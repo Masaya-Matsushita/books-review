@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import styles from 'components/Header/Header.module.css'
 
 export const Header = () => {
   const pages = [
@@ -9,10 +8,10 @@ export const Header = () => {
   ]
 
   return (
-    <div className={styles.header}>
+    <div className='flex justify-center'>
       {pages.map((page) => (
         <Link key={page.path} href={page.path}>
-          <a className={styles.anchor}>{page.name}</a>
+          <a className='mx-6 my-4'>{page.name}</a>
         </Link>
       ))}
     </div>
