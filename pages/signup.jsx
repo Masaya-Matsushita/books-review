@@ -1,7 +1,8 @@
 import { Box, Button, Group, PasswordInput, TextInput } from '@mantine/core'
 import { useForm, zodResolver } from '@mantine/form'
 import Head from 'next/head'
-import { At, Ballpen, Key } from 'tabler-icons-react'
+// import useSWR from 'swr'
+import { At, Ballpen, Book2, Key } from 'tabler-icons-react'
 import { z } from 'zod'
 
 const schema = z.object({
@@ -11,6 +12,16 @@ const schema = z.object({
     message: '「半角英数それぞれ1種類以上を含む6文字以上」で入力してください。',
   }),
 })
+
+// const fetcher = async (url) => {
+//   const res = await fetch(url)
+//   console.log(values)
+//   if (!res.ok) {
+//     throw new Error('エラーが発生したため、登録に失敗しました。')
+//   }
+//   const json = await res.json()
+//   return json
+// }
 
 export default function Home() {
   const form = useForm({
@@ -22,6 +33,19 @@ export default function Home() {
     },
   })
 
+  const handleSubmit = (values) => {
+    console.log(values)
+    // const { data, error } = useSWR(
+    //   'https://api-for-missions-and-railways.herokuapp.com/users',
+    //   fetcher
+    // )
+    // return {
+    //   token: data.token,
+    //   error,
+    //   isLoading: !data && !error,
+    // }
+  }
+
   return (
     <div>
       <Head>
@@ -29,7 +53,7 @@ export default function Home() {
       </Head>
       <h1>新規登録</h1>
       <Box sx={{ maxWidth: 400 }} mx='auto'>
-        <form onSubmit={form.onSubmit((values) => console.log(values))}>
+        <form onSubmit={form.onSubmit(handleSubmit)}>
           <TextInput
             id='username'
             placeholder='サービス名太郎'
@@ -65,7 +89,7 @@ export default function Home() {
             // error='error message'
           />
           <Group position='right' mt='xl'>
-            <Button type='submit' size='lg'>
+            <Button type='submit' size='lg' leftIcon={<Book2 size={16} />}>
               登録
             </Button>
           </Group>
