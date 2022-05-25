@@ -13,9 +13,14 @@ const schema = z.object({
   }),
 })
 
-// const fetcher = async (url) => {
-//   const res = await fetch(url)
-//   console.log(values)
+// const fetcher = async (url, values) => {
+//   const res = await fetch(url, {
+//     method: 'POST',
+//     headers: {
+//       'Content-Type': 'application/json',
+//     },
+//     body: JSON.stringify(values),
+//   })
 //   if (!res.ok) {
 //     throw new Error('エラーが発生したため、登録に失敗しました。')
 //   }
