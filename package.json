@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@mantine/core": "^4.2.6",
+    "@mantine/form": "^4.2.6",
     "@mantine/hooks": "^4.2.6",
     "@mantine/next": "^4.2.6",
     "@types/react": "^18.0.9",
