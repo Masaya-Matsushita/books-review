@@ -11,7 +11,7 @@ export const Header = () => {
     <div className='flex justify-center'>
       {pages.map((page) => (
         <Link key={page.path} href={page.path}>
-          <a className='mx-6 my-4'>{page.name}</a>
+          <a className='my-4 mx-6'>{page.name}</a>
         </Link>
       ))}
     </div>
