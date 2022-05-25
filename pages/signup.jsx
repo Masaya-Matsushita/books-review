@@ -1,24 +1,24 @@
 import { Box, Button, Group, PasswordInput, TextInput } from '@mantine/core'
-import { useForm } from '@mantine/form'
+import { useForm, zodResolver } from '@mantine/form'
 import Head from 'next/head'
 import { At, Ballpen, Key } from 'tabler-icons-react'
+import { z } from 'zod'
+
+const schema = z.object({
+  name: z.string().min(2, { message: '2文字以上で入力してください。' }),
+  email: z.string().email({ message: '正しく入力されていません。' }),
+  password: z.string().regex(/^(?=.*?[a-z])(?=.*?\d)[a-z\d]{6,100}$/i, {
+    message: '「半角英数それぞれ1種類以上を含む6文字以上」で入力してください。',
+  }),
+})
 
 export default function Home() {
   const form = useForm({
+    schema: zodResolver(schema),
     initialValues: {
       name: '',
       email: '',
       password: '',
-    },
-    validate: {
-      email: (value) =>
-        /[\w\-._]+@[\w\-._]+\.[A-Za-z]+/.test(value)
-          ? null
-          : '誤った値が入力されました。',
-      password: (value) =>
-        /^(?=.*?[a-z])(?=.*?\d)[a-z\d]{6,100}$/i.test(value)
-          ? null
-          : '「半角英数字をそれぞれ1種類以上含む6文字以上」でご設定ください。',
     },
   })
 
@@ -27,7 +27,7 @@ export default function Home() {
       <Head>
         <title>Signup Page</title>
       </Head>
-      <h1>メールアドレスだけで簡単に登録できます</h1>
+      <h1>新規登録</h1>
       <Box sx={{ maxWidth: 400 }} mx='auto'>
         <form onSubmit={form.onSubmit((values) => console.log(values))}>
           <TextInput
@@ -64,9 +64,9 @@ export default function Home() {
             {...form.getInputProps('password')}
             // error='error message'
           />
-          <Group position='right' mt='md'>
-            <Button type='submit' size='lg' uppercase>
-              登録する
+          <Group position='right' mt='xl'>
+            <Button type='submit' size='lg'>
+              登録
             </Button>
           </Group>
         </form>
