@@ -8,8 +8,6 @@ export default function Home() {
         <title>Index Page</title>
       </Head>
       <h1>Index Page</h1>
-      <button>ボタン</button>
-      <Button>ボタン</Button>
     </div>
   )
 }
