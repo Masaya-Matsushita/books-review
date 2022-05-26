@@ -1,7 +1,7 @@
 import { Box, Button, Group, PasswordInput, TextInput } from '@mantine/core'
 import { useForm, zodResolver } from '@mantine/form'
 import Head from 'next/head'
-// import useSWR from 'swr'
+import useSWR from 'swr'
 import { At, Ballpen, Book2, Key } from 'tabler-icons-react'
 import { z } from 'zod'
 
@@ -13,13 +13,22 @@ const schema = z.object({
   }),
 })
 
+const fetcher = async (url) => {
+  const res = await fetch(url)
+  if (!res.ok) {
+    throw new Error('エラーが発生したため、登録に失敗しました。')
+  }
+  const json = await res.json()
+  return json
+}
+
 // const fetcher = async (url, values) => {
 //   const res = await fetch(url, {
 //     method: 'POST',
 //     headers: {
 //       'Content-Type': 'application/json',
 //     },
-//     body: JSON.stringify(values),
+//     body: JSON.stringify(values), //修正必要
 //   })
 //   if (!res.ok) {
 //     throw new Error('エラーが発生したため、登録に失敗しました。')
@@ -38,18 +47,25 @@ export default function Home() {
     },
   })
 
-  const handleSubmit = (values) => {
-    console.log(values)
-    // const { data, error } = useSWR(
-    //   'https://api-for-missions-and-railways.herokuapp.com/users',
-    //   fetcher
-    // )
-    // return {
-    //   token: data.token,
-    //   error,
-    //   isLoading: !data && !error,
-    // }
+  const { data, error, mutate } = useSWR(
+    'https://jsonplaceholder.typicode.com/users',
+    fetcher
+  )
+
+  const handleSubmit = async (values) => {
+    mutate(
+      {
+        ...data,
+        name: values.name,
+        email: values.email,
+        password: values.password,
+      },
+      false
+    )
   }
+
+  // 文字が入力される度に実行される、再描画されるだけ？多分fetchはしていない？
+  // console.log({ data, error })
 
   return (
     <div>
@@ -61,7 +77,7 @@ export default function Home() {
         <form onSubmit={form.onSubmit(handleSubmit)}>
           <TextInput
             id='username'
-            placeholder='サービス名太郎'
+            placeholder='サービス太郎'
             label='User Name'
             aria-label='Full name'
             size='lg'
