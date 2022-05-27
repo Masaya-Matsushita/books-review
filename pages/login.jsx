@@ -104,6 +104,7 @@ export default function Login() {
             required
             icon={<Key size={16} />}
             {...form.getInputProps('password')}
+            className='mt-2'
           />
           <Group position='right' mt='xl'>
             <Button type='submit' size='lg' leftIcon={<Book2 size={16} />}>
