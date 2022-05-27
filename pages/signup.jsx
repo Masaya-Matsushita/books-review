@@ -3,8 +3,9 @@ import { useForm, zodResolver } from '@mantine/form'
 import Head from 'next/head'
 import { At, Ballpen, Book2, Key } from 'tabler-icons-react'
 import { z } from 'zod'
+import Link from 'next/link'
+import { useState } from 'react'
 
-// formのバリデーションを定義
 const schema = z.object({
   name: z
     .string()
@@ -17,7 +18,6 @@ const schema = z.object({
 })
 
 export default function Home() {
-  // useFormを定義
   const form = useForm({
     schema: zodResolver(schema),
     initialValues: {
@@ -27,24 +27,32 @@ export default function Home() {
     },
   })
 
-  // name, email, passwordからtokenを取得
+  const [token, setToken] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
+
   const handleSubmit = async (values) => {
-    const res = await fetch(
-      'https://api-for-missions-and-railways.herokuapp.com/users',
-      {
-        method: 'post',
-        header: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(values),
+    setLoading(true)
+    try {
+      const res = await fetch(
+        'https://api-for-missions-and-railways.herokuapp.com/users',
+        {
+          method: 'post',
+          header: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(values),
+        }
+      )
+      if (!res.ok) {
+        throw new Error('エラーが発生したため、登録に失敗しました。')
       }
-    )
-    if (!res.ok) {
-      throw new Error('エラーが発生したため、登録に失敗しました。')
+      const json = await res.json()
+      setToken(json.token)
+    } catch (error) {
+      setError(error)
     }
-    const json = await res.json()
-    console.log(json)
-    return json
+    setLoading(false)
   }
 
   return (
@@ -91,6 +99,12 @@ export default function Home() {
           </Group>
         </form>
       </Box>
+      <Link href='/login'>
+        <a>ログインはこちら</a>
+      </Link>
+      {loading ? <div>ローディング中</div> : null}
+      {error ? <div>{error.message}</div> : null}
+      <div>{token}</div>
     </div>
   )
 }
