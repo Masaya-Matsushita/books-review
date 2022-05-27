@@ -4,7 +4,7 @@ import Head from 'next/head'
 import { At, Ballpen, Book2, Key } from 'tabler-icons-react'
 import { z } from 'zod'
 import Link from 'next/link'
-import { useState } from 'react'
+import { useReducer } from 'react'
 
 const schema = z.object({
   name: z
@@ -17,7 +17,38 @@ const schema = z.object({
   }),
 })
 
-export default function Home() {
+const initialState = {
+  loading: false,
+  token: '',
+  error: null,
+}
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case 'start':
+      return {
+        ...state,
+        loading: true,
+      }
+    case 'end':
+      return {
+        ...state,
+        loading: false,
+        token: action.data,
+      }
+    case 'error':
+      return {
+        ...state,
+        loading: false,
+        error: action.error,
+      }
+    default: {
+      throw new Error('no such action type')
+    }
+  }
+}
+
+export default function Signup() {
   const form = useForm({
     schema: zodResolver(schema),
     initialValues: {
@@ -27,12 +58,10 @@ export default function Home() {
     },
   })
 
-  const [token, setToken] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState(null)
+  const [state, dispatch] = useReducer(reducer, initialState)
 
   const handleSubmit = async (values) => {
-    setLoading(true)
+    dispatch({ type: 'start' })
     try {
       const res = await fetch(
         'https://api-for-missions-and-railways.herokuapp.com/users',
@@ -48,11 +77,10 @@ export default function Home() {
         throw new Error('エラーが発生したため、登録に失敗しました。')
       }
       const json = await res.json()
-      setToken(json.token)
+      dispatch({ type: 'end', data: json.token })
     } catch (error) {
-      setError(error)
+      dispatch({ type: 'error', error })
     }
-    setLoading(false)
   }
 
   return (
@@ -102,9 +130,9 @@ export default function Home() {
       <Link href='/login'>
         <a>ログインはこちら</a>
       </Link>
-      {loading ? <div>ローディング中</div> : null}
-      {error ? <div>{error.message}</div> : null}
-      <div>{token}</div>
+      {state.loading ? <div>ローディング中</div> : null}
+      {state.error ? <div>{state.error.message}</div> : null}
+      <div>{state.token}</div>
     </div>
   )
 }
