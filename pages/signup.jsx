@@ -4,7 +4,7 @@ import Head from 'next/head'
 import { At, Ballpen, Book2, Key } from 'tabler-icons-react'
 import { z } from 'zod'
 import Link from 'next/link'
-import { useReducer } from 'react'
+import { useStateManagement } from 'hooks/useStateManagement'
 
 const schema = z.object({
   name: z
@@ -17,38 +17,9 @@ const schema = z.object({
   }),
 })
 
-const initialState = {
-  loading: false,
-  data: '',
-  error: null,
-}
-
-const reducer = (state, action) => {
-  switch (action.type) {
-    case 'start':
-      return {
-        ...state,
-        loading: true,
-      }
-    case 'end':
-      return {
-        ...state,
-        loading: false,
-        data: action.data,
-      }
-    case 'error':
-      return {
-        ...state,
-        loading: false,
-        error: action.error,
-      }
-    default: {
-      throw new Error('no such action type')
-    }
-  }
-}
-
 export default function Signup() {
+  const { state, dispatch } = useStateManagement()
+
   const form = useForm({
     schema: zodResolver(schema),
     initialValues: {
@@ -57,8 +28,6 @@ export default function Signup() {
       password: '',
     },
   })
-
-  const [state, dispatch] = useReducer(reducer, initialState)
 
   const handleSubmit = async (values) => {
     dispatch({ type: 'start' })
