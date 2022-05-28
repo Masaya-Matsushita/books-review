@@ -61,7 +61,7 @@ export const AuthForm = (props) => {
               className='mt-2'
             />
             <Group position='right' mt='xl'>
-              <Button type='submit' size='lg' leftIcon={<Book2 size={16} />}>
+              <Button type='submit' size='lg'>
                 {props.submitText}
               </Button>
             </Group>

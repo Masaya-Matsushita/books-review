@@ -1,11 +1,9 @@
-import Head from 'next/head'
+import { HeadComponent as Head } from 'components/Head'
 
 export default function Home() {
   return (
     <div>
-      <Head>
-        <title>Index Page</title>
-      </Head>
+      <Head title='index page' />
       <h1>Index Page</h1>
     </div>
   )

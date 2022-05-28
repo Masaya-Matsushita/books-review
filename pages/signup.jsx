@@ -1,12 +1,10 @@
 import { AuthForm } from 'components/AuthForm'
-import Head from 'next/head'
+import { HeadComponent as Head } from 'components/Head'
 
 export default function Signup() {
   return (
     <div>
-      <Head>
-        <title>Signup Page</title>
-      </Head>
+      <Head title='signup page' />
       <AuthForm
         path='users'
         errorMessage='エラーが発生したため、登録に失敗しました。'
