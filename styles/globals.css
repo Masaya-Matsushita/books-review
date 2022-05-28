@@ -1,2 +1,9 @@
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  body {
+    display: flex;
+    justify-content: center;
+  }
+}

@@ -5,11 +5,9 @@ import 'styles/globals.css'
 function MyApp({ Component, pageProps }) {
   return (
     <>
+      <Header />
       <MantineProvider withGlobalStyles withNormalizeCSS>
-        <Header />
-        <div className='flex justify-center'>
-          <Component {...pageProps} />
-        </div>
+        <Component {...pageProps} />
       </MantineProvider>
     </>
   )
