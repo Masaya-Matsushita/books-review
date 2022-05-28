@@ -19,7 +19,7 @@ const schema = z.object({
 
 const initialState = {
   loading: false,
-  token: '',
+  data: '',
   error: null,
 }
 
@@ -34,7 +34,7 @@ const reducer = (state, action) => {
       return {
         ...state,
         loading: false,
-        token: action.data,
+        data: action.data,
       }
     case 'error':
       return {
@@ -134,7 +134,7 @@ export default function Signup() {
       </Link>
       {state.loading ? <div>ローディング中</div> : null}
       {state.error ? <div>{state.error.message}</div> : null}
-      <div>{state.token}</div>
+      <div>{state.data}</div>
     </div>
   )
 }

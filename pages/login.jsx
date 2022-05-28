@@ -15,7 +15,7 @@ const schema = z.object({
 
 const initialState = {
   loading: false,
-  token: '',
+  data: '',
   error: null,
 }
 
@@ -30,7 +30,7 @@ const reducer = (state, action) => {
       return {
         ...state,
         loading: false,
-        token: action.data,
+        data: action.data,
       }
     case 'error':
       return {
@@ -69,7 +69,7 @@ export default function Login() {
         }
       )
       if (!res.ok) {
-        throw new Error(res.ErrorCode)
+        throw new Error('ログインに失敗しました。入力内容をご確認ください。')
       }
       const json = await res.json()
       dispatch({ type: 'end', data: json.token })
@@ -118,7 +118,7 @@ export default function Login() {
       </Link>
       {state.loading ? <div>ローディング中</div> : null}
       {state.error ? <div>{state.error.message}</div> : null}
-      <div>{state.token}</div>
+      <div>{state.data}</div>
     </div>
   )
 }
