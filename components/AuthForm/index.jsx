@@ -1,32 +1,12 @@
 import { Box, Button, Group, PasswordInput, TextInput } from '@mantine/core'
-import { useForm, zodResolver } from '@mantine/form'
 import { At, Ballpen, Book2, Key } from 'tabler-icons-react'
-import { z } from 'zod'
 import Link from 'next/link'
 import { useStateManagement } from 'hooks/useStateManagement'
-
-const schema = z.object({
-  name: z
-    .string()
-    .min(2, { message: '2文字以上10文字以内で入力してください。' })
-    .max(10, { message: '2文字以上10文字以内で入力してください。' }),
-  email: z.string().email({ message: '正しく入力されていません。' }),
-  password: z.string().regex(/^(?=.*?[a-z])(?=.*?\d)[a-z\d]{6,100}$/i, {
-    message: '「半角英数それぞれ1種類以上を含む6文字以上」で入力してください。',
-  }),
-})
+import { useAuthFormInitialize } from 'hooks/useAuthFormInitialize'
 
 export const AuthForm = (props) => {
+  const form = useAuthFormInitialize()
   const { state, dispatch } = useStateManagement()
-
-  const form = useForm({
-    schema: zodResolver(schema),
-    initialValues: {
-      name: '',
-      email: '',
-      password: '',
-    },
-  })
 
   const handleSubmit = async (values) => {
     dispatch({ type: 'start' })
