@@ -1,4 +1,4 @@
-import { useReducer } from "react"
+import { useReducer } from 'react'
 
 const initialState = {
   loading: false,
@@ -33,5 +33,6 @@ const reducer = (state, action) => {
 
 export const useStateManagement = () => {
   const [state, dispatch] = useReducer(reducer, initialState)
+
   return { state, dispatch }
 }

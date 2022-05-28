@@ -33,65 +33,23 @@ export const AuthForm = (props) => {
     }
   }
 
-  if (router.pathname === '/signin') {
-    return (
-      <div>
-        <h1>{props.title}</h1>
-        <Box sx={{ maxWidth: 400 }} mx='auto'>
-          <form onSubmit={form.onSubmit(handleSubmit)}>
-            <TextInput
-              id='email'
-              placeholder='example@mail.com'
-              label='Email'
-              aria-label='Email'
-              size='lg'
-              required
-              icon={<At size={16} />}
-              {...form.getInputProps('email')}
-              className='mt-2'
-            />
-            <PasswordInput
-              id='password'
-              placeholder='半角英数6文字以上'
-              label='Password'
-              size='lg'
-              required
-              icon={<Key size={16} />}
-              {...form.getInputProps('password')}
-              className='mt-2'
-            />
-            <Group position='right' mt='xl'>
-              <Button type='submit' size='lg'>
-                {props.submitText}
-              </Button>
-            </Group>
-          </form>
-        </Box>
-        <Link href={props.linkHref}>
-          <a>{props.linkText}</a>
-        </Link>
-        {state.loading ? <div>ローディング中</div> : null}
-        {state.error ? <div>{state.error.message}</div> : null}
-        <div>{state.data}</div>
-      </div>
-    )
-  }
-
   return (
     <div>
       <h1>{props.title}</h1>
       <Box sx={{ maxWidth: 400 }} mx='auto'>
         <form onSubmit={form.onSubmit(handleSubmit)}>
-          <TextInput
-            id='username'
-            placeholder='サービス太郎'
-            label='User Name'
-            aria-label='Full name'
-            size='lg'
-            required
-            icon={<Ballpen size={16} />}
-            {...form.getInputProps('name')}
-          />
+          {router.pathname === '/signup' ? (
+            <TextInput
+              id='username'
+              placeholder='サービス太郎'
+              label='User Name'
+              aria-label='Full name'
+              size='lg'
+              required
+              icon={<Ballpen size={16} />}
+              {...form.getInputProps('name')}
+            />
+          ) : null}
           <TextInput
             id='email'
             placeholder='example@mail.com'
@@ -114,9 +72,15 @@ export const AuthForm = (props) => {
             className='mt-2'
           />
           <Group position='right' mt='xl'>
-            <Button type='submit' size='lg' leftIcon={<Book2 size={16} />}>
-              {props.submitText}
-            </Button>
+            {router.pathname === '/signup' ? (
+              <Button type='submit' size='lg' leftIcon={<Book2 size={16} />}>
+                {props.submitText}
+              </Button>
+            ) : (
+              <Button type='submit' size='lg'>
+                {props.submitText}
+              </Button>
+            )}
           </Group>
         </form>
       </Box>
