@@ -1,5 +1,6 @@
 import { useReducer } from 'react'
 
+// 状態の初期設定
 const initialState = {
   loading: false,
   error: null,
@@ -7,16 +8,19 @@ const initialState = {
 
 const reducer = (state, action) => {
   switch (action.type) {
+    // ローディング開始
     case 'start':
       return {
         ...state,
         loading: true,
       }
+    // ローディング終了
     case 'end':
       return {
         ...state,
         loading: false,
       }
+    // エラー時
     case 'error':
       return {
         ...state,

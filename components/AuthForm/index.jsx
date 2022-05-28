@@ -14,7 +14,10 @@ export const AuthForm = (props) => {
   const { setToken } = useContext(TokenContext)
 
   const handleSubmit = async (values) => {
+    //ローディングを表示
     dispatch({ type: 'start' })
+
+    //POST通信でトークンを取得
     try {
       const res = await fetch(
         `https://api-for-missions-and-railways.herokuapp.com/${props.path}`,
@@ -30,8 +33,14 @@ export const AuthForm = (props) => {
         throw new Error(props.errorMessage)
       }
       const json = await res.json()
+
+      //ローディング表示を解除
       dispatch({ type: 'end' })
+
+      //取得したトークンを代入
       setToken(json.token)
+
+      //エラー処理
     } catch (error) {
       dispatch({ type: 'error', error })
     }
@@ -42,6 +51,8 @@ export const AuthForm = (props) => {
       <h1>{props.title}</h1>
       <Box sx={{ maxWidth: 400 }} mx='auto'>
         <form onSubmit={form.onSubmit(handleSubmit)}>
+
+          {/* サインイン画面ではName入力無し */}
           {router.pathname === '/signup' ? (
             <TextInput
               id='username'
@@ -54,6 +65,8 @@ export const AuthForm = (props) => {
               {...form.getInputProps('name')}
             />
           ) : null}
+
+          {/* メールアドレス */}
           <TextInput
             id='email'
             placeholder='example@mail.com'
@@ -65,6 +78,8 @@ export const AuthForm = (props) => {
             {...form.getInputProps('email')}
             className='mt-2'
           />
+
+          {/* パスワード */}
           <PasswordInput
             id='password'
             placeholder='半角英数6文字以上'
@@ -76,6 +91,8 @@ export const AuthForm = (props) => {
             className='mt-2'
           />
           <Group position='right' mt='xl'>
+
+            {/* サインイン画面ではボタン内アイコン無し */}
             {router.pathname === '/signup' ? (
               <Button type='submit' size='lg' leftIcon={<Book2 size={16} />}>
                 {props.submitText}
@@ -88,9 +105,13 @@ export const AuthForm = (props) => {
           </Group>
         </form>
       </Box>
+
+      {/* サインイン⇔サインアップ遷移 */}
       <Link href={props.linkHref}>
         <a>{props.linkText}</a>
       </Link>
+
+      {/* 仮、後で消す */}
       {state.loading ? <div>ローディング中</div> : null}
       {state.error ? <div>{state.error.message}</div> : null}
     </div>

@@ -5,7 +5,10 @@ import { useRouter } from 'next/router'
 export const useAuthFormInitialize = () => {
   const router = useRouter()
 
+  //フォームのバリデーションを定義
   const schema =
+
+    // サインアップ画面の場合(name有り)
     router.pathname === '/signup'
       ? z.object({
           name: z
@@ -18,6 +21,8 @@ export const useAuthFormInitialize = () => {
               '「半角英数それぞれ1種類以上を含む6文字以上」で入力してください。',
           }),
         })
+        
+    // サインイン画面の場合(name無し)
       : z.object({
           email: z.string().email({ message: '正しく入力されていません。' }),
           password: z.string().regex(/^(?=.*?[a-z])(?=.*?\d)[a-z\d]{6,100}$/i, {
@@ -26,6 +31,7 @@ export const useAuthFormInitialize = () => {
           }),
         })
 
+  // フォームの初期設定
   const form = useForm({
     schema: zodResolver(schema),
     initialValues: {

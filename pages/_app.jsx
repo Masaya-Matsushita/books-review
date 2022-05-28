@@ -3,6 +3,7 @@ import { Header } from 'components/Header'
 import { createContext, useState } from 'react'
 import 'styles/globals.css'
 
+// トークンを管理
 export const TokenContext = createContext({
   token: undefined,
   setToken: () => {
