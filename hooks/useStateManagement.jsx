@@ -2,7 +2,6 @@ import { useReducer } from 'react'
 
 const initialState = {
   loading: false,
-  data: '',
   error: null,
 }
 
@@ -17,7 +16,6 @@ const reducer = (state, action) => {
       return {
         ...state,
         loading: false,
-        data: action.data,
       }
     case 'error':
       return {

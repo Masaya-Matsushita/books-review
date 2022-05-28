@@ -4,11 +4,14 @@ import Link from 'next/link'
 import { useStateManagement } from 'hooks/useStateManagement'
 import { useAuthFormInitialize } from 'hooks/useAuthFormInitialize'
 import { useRouter } from 'next/router'
+import { useContext } from 'react'
+import { TokenContext } from 'pages/_app'
 
 export const AuthForm = (props) => {
   const router = useRouter()
   const form = useAuthFormInitialize()
   const { state, dispatch } = useStateManagement()
+  const { setToken } = useContext(TokenContext)
 
   const handleSubmit = async (values) => {
     dispatch({ type: 'start' })
@@ -27,7 +30,8 @@ export const AuthForm = (props) => {
         throw new Error(props.errorMessage)
       }
       const json = await res.json()
-      dispatch({ type: 'end', data: json.token })
+      dispatch({ type: 'end' })
+      setToken(json.token)
     } catch (error) {
       dispatch({ type: 'error', error })
     }
@@ -89,7 +93,6 @@ export const AuthForm = (props) => {
       </Link>
       {state.loading ? <div>ローディング中</div> : null}
       {state.error ? <div>{state.error.message}</div> : null}
-      <div>{state.data}</div>
     </div>
   )
 }
