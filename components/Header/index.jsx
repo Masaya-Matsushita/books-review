@@ -4,7 +4,7 @@ export const Header = () => {
   const pages = [
     { path: '/', name: 'index' },
     { path: '/signup', name: 'signup' },
-    { path: '/login', name: 'login' },
+    { path: '/signin', name: 'signin' },
   ]
 
   return (
