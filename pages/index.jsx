@@ -34,11 +34,19 @@ export default function Home() {
       <h1>Index Page</h1>
       <button onClick={token ? (e) => getPosts(token, e) : null}>ボタン</button>
       {posts ? (
-        <ul>
+        <div>
           {posts.map((post) => {
-            return <li key={post.id}>{post.title}</li>
+            return (
+              <div key={post.id} className='mt-5 border-2'>
+                <h1>{post.title}</h1>
+                <h3>{post.detail}</h3>
+                <p>{post.review}</p>
+                <p>{post.reviewer}</p>
+                <a href={post.url}>リンクはこちら</a>
+              </div>
+            )
           })}
-        </ul>
+        </div>
       ) : null}
     </div>
   )
