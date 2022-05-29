@@ -5,11 +5,12 @@ import { useContext, useState } from 'react'
 export default function Home() {
   const { token } = useContext(TokenContext)
   const [posts, setPosts] = useState([])
+  const [offset, setOffset] = useState(0)
 
-  const getPosts = async (token) => {
+  const getPosts = async (token, offset) => {
     try {
       const res = await fetch(
-        'https://api-for-missions-and-railways.herokuapp.com/books?offset=0',
+        `https://api-for-missions-and-railways.herokuapp.com/books?offset=${offset}`,
         {
           method: 'GET',
           mode: 'cors',
@@ -22,7 +23,9 @@ export default function Home() {
         throw new Error('エラー')
       }
       const json = await res.json()
-      setPosts(json)
+      setPosts((prev) => [...prev, ...json])
+      setOffset((prev) => prev + 10)
+      return offset
     } catch (error) {
       console.error(error.message)
     }
@@ -32,7 +35,9 @@ export default function Home() {
     <div>
       <Head title='index page' />
       <h1>Index Page</h1>
-      <button onClick={token ? (e) => getPosts(token, e) : null}>ボタン</button>
+      <button onClick={token ? (e) => getPosts(token, offset, e) : null}>
+        ボタン
+      </button>
       {posts ? (
         <div>
           {posts.map((post) => {
