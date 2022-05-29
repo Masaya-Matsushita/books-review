@@ -1,6 +1,6 @@
 import { HeadComponent as Head } from 'components/Head'
 import { TokenContext } from 'pages/_app'
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 
 export default function Home() {
   const { token } = useContext(TokenContext)
@@ -30,6 +30,16 @@ export default function Home() {
       console.error(error.message)
     }
   }
+
+  // 2回マウントされる
+  // 　→52行目map関数でエラー「two children with the same key」
+  useEffect(() => {
+    console.log('mount')
+    token ? getPosts(token, offset) : null
+    return () => {
+      console.log('un-mount')
+    }
+  }, [])
 
   return (
     <div>
