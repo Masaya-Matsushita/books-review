@@ -7,10 +7,14 @@ export default function Home() {
   const { token } = useContext(TokenContext)
   const [posts, setPosts] = useState([])
   const [offset, setOffset] = useState(0)
+  const [loading, setLoading] = useState(null)
 
   const getPosts = async (token, offset, e) => {
     // postsをリセット
     setPosts([])
+
+    // ローディング表示
+    setLoading(true)
 
     // Paginationの番号を取得し、offsetを更新
     // 1回目のonchangeではoffsetが以前の状態のままfetchされてしまう
@@ -35,6 +39,7 @@ export default function Home() {
         throw new Error('エラー')
       }
       const json = await res.json()
+      setLoading(false)
       setPosts([...json])
     } catch (error) {
       console.error(error.message)
@@ -56,17 +61,21 @@ export default function Home() {
       <Head title='index page' />
       <h1>Index Page</h1>
       {token ? (
-        posts.map((post) => {
-          return (
-            <div key={post.id} className='mt-5 border-2'>
-              <h1>{post.title}</h1>
-              <h3>{post.detail}</h3>
-              <p>{post.review}</p>
-              <p>{post.reviewer}</p>
-              <a href={post.url}>リンクはこちら</a>
-            </div>
-          )
-        })
+        loading ? (
+          <div>ローディング中</div>
+        ) : (
+          posts.map((post) => {
+            return (
+              <div key={post.id} className='mt-5 border-2'>
+                <h1>{post.title}</h1>
+                <h3>{post.detail}</h3>
+                <p>{post.review}</p>
+                <p>{post.reviewer}</p>
+                <a href={post.url}>リンクはこちら</a>
+              </div>
+            )
+          })
+        )
       ) : (
         <div>ログインしてください</div>
       )}
