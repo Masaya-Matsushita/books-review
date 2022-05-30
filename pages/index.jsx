@@ -23,7 +23,7 @@ export default function Home() {
     // postsを取得(offsetの値から10件)
     try {
       const res = await fetch(
-        `https://api-for-missions-and-railways.herokuapp.coma/books?offset=${offset}`,
+        `https://api-for-missions-and-railways.herokuapp.com/books?offset=${offset}`,
         {
           method: 'GET',
           mode: 'cors',
@@ -33,7 +33,7 @@ export default function Home() {
         }
       )
       if (!res.ok) {
-        throw new Error
+        throw new Error()
       }
       const json = await res.json()
 
@@ -46,14 +46,8 @@ export default function Home() {
     }
   }
 
-  // 2回マウントされる
-  // →52行目map関数でエラー「two children with the same key」
   useEffect(() => {
-    console.log('mount')
     token ? getPosts(token, state.offset) : null
-    return () => {
-      console.log('un-mount')
-    }
   }, [])
 
   return (
