@@ -1,2 +1,8 @@
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  body {
+    padding: 25px;
+  }
+}

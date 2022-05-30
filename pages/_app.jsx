@@ -1,17 +1,26 @@
 import { MantineProvider } from '@mantine/core'
-import { HeadComponent as Head } from 'components/Head'
 import { Header } from 'components/Header'
+import { createContext, useState } from 'react'
 import 'styles/globals.css'
 
+// トークンを管理
+export const TokenContext = createContext({
+  token: undefined,
+  setToken: () => {
+    throw new Error('no setting!')
+  },
+})
+
 function MyApp({ Component, pageProps }) {
+  const [token, setToken] = useState(undefined)
+
   return (
     <>
-      <Head />
+      <Header />
       <MantineProvider withGlobalStyles withNormalizeCSS>
-        <Header />
-        <div className='flex justify-center'>
+        <TokenContext.Provider value={{ token, setToken }}>
           <Component {...pageProps} />
-        </div>
+        </TokenContext.Provider>
       </MantineProvider>
     </>
   )
