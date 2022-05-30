@@ -51,7 +51,6 @@ export const AuthForm = (props) => {
       <h1>{props.title}</h1>
       <Box sx={{ maxWidth: 400 }} mx='auto'>
         <form onSubmit={form.onSubmit(handleSubmit)}>
-
           {/* サインイン画面ではName入力無し */}
           {router.pathname === '/signup' ? (
             <TextInput
@@ -91,7 +90,6 @@ export const AuthForm = (props) => {
             className='mt-2'
           />
           <Group position='right' mt='xl'>
-
             {/* サインイン画面ではボタン内アイコン無し */}
             {router.pathname === '/signup' ? (
               <Button type='submit' size='lg' leftIcon={<Book2 size={16} />}>
@@ -108,7 +106,7 @@ export const AuthForm = (props) => {
 
       {/* サインイン⇔サインアップ遷移 */}
       <Link href={props.linkHref}>
-        <a>{props.linkText}</a>
+        <a className='block mt-4'>{props.linkText}</a>
       </Link>
 
       {/* 仮、後で消す */}
