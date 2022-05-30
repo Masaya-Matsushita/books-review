@@ -46,6 +46,7 @@ export default function Home() {
     }
   }
 
+  // マウント時
   useEffect(() => {
     token ? getPosts(token, state.offset) : null
   }, [])
