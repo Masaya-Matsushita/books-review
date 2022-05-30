@@ -2,22 +2,32 @@ import { useReducer } from 'react'
 
 // 状態の初期設定
 const initialState = {
+  posts: [],
+  offset: 0,
   loading: false,
   error: null,
 }
 
 const reducer = (state, action) => {
   switch (action.type) {
-    // ローディング開始
+    // 開始
     case 'start':
       return {
         ...state,
+        posts: [],
         loading: true,
       }
-    // ローディング終了
+    // 取得するpostsの範囲をセット
+    case 'offset':
+      return {
+        ...state,
+        offset: action.offset,
+      }
+    // 終了
     case 'end':
       return {
         ...state,
+        posts: action.posts,
         loading: false,
       }
     // エラー
@@ -33,8 +43,7 @@ const reducer = (state, action) => {
   }
 }
 
-export const useAuthState = () => {
+export const usePostsState = () => {
   const [state, dispatch] = useReducer(reducer, initialState)
-
   return { state, dispatch }
 }

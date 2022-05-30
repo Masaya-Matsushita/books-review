@@ -1,42 +1,20 @@
 import { Pagination } from '@mantine/core'
 import { HeadComponent as Head } from 'components/Head'
 import { Posts } from 'components/Posts'
+import { usePostsState } from 'hooks/usePostsState'
 import { TokenContext } from 'pages/_app'
-import { useContext, useEffect, useReducer } from 'react'
-
-const initialState = {
-  posts: [],
-  offset: 0,
-  loading: false,
-  error: null,
-}
-
-const reducer = (state, action) => {
-  switch (action.type) {
-    case 'start':
-      return { ...state, posts: [], loading: true }
-    case 'offset':
-      return { ...state, offset: action.offset }
-    case 'end':
-      return { ...state, posts: action.posts, loading: false }
-    case 'error':
-      return { ...state, loading: false, error: action.error }
-    default: {
-      throw new Error('no such action type!')
-    }
-  }
-}
+import { useContext, useEffect } from 'react'
 
 export default function Home() {
   const { token } = useContext(TokenContext)
-  const [state, dispatch] = useReducer(reducer, initialState)
+  const { state, dispatch } = usePostsState()
 
   const getPosts = async (token, offset, e) => {
     // postsリセット、ローディング表示
     dispatch({ type: 'start' })
 
     // Paginationの番号を取得し、offsetを更新
-    //  →1回目のonchangeではoffsetが以前の状態のままfetchされてしまう
+    // →1回目のonchangeではoffsetが以前の状態のままfetchされてしまう
     if (e) {
       dispatch({ type: 'offset', offset: 10 * (e - 1) })
     }
@@ -45,7 +23,7 @@ export default function Home() {
     // postsを取得(offsetの値から10件)
     try {
       const res = await fetch(
-        `https://api-for-missions-and-railways.herokuapp.com/books?offset=${offset}`,
+        `https://api-for-missions-and-railways.herokuapp.coma/books?offset=${offset}`,
         {
           method: 'GET',
           mode: 'cors',
@@ -55,7 +33,7 @@ export default function Home() {
         }
       )
       if (!res.ok) {
-        throw new Error('エラー')
+        throw new Error
       }
       const json = await res.json()
 
@@ -69,7 +47,7 @@ export default function Home() {
   }
 
   // 2回マウントされる
-  // 　→52行目map関数でエラー「two children with the same key」
+  // →52行目map関数でエラー「two children with the same key」
   useEffect(() => {
     console.log('mount')
     token ? getPosts(token, state.offset) : null
