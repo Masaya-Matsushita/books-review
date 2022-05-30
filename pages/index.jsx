@@ -1,5 +1,6 @@
 import { Pagination } from '@mantine/core'
 import { HeadComponent as Head } from 'components/Head'
+import { Posts } from 'components/Posts'
 import { TokenContext } from 'pages/_app'
 import { useContext, useEffect, useReducer } from 'react'
 
@@ -57,7 +58,7 @@ export default function Home() {
         throw new Error('エラー')
       }
       const json = await res.json()
-      
+
       // ローディング解除、posts表示
       dispatch({ type: 'end', posts: [...json] })
 
@@ -81,27 +82,7 @@ export default function Home() {
     <div>
       <Head title='index page' />
       <h1>Index Page</h1>
-      {token ? (
-        state.loading ? (
-          <div>ローディング中</div>
-        ) : state.error ? (
-          <div>エラーが発生したため、データの取得に失敗しました。</div>
-        ) : (
-          state.posts.map((post) => {
-            return (
-              <div key={post.id} className='mt-5 border-2'>
-                <h1>{post.title}</h1>
-                <h3>{post.detail}</h3>
-                <p>{post.review}</p>
-                <p>{post.reviewer}</p>
-                <a href={post.url}>リンクはこちら</a>
-              </div>
-            )
-          })
-        )
-      ) : (
-        <div>ログインしてください</div>
-      )}
+      <Posts token={token} state={state} />
       <Pagination
         onChange={token ? (e) => getPosts(token, state.offset, e) : null}
         total={10}
