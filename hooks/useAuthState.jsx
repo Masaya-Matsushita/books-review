@@ -33,7 +33,7 @@ const reducer = (state, action) => {
   }
 }
 
-export const useStateManagement = () => {
+export const useAuthState = () => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
   return { state, dispatch }

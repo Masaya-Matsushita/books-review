@@ -1,7 +1,7 @@
 import { Box, Button, Group, PasswordInput, TextInput } from '@mantine/core'
 import { At, Ballpen, Book2, Key } from 'tabler-icons-react'
 import Link from 'next/link'
-import { useStateManagement } from 'hooks/useStateManagement'
+import { useAuthState } from 'hooks/useAuthState'
 import { useAuthFormInitialize } from 'hooks/useAuthFormInitialize'
 import { useRouter } from 'next/router'
 import { useContext } from 'react'
@@ -10,7 +10,7 @@ import { TokenContext } from 'pages/_app'
 export const AuthForm = (props) => {
   const router = useRouter()
   const form = useAuthFormInitialize()
-  const { state, dispatch } = useStateManagement()
+  const { state, dispatch } = useAuthState()
   const { setToken } = useContext(TokenContext)
 
   const handleSubmit = async (values) => {
