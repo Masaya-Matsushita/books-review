@@ -1,25 +1,43 @@
 import { Pagination } from '@mantine/core'
 import { HeadComponent as Head } from 'components/Head'
 import { TokenContext } from 'pages/_app'
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useReducer } from 'react'
+
+const initialState = {
+  posts: [],
+  offset: 0,
+  loading: false,
+  error: null,
+}
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case 'start':
+      return { ...state, posts: [], loading: true }
+    case 'offset':
+      return { ...state, offset: action.offset }
+    case 'end':
+      return { ...state, posts: action.posts, loading: false }
+    case 'error':
+      return { ...state, loading: false, error: action.error }
+    default: {
+      throw new Error('no such action type!')
+    }
+  }
+}
 
 export default function Home() {
   const { token } = useContext(TokenContext)
-  const [posts, setPosts] = useState([])
-  const [offset, setOffset] = useState(0)
-  const [loading, setLoading] = useState(null)
+  const [state, dispatch] = useReducer(reducer, initialState)
 
   const getPosts = async (token, offset, e) => {
-    // postsをリセット
-    setPosts([])
-
-    // ローディング表示
-    setLoading(true)
+    // postsリセット、ローディング表示
+    dispatch({ type: 'start' })
 
     // Paginationの番号を取得し、offsetを更新
-    // 1回目のonchangeではoffsetが以前の状態のままfetchされてしまう
+    //  →1回目のonchangeではoffsetが以前の状態のままfetchされてしまう
     if (e) {
-      setOffset(10 * (e - 1))
+      dispatch({ type: 'offset', offset: 10 * (e - 1) })
     }
     console.log(offset)
 
@@ -39,10 +57,13 @@ export default function Home() {
         throw new Error('エラー')
       }
       const json = await res.json()
-      setLoading(false)
-      setPosts([...json])
+      
+      // ローディング解除、posts表示
+      dispatch({ type: 'end', posts: [...json] })
+
+      // エラー処理
     } catch (error) {
-      console.error(error.message)
+      dispatch({ type: 'error', error })
     }
   }
 
@@ -50,7 +71,7 @@ export default function Home() {
   // 　→52行目map関数でエラー「two children with the same key」
   useEffect(() => {
     console.log('mount')
-    token ? getPosts(token, offset) : null
+    token ? getPosts(token, state.offset) : null
     return () => {
       console.log('un-mount')
     }
@@ -61,10 +82,12 @@ export default function Home() {
       <Head title='index page' />
       <h1>Index Page</h1>
       {token ? (
-        loading ? (
+        state.loading ? (
           <div>ローディング中</div>
+        ) : state.error ? (
+          <div>エラーが発生したため、データの取得に失敗しました。</div>
         ) : (
-          posts.map((post) => {
+          state.posts.map((post) => {
             return (
               <div key={post.id} className='mt-5 border-2'>
                 <h1>{post.title}</h1>
@@ -80,7 +103,7 @@ export default function Home() {
         <div>ログインしてください</div>
       )}
       <Pagination
-        onChange={token ? (e) => getPosts(token, offset, e) : null}
+        onChange={token ? (e) => getPosts(token, state.offset, e) : null}
         total={10}
         className='mt-16'
       />
