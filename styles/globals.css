@@ -2,7 +2,8 @@
 @tailwind utilities;
 
 @layer components {
-  body {
+  html {
     padding: 25px;
+    background-color: rgb(241, 245, 249);
   }
 }

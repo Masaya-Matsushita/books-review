@@ -1,3 +1,5 @@
+import { Card } from '@mantine/core'
+
 export const Posts = ({ cookie, state }) => {
   if (!cookie) {
     return <div>ログインしてください</div>
@@ -15,13 +17,15 @@ export const Posts = ({ cookie, state }) => {
     <div>
       {state.posts.map((post) => {
         return (
-          <div key={post.id} className='mt-5 border-2'>
+          <Card key={post.id} className='mb-8'>
             <h1>{post.title}</h1>
             <h3>{post.detail}</h3>
             <p>{post.review}</p>
-            <p>{post.reviewer}</p>
-            <a href={post.url}>リンクはこちら</a>
-          </div>
+            <a href={post.url} className='block mr-4 text-right'>
+              作品のリンク
+            </a>
+            <p className='mr-4 mb-0 text-right'>Reviewed by {post.reviewer}</p>
+          </Card>
         )
       })}
     </div>

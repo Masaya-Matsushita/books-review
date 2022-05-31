@@ -3,7 +3,7 @@ import { HeadComponent as Head } from 'components/Head'
 
 export default function Signup() {
   return (
-    <div>
+    <div className='bg-slate-100'>
       <Head title='signup page' />
       <AuthForm
         path='users'

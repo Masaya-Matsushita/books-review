@@ -1,5 +1,6 @@
 import { Pagination } from '@mantine/core'
 import { HeadComponent as Head } from 'components/Head'
+import { Header } from 'components/Header'
 import { Posts } from 'components/Posts'
 import { usePostsState } from 'hooks/usePostsState'
 import { CookieContext } from 'pages/_app'
@@ -9,7 +10,7 @@ export default function Home() {
   const cookie = useContext(CookieContext)
   const { state, dispatch } = usePostsState()
 
-  const getPosts = async (cookie, e) => {
+  const getPosts = async (jwt, e) => {
     // postsリセット、ローディング表示
     dispatch({ type: 'start' })
 
@@ -27,7 +28,7 @@ export default function Home() {
           method: 'GET',
           mode: 'cors',
           headers: {
-            Authorization: `Bearer ${cookie}`,
+            Authorization: `Bearer ${jwt}`,
           },
         }
       )
@@ -45,21 +46,22 @@ export default function Home() {
     }
   }
 
-  // マウント時
-  // →一度リロードしないとgetPostsが実行されない
+  // マウント&クッキー取得時
   useEffect(() => {
     cookie ? getPosts(cookie) : null
   }, [cookie])
 
   return (
-    <div>
+    <div className='bg-slate-100'>
       <Head title='index page' />
-      <h1>Index Page</h1>
+      <Header />
+      <h1>投稿一覧</h1>
       <Posts cookie={cookie} state={state} />
       <Pagination
         onChange={cookie ? (e) => getPosts(cookie, e) : null}
-        total={10}
-        className='mt-16'
+        total={8}
+        spacing='4px'
+        className='flex justify-center pb-12 mt-12 w-full'
       />
     </div>
   )
