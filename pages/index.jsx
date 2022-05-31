@@ -52,15 +52,16 @@ export default function Home() {
   }, [cookie])
 
   return (
-    <div>
+    <div className='bg-slate-100'>
       <Head title='index page' />
       <Header />
-      <h1>Index Page</h1>
+      <h1>投稿一覧</h1>
       <Posts cookie={cookie} state={state} />
       <Pagination
         onChange={cookie ? (e) => getPosts(cookie, e) : null}
-        total={10}
-        className='mt-16'
+        total={8}
+        spacing='4px'
+        className='flex justify-center pb-12 mt-12 w-full'
       />
     </div>
   )

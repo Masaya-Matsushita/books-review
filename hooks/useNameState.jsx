@@ -8,7 +8,7 @@ const initialState = {
 
 const reducer = (state, action) => {
   switch (action.type) {
-    // ローディング終了
+    // 名前をセット
     case 'name':
       return {
         ...state,

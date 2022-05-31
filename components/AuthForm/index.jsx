@@ -65,8 +65,6 @@ export const AuthForm = (props) => {
               {...form.getInputProps('name')}
             />
           ) : null}
-
-          {/* メールアドレス */}
           <TextInput
             id='email'
             placeholder='example@mail.com'
@@ -78,8 +76,6 @@ export const AuthForm = (props) => {
             {...form.getInputProps('email')}
             className='mt-2'
           />
-
-          {/* パスワード */}
           <PasswordInput
             id='password'
             placeholder='半角英数6文字以上'
@@ -90,27 +86,25 @@ export const AuthForm = (props) => {
             {...form.getInputProps('password')}
             className='mt-2'
           />
-          <Group position='right' mt='xl'>
-            {/* サインイン画面ではボタン内アイコン無し */}
-            {router.pathname === '/signup' ? (
-              <Button type='submit' size='lg' leftIcon={<Book2 size={16} />}>
-                {props.submitText}
-              </Button>
-            ) : (
-              <Button type='submit' size='lg'>
-                {props.submitText}
-              </Button>
-            )}
+          <Group position='right'>
+            <Button
+              type='submit'
+              size='lg'
+              leftIcon={<Book2 size={16} />}
+              className='mt-8'
+            >
+              {props.submitText}
+            </Button>
           </Group>
         </form>
       </Box>
 
       {/* サインイン⇔サインアップ遷移 */}
       <Link href={props.linkHref}>
-        <a className='block mt-4'>{props.linkText}</a>
+        <a className='block mt-4 '>{props.linkText}</a>
       </Link>
 
-      {/* 仮、後で消す */}
+      {/* 仮、後で実装 */}
       {state.loading ? <div>ローディング中</div> : null}
       {state.error ? <div>{state.error.message}</div> : null}
     </div>
