@@ -6,7 +6,7 @@ import { CookieContext } from 'pages/_app'
 import { useContext, useEffect } from 'react'
 
 export default function Home() {
-  const { cookie } = useContext(CookieContext)
+  const cookie = useContext(CookieContext)
   const { state, dispatch } = usePostsState()
 
   const getPosts = async (cookie, e) => {
@@ -46,6 +46,7 @@ export default function Home() {
   }
 
   // マウント時
+  // →一度リロードしないとgetPostsが実行されない
   useEffect(() => {
     cookie ? getPosts(cookie) : null
   }, [cookie])

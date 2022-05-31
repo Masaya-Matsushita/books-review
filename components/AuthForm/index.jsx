@@ -4,11 +4,14 @@ import Link from 'next/link'
 import { useAuthState } from 'hooks/useAuthState'
 import { useAuthFormInitialize } from 'hooks/useAuthFormInitialize'
 import { useRouter } from 'next/router'
+import { isLoginContext } from 'pages/_app'
+import { useContext } from 'react'
 
 export const AuthForm = (props) => {
   const router = useRouter()
   const form = useAuthFormInitialize()
   const { state, dispatch } = useAuthState()
+  const { setIsLogin } = useContext(isLoginContext)
 
   const handleSubmit = async (values) => {
     //ローディングを表示
@@ -35,7 +38,8 @@ export const AuthForm = (props) => {
       dispatch({ type: 'end' })
 
       //クッキーに値をセット
-        document.cookie = `token=${json.token}; max-age=7200`
+      document.cookie = `token=${json.token}; max-age=7200`
+      setIsLogin(true)
 
       //エラー処理
     } catch (error) {
