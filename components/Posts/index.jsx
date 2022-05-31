@@ -1,5 +1,5 @@
-export const Posts = ({ token, state }) => {
-  if (!token) {
+export const Posts = ({ cookie, state }) => {
+  if (!cookie) {
     return <div>ログインしてください</div>
   }
 

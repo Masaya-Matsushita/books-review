@@ -2,14 +2,14 @@ import { Pagination } from '@mantine/core'
 import { HeadComponent as Head } from 'components/Head'
 import { Posts } from 'components/Posts'
 import { usePostsState } from 'hooks/usePostsState'
-import { TokenContext } from 'pages/_app'
+import { CookieContext } from 'pages/_app'
 import { useContext, useEffect } from 'react'
 
 export default function Home() {
-  const { token } = useContext(TokenContext)
+  const cookie = useContext(CookieContext)
   const { state, dispatch } = usePostsState()
 
-  const getPosts = async (token, offset, e) => {
+  const getPosts = async (cookie, e) => {
     // postsリセット、ローディング表示
     dispatch({ type: 'start' })
 
@@ -18,17 +18,16 @@ export default function Home() {
     if (e) {
       dispatch({ type: 'offset', offset: 10 * (e - 1) })
     }
-    console.log(offset)
 
     // postsを取得(offsetの値から10件)
     try {
       const res = await fetch(
-        `https://api-for-missions-and-railways.herokuapp.com/books?offset=${offset}`,
+        `https://api-for-missions-and-railways.herokuapp.com/books?offset=${state.offset}`,
         {
           method: 'GET',
           mode: 'cors',
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${cookie}`,
           },
         }
       )
@@ -46,17 +45,19 @@ export default function Home() {
     }
   }
 
+  // マウント時
+  // →一度リロードしないとgetPostsが実行されない
   useEffect(() => {
-    token ? getPosts(token, state.offset) : null
-  }, [])
+    cookie ? getPosts(cookie) : null
+  }, [cookie])
 
   return (
     <div>
       <Head title='index page' />
       <h1>Index Page</h1>
-      <Posts token={token} state={state} />
+      <Posts cookie={cookie} state={state} />
       <Pagination
-        onChange={token ? (e) => getPosts(token, state.offset, e) : null}
+        onChange={cookie ? (e) => getPosts(cookie, e) : null}
         total={10}
         className='mt-16'
       />
