@@ -46,7 +46,7 @@ export default function Home() {
     }
   }
 
-  // マウント時
+  // マウント&クッキー取得時
   useEffect(() => {
     cookie ? getPosts(cookie) : null
   }, [cookie])

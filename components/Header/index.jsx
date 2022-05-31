@@ -1,17 +1,14 @@
 import { Button } from '@mantine/core'
-import Link from 'next/link'
+import { useNameState } from 'hooks/useNameState'
+import Router from 'next/router'
 import { CookieContext } from 'pages/_app'
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect } from 'react'
 
 export const Header = () => {
   const cookie = useContext(CookieContext)
-  const [name, setName] = useState(null)
+  const { state, dispatch } = useNameState()
 
-  const pages = [
-    { path: '/signup', name: 'signup' },
-    { path: '/signin', name: 'signin' },
-  ]
-
+  // ユーザー名を取得
   const getName = async (jwt) => {
     try {
       const res = await fetch(
@@ -28,27 +25,26 @@ export const Header = () => {
         throw new Error()
       }
       const json = await res.json()
-      setName(json.name)
+      dispatch({ type: 'name', name: json.name })
 
       // エラー処理
     } catch (error) {
-      console.error(error)
+      dispatch({ type: 'error', error })
     }
   }
 
-  // マウント時
+  // マウント＆クッキー取得時
   useEffect(() => {
     cookie ? getName(cookie) : null
   }, [cookie])
 
   return (
     <div className='flex justify-center'>
-      {pages.map((page) => (
-        <Link key={page.path} href={page.path}>
-          <a>{page.name}</a>
-        </Link>
-      ))}
-      {name ? <div>{name}</div> : <Button>ログイン</Button>}
+      {state.name ? (
+        <div>ログイン済：{state.name}さん</div>
+      ) : (
+        <Button onClick={() => Router.push('/signin')}>ログイン</Button>
+      )}
     </div>
   )
 }
