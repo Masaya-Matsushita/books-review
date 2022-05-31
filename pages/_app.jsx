@@ -1,36 +1,25 @@
 import { MantineProvider } from '@mantine/core'
 import { Header } from 'components/Header'
-import { createContext, useState } from 'react'
-import { CookiesProvider, useCookies } from 'react-cookie'
+import { createContext, useEffect, useState } from 'react'
 import 'styles/globals.css'
 
-// トークンを管理
-export const TokenContext = createContext({
-  token: undefined,
-  setToken: () => {
-    throw new Error('no setting!')
-  },
-})
+export const CookieContext = createContext(undefined)
 
 function MyApp({ Component, pageProps }) {
-  const [token, setToken] = useState(undefined)
-  const [cookie, setCookie, removeCookie] = useCookies(['token'])
+  const [cookie, setCookie] = useState(undefined)
 
-  if (token) {
-    let tomorrow = new Date()
-    tomorrow.setTime(tomorrow.getTime() + 1000 * 3600 * 24)
-    setCookie('token', token, { path: '/', expires: tomorrow })
-  }
+  useEffect(() => {
+    const cookieArray = document.cookie.split('=')
+    setCookie(cookieArray[1])
+  }, [])
 
   return (
     <>
       <Header />
       <MantineProvider withGlobalStyles withNormalizeCSS>
-        <TokenContext.Provider value={{ token, setToken }}>
-          <CookiesProvider>
-            <Component {...pageProps} />
-          </CookiesProvider>
-        </TokenContext.Provider>
+        <CookieContext.Provider value={cookie}>
+          <Component {...pageProps} />
+        </CookieContext.Provider>
       </MantineProvider>
     </>
   )
