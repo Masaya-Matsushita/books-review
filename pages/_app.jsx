@@ -17,7 +17,7 @@ function MyApp({ Component, pageProps }) {
     <>
       <Header />
       <MantineProvider withGlobalStyles withNormalizeCSS>
-        <CookieContext.Provider value={cookie}>
+        <CookieContext.Provider value={{cookie}}>
           <Component {...pageProps} />
         </CookieContext.Provider>
       </MantineProvider>
