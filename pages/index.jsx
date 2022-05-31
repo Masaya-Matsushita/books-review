@@ -9,7 +9,7 @@ export default function Home() {
   const { cookie } = useContext(CookieContext)
   const { state, dispatch } = usePostsState()
 
-  const getPosts = async (cookie, offset, e) => {
+  const getPosts = async (cookie, e) => {
     // postsリセット、ローディング表示
     dispatch({ type: 'start' })
 
@@ -18,12 +18,11 @@ export default function Home() {
     if (e) {
       dispatch({ type: 'offset', offset: 10 * (e - 1) })
     }
-    console.log(offset)
 
     // postsを取得(offsetの値から10件)
     try {
       const res = await fetch(
-        `https://api-for-missions-and-railways.herokuapp.com/books?offset=${offset}`,
+        `https://api-for-missions-and-railways.herokuapp.com/books?offset=${state.offset}`,
         {
           method: 'GET',
           mode: 'cors',
@@ -48,7 +47,7 @@ export default function Home() {
 
   // マウント時
   useEffect(() => {
-    cookie ? getPosts(cookie, state.offset) : null
+    cookie ? getPosts(cookie) : null
   }, [cookie])
 
   return (
@@ -57,7 +56,7 @@ export default function Home() {
       <h1>Index Page</h1>
       <Posts cookie={cookie} state={state} />
       <Pagination
-        onChange={cookie ? (e) => getPosts(cookie, state.offset, e) : null}
+        onChange={cookie ? (e) => getPosts(cookie, e) : null}
         total={10}
         className='mt-16'
       />

@@ -35,11 +35,7 @@ export const AuthForm = (props) => {
       dispatch({ type: 'end' })
 
       //クッキーに値をセット
-      if (typeof document !== 'undefined') {
         document.cookie = `token=${json.token}; max-age=7200`
-      } else {
-        throw new Error('Cookie setting error!')
-      }
 
       //エラー処理
     } catch (error) {
