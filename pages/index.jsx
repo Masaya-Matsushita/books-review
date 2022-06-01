@@ -15,15 +15,16 @@ export default function Home() {
     dispatch({ type: 'start' })
 
     // Paginationの番号を取得し、offsetを更新
-    // →1回目のonchangeではoffsetが以前の状態のままfetchされてしまう
-    if (e) {
-      dispatch({ type: 'offset', offset: 10 * (e - 1) })
+    const offset = 10 * (e - 1)
+    if (!e) {
+      offset = 0
     }
+    dispatch({ type: 'offset', offset: offset })
 
     // postsを取得(offsetの値から10件)
     try {
       const res = await fetch(
-        `https://api-for-missions-and-railways.herokuapp.com/books?offset=${state.offset}`,
+        `https://api-for-missions-and-railways.herokuapp.com/books?offset=${offset}`,
         {
           method: 'GET',
           mode: 'cors',
