@@ -15,6 +15,7 @@ const reducer = (state, action) => {
       return {
         ...state,
         posts: [],
+        loading: true,
       }
     // 取得するpostsの範囲をセット
     case 'offset':
