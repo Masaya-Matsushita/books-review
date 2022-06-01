@@ -3,13 +3,11 @@ import { At, Ballpen, Book2, Key } from 'tabler-icons-react'
 import Link from 'next/link'
 import { useAuthState } from 'hooks/useAuthState'
 import { useAuthFormInitialize } from 'hooks/useAuthFormInitialize'
-import { useRouter } from 'next/router'
 import { isLoginContext } from 'pages/_app'
 import { useContext } from 'react'
 // import PropTypes from 'prop-types'
 
 export const AuthForm = (props) => {
-  const router = useRouter()
   const form = useAuthFormInitialize(props.path)
   const { state, dispatch } = useAuthState()
   const { setIsLogin } = useContext(isLoginContext)
@@ -42,7 +40,6 @@ export const AuthForm = (props) => {
       //クッキーに値をセット
       document.cookie = `token=${json.token}; max-age=7200`
       setIsLogin(true)
-      router.push('/')
 
       //エラー処理
     } catch (error) {

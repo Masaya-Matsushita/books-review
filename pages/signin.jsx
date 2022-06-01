@@ -1,10 +1,10 @@
 import { AuthForm } from 'components/AuthForm'
 import { HeadComponent as Head } from 'components/Head'
-import { useRedirect } from 'hooks/useRedilect'
+import { useRedirectToTop } from 'hooks/useRedilectToTop'
 
 export default function Signin() {
   // ログインしている場合トップページへリダイレクト
-  useRedirect()
+  useRedirectToTop()
 
   return (
     <div className='bg-slate-100'>
