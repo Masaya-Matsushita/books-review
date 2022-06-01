@@ -40,6 +40,7 @@ export const AuthForm = (props) => {
       //クッキーに値をセット
       document.cookie = `token=${json.token}; max-age=7200`
       setIsLogin(true)
+      router.push('/')
 
       //エラー処理
     } catch (error) {
@@ -91,6 +92,7 @@ export const AuthForm = (props) => {
               type='submit'
               size='lg'
               leftIcon={<Book2 size={16} />}
+              loading={state.loading}
               className='mt-8'
             >
               {props.submitText}
@@ -98,10 +100,8 @@ export const AuthForm = (props) => {
           </Group>
         </form>
       </Box>
-
-      {/* サインイン⇔サインアップ遷移 */}
       <Link href={props.linkHref}>
-        <a className='block mt-4 '>{props.linkText}</a>
+        <a className='block mt-4'>{props.linkText}</a>
       </Link>
 
       {/* 仮、後で実装 */}
