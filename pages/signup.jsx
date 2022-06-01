@@ -1,13 +1,16 @@
 import { AuthForm } from 'components/AuthForm'
 import { HeadComponent as Head } from 'components/Head'
+import { useRedirectToTop } from 'hooks/useRedilectToTop'
 
 export default function Signup() {
+  // ログインしている場合トップページへリダイレクト
+  useRedirectToTop()
+
   return (
     <div className='bg-slate-100'>
       <Head title='signup page' />
       <AuthForm
         path='users'
-        errorMessage='エラーが発生したため、登録に失敗しました。'
         title='新規登録'
         submitText='登録'
         linkHref='/signin'

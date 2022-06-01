@@ -3,6 +3,7 @@ import { HeadComponent as Head } from 'components/Head'
 import { Header } from 'components/Header'
 import { Posts } from 'components/Posts'
 import { usePostsState } from 'hooks/usePostsState'
+import { useRedirectToSignin } from 'hooks/useRedilectToSignin'
 import { CookieContext } from 'pages/_app'
 import { useContext, useEffect } from 'react'
 
@@ -10,20 +11,24 @@ export default function Home() {
   const cookie = useContext(CookieContext)
   const { state, dispatch } = usePostsState()
 
+  // ログインしていない場合ログインページへリダイレクト
+  useRedirectToSignin(cookie)
+
   const getPosts = async (jwt, e) => {
     // postsリセット、ローディング表示
     dispatch({ type: 'start' })
 
     // Paginationの番号を取得し、offsetを更新
-    // →1回目のonchangeではoffsetが以前の状態のままfetchされてしまう
-    if (e) {
-      dispatch({ type: 'offset', offset: 10 * (e - 1) })
+    const offset = 10 * (e - 1)
+    if (!e) {
+      offset = 0
     }
+    dispatch({ type: 'offset', offset: offset })
 
     // postsを取得(offsetの値から10件)
     try {
       const res = await fetch(
-        `https://api-for-missions-and-railways.herokuapp.com/books?offset=${state.offset}`,
+        `https://api-for-missions-and-railways.herokuapp.com/books?offset=${offset}`,
         {
           method: 'GET',
           mode: 'cors',
@@ -32,17 +37,17 @@ export default function Home() {
           },
         }
       )
-      if (!res.ok) {
-        throw new Error()
-      }
       const json = await res.json()
+      if (!res.ok) {
+        dispatch({ type: 'error', error: json.ErrorMessageJP })
+      }
 
       // ローディング解除、posts表示
       dispatch({ type: 'end', posts: [...json] })
 
       // エラー処理
     } catch (error) {
-      dispatch({ type: 'error', error })
+      dispatch({ type: 'error', error: error.message })
     }
   }
 

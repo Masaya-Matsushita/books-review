@@ -4,7 +4,7 @@ import { useReducer } from 'react'
 const initialState = {
   posts: [],
   offset: 0,
-  loading: false,
+  loading: true,
   error: null,
 }
 

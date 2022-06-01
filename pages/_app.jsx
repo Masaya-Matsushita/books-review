@@ -1,4 +1,5 @@
 import { MantineProvider } from '@mantine/core'
+import { NotificationsProvider } from '@mantine/notifications'
 import { createContext, useEffect, useState } from 'react'
 import 'styles/globals.css'
 
@@ -23,11 +24,13 @@ function MyApp({ Component, pageProps }) {
   return (
     <>
       <MantineProvider withGlobalStyles withNormalizeCSS>
-        <CookieContext.Provider value={cookie}>
-          <isLoginContext.Provider value={{ isLogin, setIsLogin }}>
-            <Component {...pageProps} />
-          </isLoginContext.Provider>
-        </CookieContext.Provider>
+        <NotificationsProvider>
+          <CookieContext.Provider value={cookie}>
+            <isLoginContext.Provider value={{ isLogin, setIsLogin }}>
+              <Component {...pageProps} />
+            </isLoginContext.Provider>
+          </CookieContext.Provider>
+        </NotificationsProvider>
       </MantineProvider>
     </>
   )

@@ -1,10 +1,11 @@
 import { Button } from '@mantine/core'
 import { useNameState } from 'hooks/useNameState'
-import Router from 'next/router'
+import { useRouter } from 'next/router'
 import { CookieContext } from 'pages/_app'
 import { useContext, useEffect } from 'react'
 
 export const Header = () => {
+  const router = useRouter()
   const cookie = useContext(CookieContext)
   const { state, dispatch } = useNameState()
 
@@ -39,11 +40,11 @@ export const Header = () => {
   }, [cookie])
 
   return (
-    <div className='flex justify-center'>
+    <div className='flex justify-end'>
       {state.name ? (
         <div>ログイン済：{state.name}さん</div>
       ) : (
-        <Button onClick={() => Router.push('/signin')}>ログイン</Button>
+        <Button onClick={() => router.push('/signin')}>ログイン</Button>
       )}
     </div>
   )
