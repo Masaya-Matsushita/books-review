@@ -1,8 +1,8 @@
 import { showNotification } from '@mantine/notifications'
 import { useRouter } from 'next/router'
-import { CookieContext } from 'pages/_app'
 import { useContext, useEffect } from 'react'
 import { Check } from 'tabler-icons-react'
+import { CookieContext } from 'components/StateProvider'
 
 export const useRedirectToTop = () => {
   const cookie = useContext(CookieContext)

@@ -1,8 +1,8 @@
 import { Button } from '@mantine/core'
 import { useNameState } from 'hooks/useNameState'
 import { useRouter } from 'next/router'
-import { CookieContext } from 'pages/_app'
 import { useContext, useEffect } from 'react'
+import { CookieContext } from 'components/StateProvider'
 
 export const Header = () => {
   const router = useRouter()

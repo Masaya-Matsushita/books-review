@@ -4,8 +4,8 @@ import { Header } from 'components/Header'
 import { Posts } from 'components/Posts'
 import { usePostsState } from 'hooks/usePostsState'
 import { useRedirectToSignin } from 'hooks/useRedilectToSignin'
-import { CookieContext } from 'pages/_app'
 import { useContext, useEffect } from 'react'
+import { CookieContext } from 'components/StateProvider'
 
 export default function Home() {
   const cookie = useContext(CookieContext)
@@ -61,7 +61,7 @@ export default function Home() {
       <Head title='index page' />
       <Header />
       <h1>投稿一覧</h1>
-      <Posts cookie={cookie} state={state} />
+      <Posts cookie={cookie} state={state}/>
       <Pagination
         onChange={cookie ? (e) => getPosts(cookie, e) : null}
         total={8}

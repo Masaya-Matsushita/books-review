@@ -3,14 +3,14 @@ import { At, Ballpen, Book2, Key } from 'tabler-icons-react'
 import Link from 'next/link'
 import { useAuthState } from 'hooks/useAuthState'
 import { useAuthFormInitialize } from 'hooks/useAuthFormInitialize'
-import { isLoginContext } from 'pages/_app'
 import { useContext } from 'react'
+import { isLoginDispatchContext } from 'components/StateProvider'
 // import PropTypes from 'prop-types'
 
 export const AuthForm = (props) => {
   const form = useAuthFormInitialize(props.path)
   const { state, dispatch } = useAuthState()
-  const { setIsLogin } = useContext(isLoginContext)
+  const setIsLogin = useContext(isLoginDispatchContext)
 
   const handleSubmit = async (values) => {
     //ローディングを表示
