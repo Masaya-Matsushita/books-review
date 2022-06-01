@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { useForm, zodResolver } from '@mantine/form'
-import PropTypes from 'prop-types'
+// import PropTypes from 'prop-types'
 
 export const useAuthFormInitialize = (mode) => {
   //フォームのバリデーションを定義
@@ -40,6 +40,6 @@ export const useAuthFormInitialize = (mode) => {
   return form
 }
 
-useAuthFormInitialize.Proptypes = {
-  mode: PropTypes.oneOf(['users', 'signin']),
-}
+// useAuthFormInitialize.Proptypes = {
+//   mode: PropTypes.oneOf(['users', 'signin']),
+// }

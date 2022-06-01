@@ -6,7 +6,7 @@ import { useAuthFormInitialize } from 'hooks/useAuthFormInitialize'
 import { useRouter } from 'next/router'
 import { isLoginContext } from 'pages/_app'
 import { useContext } from 'react'
-import PropTypes from 'prop-types'
+// import PropTypes from 'prop-types'
 
 export const AuthForm = (props) => {
   const router = useRouter()
@@ -112,13 +112,13 @@ export const AuthForm = (props) => {
   )
 }
 
-AuthForm.Proptypes = {
-  path: PropTypes.oneOf(['users', 'signin']),
-  title: PropTypes.oneOf(['新規登録', 'ログイン']),
-  submitText: PropTypes.oneOf(['登録', 'ログイン']),
-  linkHref: PropTypes.oneOf(['/signin', '/signup']),
-  linkText: PropTypes.oneOf([
-    '登録済みの方はこちら',
-    'アカウントをお持ちでない方',
-  ]),
-}
+// AuthForm.Proptypes = {
+//   path: PropTypes.oneOf(['users', 'signin']),
+//   title: PropTypes.oneOf(['新規登録', 'ログイン']),
+//   submitText: PropTypes.oneOf(['登録', 'ログイン']),
+//   linkHref: PropTypes.oneOf(['/signin', '/signup']),
+//   linkText: PropTypes.oneOf([
+//     '登録済みの方はこちら',
+//     'アカウントをお持ちでない方',
+//   ]),
+// }

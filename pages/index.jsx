@@ -3,10 +3,14 @@ import { HeadComponent as Head } from 'components/Head'
 import { Header } from 'components/Header'
 import { Posts } from 'components/Posts'
 import { usePostsState } from 'hooks/usePostsState'
+import { useRedirect } from 'hooks/useRedilect'
 import { CookieContext } from 'pages/_app'
 import { useContext, useEffect } from 'react'
 
 export default function Home() {
+  // ログインしていない場合ログインページへリダイレクト
+  useRedirect()
+
   const cookie = useContext(CookieContext)
   const { state, dispatch } = usePostsState()
 
