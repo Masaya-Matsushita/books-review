@@ -4,7 +4,7 @@ import { useReducer } from 'react'
 const initialState = {
   posts: [],
   offset: 0,
-  loading: false,
+  loading: true,
   error: null,
 }
 
@@ -15,7 +15,6 @@ const reducer = (state, action) => {
       return {
         ...state,
         posts: [],
-        loading: true,
       }
     // 取得するpostsの範囲をセット
     case 'offset':

@@ -1,12 +1,8 @@
-import { Card } from '@mantine/core'
+import { Card, Loader } from '@mantine/core'
 
-export const Posts = ({ cookie, state }) => {
-  if (!cookie) {
-    return <div>ログインしてください</div>
-  }
-
+export const Posts = ({ state }) => {
   if (state.loading) {
-    return <div>ローディング中</div>
+    return <Loader size='lg' className='fixed inset-0 m-auto' />
   }
 
   if (state.error) {
