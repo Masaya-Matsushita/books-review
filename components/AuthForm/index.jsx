@@ -13,10 +13,10 @@ export const AuthForm = (props) => {
   const setIsLogin = useContext(isLoginDispatchContext)
 
   const handleSubmit = async (values) => {
-    //ローディングを表示
+    //ローディング表示
     dispatch({ type: 'start' })
 
-    //POST通信でトークンを取得
+    //トークンを取得
     try {
       const res = await fetch(
         `https://api-for-missions-and-railways.herokuapp.com/${props.path}`,
@@ -29,19 +29,21 @@ export const AuthForm = (props) => {
         }
       )
       const json = await res.json()
+
+      // エラーの入ったデータを取得した場合
       if (!res.ok) {
         dispatch({ type: 'error', error: json.ErrorMessageJP })
         return
       }
 
-      //ローディング表示を解除
+      // ローディング表示を解除
       dispatch({ type: 'end' })
 
-      //クッキーに値をセット
+      // クッキーに値をセット
       document.cookie = `token=${json.token}; max-age=7200`
       setIsLogin(true)
 
-      //エラー処理
+      // fetchが失敗した場合
     } catch (error) {
       dispatch({ type: 'error', error: error.message })
     }

@@ -19,14 +19,14 @@ export default function Home() {
       // postsリセット、ローディング表示
       dispatch({ type: 'start' })
 
-      // Paginationの番号を取得し、offsetを更新
+      // offsetの値を定義
       const offset = 10 * (e - 1)
       if (!e) {
         offset = 0
       }
       dispatch({ type: 'offset', offset: offset })
 
-      // postsを取得(offsetの値から10件)
+      // postsを取得(10件分)
       try {
         const res = await fetch(
           `https://api-for-missions-and-railways.herokuapp.com/books?offset=${offset}`,
@@ -39,14 +39,17 @@ export default function Home() {
           }
         )
         const json = await res.json()
+
+        // エラーの入ったデータを取得した場合
         if (!res.ok) {
           dispatch({ type: 'error', error: json.ErrorMessageJP })
+          return
         }
 
-        // ローディング解除、posts表示
+        // データをpostsへ、ローディング解除
         dispatch({ type: 'end', posts: [...json] })
 
-        // エラー処理
+        // fetchが失敗した場合
       } catch (error) {
         dispatch({ type: 'error', error: error.message })
       }
@@ -54,7 +57,7 @@ export default function Home() {
     [dispatch]
   )
 
-  // マウント&クッキー取得時
+  // マウント時&クッキー取得時
   useEffect(() => {
     cookie ? getPosts(cookie) : null
   }, [cookie, getPosts])
@@ -64,7 +67,7 @@ export default function Home() {
       <Head title='index page' />
       <Header />
       <h1>投稿一覧</h1>
-      <Posts cookie={cookie} state={state} />
+      <Posts state={state} />
       <Pagination
         onChange={cookie ? (e) => getPosts(cookie, e) : null}
         total={10}
