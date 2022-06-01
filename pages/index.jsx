@@ -32,17 +32,17 @@ export default function Home() {
           },
         }
       )
-      if (!res.ok) {
-        throw new Error()
-      }
       const json = await res.json()
+      if (!res.ok) {
+        dispatch({ type: 'error', error: json.ErrorMessageJP })
+      }
 
       // ローディング解除、posts表示
       dispatch({ type: 'end', posts: [...json] })
 
       // エラー処理
     } catch (error) {
-      dispatch({ type: 'error', error })
+      dispatch({ type: 'error', error: error.message })
     }
   }
 

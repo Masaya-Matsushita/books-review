@@ -7,7 +7,6 @@ export default function Signin() {
       <Head title='signin page' />
       <AuthForm
         path='signin'
-        errorMessage='ログインに失敗しました。入力内容をご確認ください。'
         title='ログイン'
         submitText='ログイン'
         linkHref='/signup'

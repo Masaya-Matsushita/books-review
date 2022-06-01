@@ -10,7 +10,7 @@ export const Posts = ({ cookie, state }) => {
   }
 
   if (state.error) {
-    return <div>エラーが発生したため、データの取得に失敗しました。</div>
+    return <div>{state.error}</div>
   }
 
   return (

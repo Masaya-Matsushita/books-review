@@ -7,7 +7,6 @@ export default function Signup() {
       <Head title='signup page' />
       <AuthForm
         path='users'
-        errorMessage='エラーが発生したため、登録に失敗しました。'
         title='新規登録'
         submitText='登録'
         linkHref='/signin'

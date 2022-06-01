@@ -29,10 +29,11 @@ export const AuthForm = (props) => {
           body: JSON.stringify(values),
         }
       )
-      if (!res.ok) {
-        throw new Error(props.errorMessage)
-      }
       const json = await res.json()
+      if (!res.ok) {
+        dispatch({ type: 'error', error: json.ErrorMessageJP })
+        return
+      }
 
       //ローディング表示を解除
       dispatch({ type: 'end' })
@@ -44,7 +45,7 @@ export const AuthForm = (props) => {
 
       //エラー処理
     } catch (error) {
-      dispatch({ type: 'error', error })
+      dispatch({ type: 'error', error: error.message })
     }
   }
 
@@ -105,8 +106,7 @@ export const AuthForm = (props) => {
       </Link>
 
       {/* 仮、後で実装 */}
-      {state.loading ? <div>ローディング中</div> : null}
-      {state.error ? <div>{state.error.message}</div> : null}
+      {state.error ? <div>{state.error}</div> : null}
     </div>
   )
 }
