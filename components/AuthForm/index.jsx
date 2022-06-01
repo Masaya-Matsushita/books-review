@@ -9,7 +9,7 @@ import { useContext } from 'react'
 
 export const AuthForm = (props) => {
   const router = useRouter()
-  const form = useAuthFormInitialize()
+  const form = useAuthFormInitialize(props.path)
   const { state, dispatch } = useAuthState()
   const { setIsLogin } = useContext(isLoginContext)
 
@@ -53,7 +53,7 @@ export const AuthForm = (props) => {
       <Box sx={{ maxWidth: 400 }} mx='auto'>
         <form onSubmit={form.onSubmit(handleSubmit)}>
           {/* サインイン画面ではName入力無し */}
-          {router.pathname === '/signup' ? (
+          {props.path === 'signup' ? (
             <TextInput
               id='username'
               placeholder='サービス太郎'

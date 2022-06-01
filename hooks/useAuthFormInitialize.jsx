@@ -1,14 +1,13 @@
 import { z } from 'zod'
 import { useForm, zodResolver } from '@mantine/form'
-import { useRouter } from 'next/router'
 
-export const useAuthFormInitialize = () => {
-  const router = useRouter()
+export const useAuthFormInitialize = (mode) => {
+
 
   //フォームのバリデーションを定義
   const schema =
   // サインアップ画面の場合(name有り)
-    router.pathname === '/signup'
+    mode === 'signup'
       ? z.object({
           name: z
             .string()
