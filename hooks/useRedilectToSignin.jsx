@@ -8,5 +8,5 @@ export const useRedirectToSignin = (cookie) => {
     if (!cookie) {
       router.push('/signin')
     }
-  }, [])
+  }, [cookie, router])
 }

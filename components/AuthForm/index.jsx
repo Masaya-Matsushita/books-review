@@ -49,13 +49,13 @@ export const AuthForm = (props) => {
 
   return (
     <div>
-      <h1>{props.title}</h1>
-      {state.error ? (
-        <div className='text-lg font-bold text-red-500'>
-          Error：{state.error}
-        </div>
-      ) : null}
       <Box sx={{ maxWidth: 400 }} mx='auto'>
+        <h1>{props.title}</h1>
+        {state.error ? (
+          <div className='text-lg font-bold text-red-500'>
+            Error：{state.error}
+          </div>
+        ) : null}
         <form onSubmit={form.onSubmit(handleSubmit)}>
           {/* サインイン画面ではName入力無し */}
           {props.path === 'users' ? (
@@ -103,10 +103,10 @@ export const AuthForm = (props) => {
             </Button>
           </Group>
         </form>
+        <Link href={props.linkHref}>
+          <a className='block mt-4'>{props.linkText}</a>
+        </Link>
       </Box>
-      <Link href={props.linkHref}>
-        <a className='block mt-4'>{props.linkText}</a>
-      </Link>
     </div>
   )
 }
