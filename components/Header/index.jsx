@@ -1,19 +1,14 @@
-import { Button } from '@mantine/core'
 import { useNameState } from 'hooks/useNameState'
-import { useRouter } from 'next/router'
-import { useEffect } from 'react'
-// import { CookieContext } from 'components/StateProvider'
+import { useCallback, useEffect } from 'react'
 import { useCookies } from 'react-cookie'
 import Link from 'next/link'
 
 export const Header = () => {
-  const router = useRouter()
-  // const cookie = useContext(CookieContext)
   const [cookies, setCookie, reduceCookie] = useCookies('token')
   const { state, dispatch } = useNameState()
 
   // ユーザー名を取得
-  const getName = async () => {
+  const getName = useCallback(async () => {
     try {
       const token = cookies.token
       const res = await fetch(
@@ -36,12 +31,12 @@ export const Header = () => {
     } catch (error) {
       dispatch({ type: 'error', error })
     }
-  }
+  }, [cookies.token, dispatch])
 
-  // マウント＆クッキー取得時
+  // マウント時
   useEffect(() => {
-    getName()
-  }, [])
+    cookies.token ? getName() : null
+  }, [cookies.token, getName])
 
   return (
     <div className='flex justify-end'>
@@ -53,9 +48,7 @@ export const Header = () => {
           </Link>
           さん
         </div>
-      ) : (
-        <Button onClick={() => router.push('/signin')}>ログイン</Button>
-      )}
+      ) : null}
     </div>
   )
 }

@@ -2,16 +2,12 @@ import { showNotification } from '@mantine/notifications'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { Check } from 'tabler-icons-react'
-// import { CookieContext } from 'components/StateProvider'
-import { useCookies } from 'react-cookie'
 
-export const useRedirectToTop = () => {
-  // const cookie = useContext(CookieContext)
+export const useRedirectToTop = (token) => {
   const router = useRouter()
-  const [cookies, setCookie, reduceCookie] = useCookies('token')
 
   useEffect(() => {
-    if (cookies.token) {
+    if (token) {
       router.push('/')
       showNotification({
         id: 'redilectToTop',
@@ -23,5 +19,5 @@ export const useRedirectToTop = () => {
         color: 'teal',
       })
     }
-  }, [])
+  }, [router, token])
 }

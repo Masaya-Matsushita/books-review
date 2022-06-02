@@ -3,8 +3,6 @@ import { At, Ballpen, Book2, Check, Key } from 'tabler-icons-react'
 import Link from 'next/link'
 import { useAuthState } from 'hooks/useAuthState'
 import { useAuthFormInitialize } from 'hooks/useAuthFormInitialize'
-// import { useContext } from 'react'
-// import { isLoginDispatchContext } from 'components/StateProvider'
 import { useCookies } from 'react-cookie'
 import { showNotification } from '@mantine/notifications'
 import { useRouter } from 'next/router'
@@ -13,7 +11,6 @@ import { useRouter } from 'next/router'
 export const AuthForm = (props) => {
   const form = useAuthFormInitialize(props.path)
   const { state, dispatch } = useAuthState()
-  // const setIsLogin = useContext(isLoginDispatchContext)
   const [cookies, setCookie, removeCookie] = useCookies(['token'])
   const router = useRouter()
 
@@ -45,10 +42,9 @@ export const AuthForm = (props) => {
       dispatch({ type: 'end' })
 
       // クッキーに値をセット
-      // document.cookie = `token=${json.token}; max-age=7200`
-      // setIsLogin(true)
       setCookie('token', json.token, { maxAge: 7200 })
 
+      // topベージへ遷移
       router.push('/')
       showNotification({
         id: 'redilectToTop',
