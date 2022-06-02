@@ -1,47 +1,47 @@
 import { Button } from '@mantine/core'
 import { useNameState } from 'hooks/useNameState'
 import { useRouter } from 'next/router'
-import { useCallback, useContext, useEffect } from 'react'
-import { CookieContext } from 'components/StateProvider'
+import { useEffect } from 'react'
+// import { CookieContext } from 'components/StateProvider'
+import { useCookies } from 'react-cookie'
 import Link from 'next/link'
 
 export const Header = () => {
   const router = useRouter()
-  const cookie = useContext(CookieContext)
+  // const cookie = useContext(CookieContext)
+  const [cookies, setCookie, reduceCookie] = useCookies('token')
   const { state, dispatch } = useNameState()
 
   // ユーザー名を取得
-  const getName = useCallback(
-    async (jwt) => {
-      try {
-        const res = await fetch(
-          'https://api-for-missions-and-railways.herokuapp.com/users',
-          {
-            method: 'GET',
-            mode: 'cors',
-            headers: {
-              Authorization: `Bearer ${jwt}`,
-            },
-          }
-        )
-        if (!res.ok) {
-          throw new Error()
+  const getName = async () => {
+    try {
+      const token = cookies.token
+      const res = await fetch(
+        'https://api-for-missions-and-railways.herokuapp.com/users',
+        {
+          method: 'GET',
+          mode: 'cors',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
-        const json = await res.json()
-        dispatch({ type: 'name', name: json.name })
-
-        // エラー処理
-      } catch (error) {
-        dispatch({ type: 'error', error })
+      )
+      if (!res.ok) {
+        throw new Error()
       }
-    },
-    [dispatch]
-  )
+      const json = await res.json()
+      dispatch({ type: 'name', name: json.name })
+
+      // エラー処理
+    } catch (error) {
+      dispatch({ type: 'error', error })
+    }
+  }
 
   // マウント＆クッキー取得時
   useEffect(() => {
-    cookie ? getName(cookie) : null
-  }, [cookie, getName])
+    getName()
+  }, [])
 
   return (
     <div className='flex justify-end'>

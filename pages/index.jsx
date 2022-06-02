@@ -4,64 +4,65 @@ import { Header } from 'components/Header'
 import { Posts } from 'components/Posts'
 import { usePostsState } from 'hooks/usePostsState'
 import { useRedirectToSignin } from 'hooks/useRedilectToSignin'
-import { useCallback, useContext, useEffect } from 'react'
-import { CookieContext } from 'components/StateProvider'
+import { useCallback, useEffect } from 'react'
+// import { CookieContext } from 'components/StateProvider'
+import { useCookies } from 'react-cookie'
 
 export default function Home() {
-  const cookie = useContext(CookieContext)
+  // const cookie = useContext(CookieContext)
   const { state, dispatch } = usePostsState()
 
+  const [cookies, setCookie, removeCookie] = useCookies(['sample'])
+
   // ログインしていない場合ログインページへリダイレクト
-  useRedirectToSignin(cookie)
+  useRedirectToSignin()
 
-  const getPosts = useCallback(
-    async (jwt, e) => {
+  const getPosts = async (e) => {
+    // postsリセット、ローディング表示
+    dispatch({ type: 'start' })
 
-      // postsリセット、ローディング表示
-      dispatch({ type: 'start' })
+    // offsetの値を定義
+    const offset = 10 * (e - 1)
+    if (!e) {
+      offset = 0
+    }
+    dispatch({ type: 'offset', offset: offset })
 
-      // offsetの値を定義
-      const offset = 10 * (e - 1)
-      if (!e) {
-        offset = 0
-      }
-      dispatch({ type: 'offset', offset: offset })
+    const token = cookies.token
 
-      // postsを取得(10件分)
-      try {
-        const res = await fetch(
-          `https://api-for-missions-and-railways.herokuapp.com/books?offset=${offset}`,
-          {
-            method: 'GET',
-            mode: 'cors',
-            headers: {
-              Authorization: `Bearer ${jwt}`,
-            },
-          }
-        )
-        const json = await res.json()
-
-        // エラーの入ったデータを取得した場合
-        if (!res.ok) {
-          dispatch({ type: 'error', error: json.ErrorMessageJP })
-          return
+    // postsを取得(10件分)
+    try {
+      const res = await fetch(
+        `https://api-for-missions-and-railways.herokuapp.com/books?offset=${offset}`,
+        {
+          method: 'GET',
+          mode: 'cors',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
+      )
+      const json = await res.json()
 
-        // データをpostsへ、ローディング解除
-        dispatch({ type: 'end', posts: [...json] })
-
-        // fetchが失敗した場合
-      } catch (error) {
-        dispatch({ type: 'error', error: error.message })
+      // エラーの入ったデータを取得した場合
+      if (!res.ok) {
+        dispatch({ type: 'error', error: json.ErrorMessageJP })
+        return
       }
-    },
-    [dispatch]
-  )
+
+      // データをpostsへ、ローディング解除
+      dispatch({ type: 'end', posts: [...json] })
+
+      // fetchが失敗した場合
+    } catch (error) {
+      dispatch({ type: 'error', error: error.message })
+    }
+  }
 
   // マウント時&クッキー取得時
   useEffect(() => {
-    cookie ? getPosts(cookie) : null
-  }, [cookie, getPosts])
+    cookies.token ? getPosts() : null
+  }, [])
 
   return (
     <div className='bg-slate-100'>
@@ -70,7 +71,7 @@ export default function Home() {
       <h1>投稿一覧</h1>
       <Posts state={state} />
       <Pagination
-        onChange={cookie ? (e) => getPosts(cookie, e) : null}
+        onChange={(e) => getPosts(e)}
         total={10}
         spacing='4px'
         className='flex justify-center pb-12 mt-12 w-full'

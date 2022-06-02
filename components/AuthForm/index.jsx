@@ -1,16 +1,21 @@
 import { Box, Button, Group, PasswordInput, TextInput } from '@mantine/core'
-import { At, Ballpen, Book2, Key } from 'tabler-icons-react'
+import { At, Ballpen, Book2, Check, Key } from 'tabler-icons-react'
 import Link from 'next/link'
 import { useAuthState } from 'hooks/useAuthState'
 import { useAuthFormInitialize } from 'hooks/useAuthFormInitialize'
-import { useContext } from 'react'
-import { isLoginDispatchContext } from 'components/StateProvider'
+// import { useContext } from 'react'
+// import { isLoginDispatchContext } from 'components/StateProvider'
+import { useCookies } from 'react-cookie'
+import { showNotification } from '@mantine/notifications'
+import { useRouter } from 'next/router'
 // import PropTypes from 'prop-types'
 
 export const AuthForm = (props) => {
   const form = useAuthFormInitialize(props.path)
   const { state, dispatch } = useAuthState()
-  const setIsLogin = useContext(isLoginDispatchContext)
+  // const setIsLogin = useContext(isLoginDispatchContext)
+  const [cookies, setCookie, removeCookie] = useCookies(['token'])
+  const router = useRouter()
 
   const handleSubmit = async (values) => {
     //ローディング表示
@@ -40,8 +45,20 @@ export const AuthForm = (props) => {
       dispatch({ type: 'end' })
 
       // クッキーに値をセット
-      document.cookie = `token=${json.token}; max-age=7200`
-      setIsLogin(true)
+      // document.cookie = `token=${json.token}; max-age=7200`
+      // setIsLogin(true)
+      setCookie('token', json.token, { maxAge: 7200 })
+
+      router.push('/')
+      showNotification({
+        id: 'redilectToTop',
+        disallowClose: true,
+        autoClose: 5000,
+        title: 'ログイン成功',
+        message: 'トップページへ遷移しました',
+        icon: <Check />,
+        color: 'teal',
+      })
 
       // fetchが失敗した場合
     } catch (error) {
