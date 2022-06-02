@@ -3,6 +3,7 @@ import { useNameState } from 'hooks/useNameState'
 import { useRouter } from 'next/router'
 import { useCallback, useContext, useEffect } from 'react'
 import { CookieContext } from 'components/StateProvider'
+import Link from 'next/link'
 
 export const Header = () => {
   const router = useRouter()
@@ -45,7 +46,13 @@ export const Header = () => {
   return (
     <div className='flex justify-end'>
       {state.name ? (
-        <div>ログイン済：{state.name}さん</div>
+        <div>
+          ログイン済：
+          <Link href='/profile'>
+            <a>{state.name}</a>
+          </Link>
+          さん
+        </div>
       ) : (
         <Button onClick={() => router.push('/signin')}>ログイン</Button>
       )}

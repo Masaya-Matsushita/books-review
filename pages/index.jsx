@@ -16,6 +16,7 @@ export default function Home() {
 
   const getPosts = useCallback(
     async (jwt, e) => {
+
       // postsリセット、ローディング表示
       dispatch({ type: 'start' })
 
