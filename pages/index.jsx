@@ -2,6 +2,7 @@ import { Pagination } from '@mantine/core'
 import { HeadComponent as Head } from 'components/Head'
 import { Header } from 'components/Header'
 import { Posts } from 'components/Posts'
+import { useGetName } from 'hooks/useGetName'
 import { usePostsState } from 'hooks/usePostsState'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect } from 'react'
@@ -11,6 +12,7 @@ export default function Home() {
   const router = useRouter()
   const { state, dispatch } = usePostsState()
   const [cookies, setCookie, removeCookie] = useCookies(['token'])
+  const headerState = useGetName()
 
   const getPosts = useCallback(
     async (e) => {
@@ -65,7 +67,7 @@ export default function Home() {
   return (
     <div className='bg-slate-100'>
       <Head title='index page' />
-      <Header />
+      <Header state={headerState} />
       <h1>投稿一覧</h1>
       <Posts state={state} />
       <Pagination
