@@ -10,9 +10,7 @@ import { useCookies } from 'react-cookie'
 export default function Home() {
   const router = useRouter()
   const { state, dispatch } = usePostsState()
-  const [cookies, setCookie, removeCookie] = useCookies(['sample'])
-
-  // ログインしていない場合ログインページへリダイレクト
+  const [cookies, setCookie, removeCookie] = useCookies(['token'])
 
   const getPosts = useCallback(
     async (e) => {
@@ -59,7 +57,7 @@ export default function Home() {
     [cookies.token, dispatch]
   )
 
-  // マウント時&クッキー取得時
+  // ログイン済でfetch、未ログインでリダイレクト
   useEffect(() => {
     cookies.token ? getPosts() : router.push('/signin')
   }, [cookies.token, getPosts, router])

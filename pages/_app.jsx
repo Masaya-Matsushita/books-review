@@ -1,15 +1,12 @@
-import { StyleProvider } from 'components/StyleProvider'
-import { CookiesProvider } from 'react-cookie'
+import { StateProvider } from 'components/StateProvider'
 import 'styles/globals.css'
 
 function MyApp({ Component, pageProps }) {
   return (
     <>
-      <StyleProvider>
-        <CookiesProvider>
-          <Component {...pageProps} />
-        </CookiesProvider>
-      </StyleProvider>
+      <StateProvider>
+        <Component {...pageProps} />
+      </StateProvider>
     </>
   )
 }

@@ -1,11 +1,14 @@
 import { MantineProvider } from '@mantine/core'
 import { NotificationsProvider } from '@mantine/notifications'
+import { CookiesProvider } from 'react-cookie'
 
-export const StyleProvider = ({ children }) => {
+export const StateProvider = ({ children }) => {
   return (
     <>
       <MantineProvider withGlobalStyles withNormalizeCSS>
-        <NotificationsProvider>{children}</NotificationsProvider>
+        <NotificationsProvider>
+          <CookiesProvider>{children}</CookiesProvider>
+        </NotificationsProvider>
       </MantineProvider>
     </>
   )
