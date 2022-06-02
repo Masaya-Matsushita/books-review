@@ -1,12 +1,19 @@
 import { Card, Loader } from '@mantine/core'
 
 export const Posts = ({ state }) => {
+  // ローディング状態
   if (state.loading) {
-    return <Loader size='lg' className='fixed inset-0 m-auto' />
+    return <Loader size='xl' className='block mx-auto mt-12' />
   }
 
+  // エラー発生時
   if (state.error) {
-    return <div>{state.error}</div>
+    return <div className='mt-12 text-xl text-center'>{state.error}</div>
+  }
+
+  // 取得した投稿が空だった場合
+  if (state.posts.length === 0) {
+    return <div className='mt-12 text-xl text-center'>投稿はありません</div>
   }
 
   return (

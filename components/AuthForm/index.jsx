@@ -3,20 +3,20 @@ import { At, Ballpen, Book2, Key } from 'tabler-icons-react'
 import Link from 'next/link'
 import { useAuthState } from 'hooks/useAuthState'
 import { useAuthFormInitialize } from 'hooks/useAuthFormInitialize'
-import { isLoginContext } from 'pages/_app'
 import { useContext } from 'react'
+import { isLoginDispatchContext } from 'components/StateProvider'
 // import PropTypes from 'prop-types'
 
 export const AuthForm = (props) => {
   const form = useAuthFormInitialize(props.path)
   const { state, dispatch } = useAuthState()
-  const { setIsLogin } = useContext(isLoginContext)
+  const setIsLogin = useContext(isLoginDispatchContext)
 
   const handleSubmit = async (values) => {
-    //ローディングを表示
+    //ローディング表示
     dispatch({ type: 'start' })
 
-    //POST通信でトークンを取得
+    //トークンを取得
     try {
       const res = await fetch(
         `https://api-for-missions-and-railways.herokuapp.com/${props.path}`,
@@ -29,19 +29,21 @@ export const AuthForm = (props) => {
         }
       )
       const json = await res.json()
+
+      // エラーの入ったデータを取得した場合
       if (!res.ok) {
         dispatch({ type: 'error', error: json.ErrorMessageJP })
         return
       }
 
-      //ローディング表示を解除
+      // ローディング表示を解除
       dispatch({ type: 'end' })
 
-      //クッキーに値をセット
+      // クッキーに値をセット
       document.cookie = `token=${json.token}; max-age=7200`
       setIsLogin(true)
 
-      //エラー処理
+      // fetchが失敗した場合
     } catch (error) {
       dispatch({ type: 'error', error: error.message })
     }
@@ -49,13 +51,13 @@ export const AuthForm = (props) => {
 
   return (
     <div>
-      <h1>{props.title}</h1>
-      {state.error ? (
-        <div className='text-lg font-bold text-red-500'>
-          Error：{state.error}
-        </div>
-      ) : null}
       <Box sx={{ maxWidth: 400 }} mx='auto'>
+        <h1>{props.title}</h1>
+        {state.error ? (
+          <div className='text-lg font-bold text-red-500'>
+            Error：{state.error}
+          </div>
+        ) : null}
         <form onSubmit={form.onSubmit(handleSubmit)}>
           {/* サインイン画面ではName入力無し */}
           {props.path === 'users' ? (
@@ -103,10 +105,10 @@ export const AuthForm = (props) => {
             </Button>
           </Group>
         </form>
+        <Link href={props.linkHref}>
+          <a className='block mt-4'>{props.linkText}</a>
+        </Link>
       </Box>
-      <Link href={props.linkHref}>
-        <a className='block mt-4'>{props.linkText}</a>
-      </Link>
     </div>
   )
 }

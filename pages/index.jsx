@@ -4,8 +4,8 @@ import { Header } from 'components/Header'
 import { Posts } from 'components/Posts'
 import { usePostsState } from 'hooks/usePostsState'
 import { useRedirectToSignin } from 'hooks/useRedilectToSignin'
-import { CookieContext } from 'pages/_app'
-import { useContext, useEffect } from 'react'
+import { useCallback, useContext, useEffect } from 'react'
+import { CookieContext } from 'components/StateProvider'
 
 export default function Home() {
   const cookie = useContext(CookieContext)
@@ -14,57 +14,64 @@ export default function Home() {
   // ログインしていない場合ログインページへリダイレクト
   useRedirectToSignin(cookie)
 
-  const getPosts = async (jwt, e) => {
-    // postsリセット、ローディング表示
-    dispatch({ type: 'start' })
+  const getPosts = useCallback(
+    async (jwt, e) => {
 
-    // Paginationの番号を取得し、offsetを更新
-    const offset = 10 * (e - 1)
-    if (!e) {
-      offset = 0
-    }
-    dispatch({ type: 'offset', offset: offset })
+      // postsリセット、ローディング表示
+      dispatch({ type: 'start' })
 
-    // postsを取得(offsetの値から10件)
-    try {
-      const res = await fetch(
-        `https://api-for-missions-and-railways.herokuapp.com/books?offset=${offset}`,
-        {
-          method: 'GET',
-          mode: 'cors',
-          headers: {
-            Authorization: `Bearer ${jwt}`,
-          },
-        }
-      )
-      const json = await res.json()
-      if (!res.ok) {
-        dispatch({ type: 'error', error: json.ErrorMessageJP })
+      // offsetの値を定義
+      const offset = 10 * (e - 1)
+      if (!e) {
+        offset = 0
       }
+      dispatch({ type: 'offset', offset: offset })
 
-      // ローディング解除、posts表示
-      dispatch({ type: 'end', posts: [...json] })
+      // postsを取得(10件分)
+      try {
+        const res = await fetch(
+          `https://api-for-missions-and-railways.herokuapp.com/books?offset=${offset}`,
+          {
+            method: 'GET',
+            mode: 'cors',
+            headers: {
+              Authorization: `Bearer ${jwt}`,
+            },
+          }
+        )
+        const json = await res.json()
 
-      // エラー処理
-    } catch (error) {
-      dispatch({ type: 'error', error: error.message })
-    }
-  }
+        // エラーの入ったデータを取得した場合
+        if (!res.ok) {
+          dispatch({ type: 'error', error: json.ErrorMessageJP })
+          return
+        }
 
-  // マウント&クッキー取得時
+        // データをpostsへ、ローディング解除
+        dispatch({ type: 'end', posts: [...json] })
+
+        // fetchが失敗した場合
+      } catch (error) {
+        dispatch({ type: 'error', error: error.message })
+      }
+    },
+    [dispatch]
+  )
+
+  // マウント時&クッキー取得時
   useEffect(() => {
     cookie ? getPosts(cookie) : null
-  }, [cookie])
+  }, [cookie, getPosts])
 
   return (
     <div className='bg-slate-100'>
       <Head title='index page' />
       <Header />
       <h1>投稿一覧</h1>
-      <Posts cookie={cookie} state={state} />
+      <Posts state={state} />
       <Pagination
         onChange={cookie ? (e) => getPosts(cookie, e) : null}
-        total={8}
+        total={10}
         spacing='4px'
         className='flex justify-center pb-12 mt-12 w-full'
       />
