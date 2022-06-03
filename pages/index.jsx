@@ -2,21 +2,20 @@ import { Pagination } from '@mantine/core'
 import { HeadComponent as Head } from 'components/Head'
 import { Header } from 'components/Header'
 import { Posts } from 'components/Posts'
+import { useGetName } from 'hooks/useGetName'
 import { usePostsState } from 'hooks/usePostsState'
-import { useRedirectToSignin } from 'hooks/useRedilectToSignin'
-import { useCallback, useContext, useEffect } from 'react'
-import { CookieContext } from 'components/StateProvider'
+import { useRouter } from 'next/router'
+import { useCallback, useEffect } from 'react'
+import { useCookies } from 'react-cookie'
 
 export default function Home() {
-  const cookie = useContext(CookieContext)
+  const router = useRouter()
   const { state, dispatch } = usePostsState()
-
-  // ログインしていない場合ログインページへリダイレクト
-  useRedirectToSignin(cookie)
+  const [cookies, setCookie, removeCookie] = useCookies(['token'])
+  const headerState = useGetName()
 
   const getPosts = useCallback(
-    async (jwt, e) => {
-
+    async (e) => {
       // postsリセット、ローディング表示
       dispatch({ type: 'start' })
 
@@ -27,6 +26,8 @@ export default function Home() {
       }
       dispatch({ type: 'offset', offset: offset })
 
+      const token = cookies.token
+
       // postsを取得(10件分)
       try {
         const res = await fetch(
@@ -35,7 +36,7 @@ export default function Home() {
             method: 'GET',
             mode: 'cors',
             headers: {
-              Authorization: `Bearer ${jwt}`,
+              Authorization: `Bearer ${token}`,
             },
           }
         )
@@ -55,22 +56,22 @@ export default function Home() {
         dispatch({ type: 'error', error: error.message })
       }
     },
-    [dispatch]
+    [cookies.token, dispatch]
   )
 
-  // マウント時&クッキー取得時
+  // ログイン済でfetch、未ログインでリダイレクト
   useEffect(() => {
-    cookie ? getPosts(cookie) : null
-  }, [cookie, getPosts])
+    cookies.token ? getPosts() : router.push('/signin')
+  }, [cookies.token, getPosts, router])
 
   return (
     <div className='bg-slate-100'>
       <Head title='index page' />
-      <Header />
+      <Header state={headerState} />
       <h1>投稿一覧</h1>
       <Posts state={state} />
       <Pagination
-        onChange={cookie ? (e) => getPosts(cookie, e) : null}
+        onChange={(e) => getPosts(e)}
         total={10}
         spacing='4px'
         className='flex justify-center pb-12 mt-12 w-full'

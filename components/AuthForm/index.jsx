@@ -1,16 +1,18 @@
 import { Box, Button, Group, PasswordInput, TextInput } from '@mantine/core'
-import { At, Ballpen, Book2, Key } from 'tabler-icons-react'
+import { At, Ballpen, Book2, Check, Key } from 'tabler-icons-react'
 import Link from 'next/link'
-import { useAuthState } from 'hooks/useAuthState'
+import { useLoadState } from 'hooks/useLoadState'
 import { useAuthFormInitialize } from 'hooks/useAuthFormInitialize'
-import { useContext } from 'react'
-import { isLoginDispatchContext } from 'components/StateProvider'
+import { useCookies } from 'react-cookie'
+import { showNotification } from '@mantine/notifications'
+import { useRouter } from 'next/router'
 // import PropTypes from 'prop-types'
 
 export const AuthForm = (props) => {
   const form = useAuthFormInitialize(props.path)
-  const { state, dispatch } = useAuthState()
-  const setIsLogin = useContext(isLoginDispatchContext)
+  const { state, dispatch } = useLoadState()
+  const [cookies, setCookie, removeCookie] = useCookies(['token'])
+  const router = useRouter()
 
   const handleSubmit = async (values) => {
     //ローディング表示
@@ -22,7 +24,7 @@ export const AuthForm = (props) => {
         `https://api-for-missions-and-railways.herokuapp.com/${props.path}`,
         {
           method: 'post',
-          header: {
+          headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify(values),
@@ -40,8 +42,18 @@ export const AuthForm = (props) => {
       dispatch({ type: 'end' })
 
       // クッキーに値をセット
-      document.cookie = `token=${json.token}; max-age=7200`
-      setIsLogin(true)
+      setCookie('token', json.token, { maxAge: 7200 })
+
+      // topベージへ遷移
+      router.push('/')
+      showNotification({
+        id: 'redilectToTop',
+        disallowClose: true,
+        autoClose: 5000,
+        title: 'ログインに成功しました',
+        icon: <Check />,
+        color: 'teal',
+      })
 
       // fetchが失敗した場合
     } catch (error) {
@@ -65,7 +77,7 @@ export const AuthForm = (props) => {
               id='username'
               placeholder='サービス太郎'
               label='User Name'
-              aria-label='Full name'
+              aria-label='User name'
               size='lg'
               required
               icon={<Ballpen size={16} />}
@@ -87,6 +99,7 @@ export const AuthForm = (props) => {
             id='password'
             placeholder='半角英数6文字以上'
             label='Password'
+            aria-label='Password'
             size='lg'
             required
             icon={<Key size={16} />}
