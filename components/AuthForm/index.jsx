@@ -78,7 +78,7 @@ export const AuthForm = (props) => {
               id='username'
               placeholder='サービス太郎'
               label='User Name'
-              aria-label='Full name'
+              aria-label='User name'
               size='lg'
               required
               icon={<Ballpen size={16} />}
@@ -100,6 +100,7 @@ export const AuthForm = (props) => {
             id='password'
             placeholder='半角英数6文字以上'
             label='Password'
+            aria-label='Password'
             size='lg'
             required
             icon={<Key size={16} />}
