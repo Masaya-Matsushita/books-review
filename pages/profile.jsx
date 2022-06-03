@@ -12,6 +12,7 @@ import { z } from 'zod'
 const schema = z.object({
   name: z
     .string()
+    .trim()
     .min(2, { message: '2文字以上10文字以内で入力してください。' })
     .max(10, { message: '2文字以上10文字以内で入力してください。' }),
 })
@@ -65,6 +66,11 @@ export default function Profile() {
       <Head title='profile' />
       <Box sx={{ maxWidth: 400 }} mx='auto'>
         <h1 className='mb-4'>名前を変更する</h1>
+        {state.error ? (
+          <div className='text-lg font-bold text-red-500'>
+            Error：{state.error}
+          </div>
+        ) : null}
         <form onSubmit={form.onSubmit(handleSubmit)}>
           <TextInput
             id='rename'
