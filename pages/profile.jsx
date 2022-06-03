@@ -64,6 +64,7 @@ export default function Profile() {
     <div className='bg-slate-100'>
       <Head title='profile' />
       <Box sx={{ maxWidth: 400 }} mx='auto'>
+        <h1 className='mb-4'>名前を変更する</h1>
         <form onSubmit={form.onSubmit(handleSubmit)}>
           <TextInput
             id='rename'
