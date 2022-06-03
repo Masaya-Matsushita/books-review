@@ -12,7 +12,7 @@ export const useRedirectToTop = (token) => {
       showNotification({
         id: 'redilectToTop',
         disallowClose: true,
-        autoClose: 5000,
+        autoClose: 3000,
         title: 'ログイン成功',
         message: 'トップページへ遷移しました',
         icon: <Check />,

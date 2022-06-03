@@ -1,8 +1,9 @@
 import { Menu } from '@mantine/core'
+import { showNotification } from '@mantine/notifications'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useCookies } from 'react-cookie'
-import { Logout, Settings } from 'tabler-icons-react'
+import { Check, Logout, Settings } from 'tabler-icons-react'
 
 export const Header = ({ state }) => {
   const [cookies, setCookie, removeCookie] = useCookies(['token'])
@@ -10,6 +11,13 @@ export const Header = ({ state }) => {
 
   const logout = () => {
     removeCookie('token')
+    showNotification({
+      disallowClose: true,
+      autoClose: 3000,
+      title: 'ログアウトしました',
+      icon: <Check />,
+      color: 'teal',
+    })
     router.push('/signin')
   }
 
@@ -21,11 +29,11 @@ export const Header = ({ state }) => {
     return (
       <div className='flex justify-end'>
         ログイン済：
-        <Menu control={<span>{state.name}</span>}>
+        <Menu control={<span className='underline'>{state.name}</span>}>
           <Menu.Label>Menu</Menu.Label>
           <Menu.Item icon={<Settings size={14} />}>
             <Link href='/profile'>
-              <a>User Name</a>
+              <a className='text-black no-underline'>User Name</a>
             </Link>
           </Menu.Item>
           <Menu.Item color='red' icon={<Logout size={14} />} onClick={logout}>
