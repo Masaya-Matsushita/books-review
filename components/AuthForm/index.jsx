@@ -1,7 +1,7 @@
 import { Box, Button, Group, PasswordInput, TextInput } from '@mantine/core'
 import { At, Ballpen, Book2, Check, Key } from 'tabler-icons-react'
 import Link from 'next/link'
-import { useAuthState } from 'hooks/useAuthState'
+import { useLoadState } from 'hooks/useLoadState'
 import { useAuthFormInitialize } from 'hooks/useAuthFormInitialize'
 import { useCookies } from 'react-cookie'
 import { showNotification } from '@mantine/notifications'
@@ -10,7 +10,7 @@ import { useRouter } from 'next/router'
 
 export const AuthForm = (props) => {
   const form = useAuthFormInitialize(props.path)
-  const { state, dispatch } = useAuthState()
+  const { state, dispatch } = useLoadState()
   const [cookies, setCookie, removeCookie] = useCookies(['token'])
   const router = useRouter()
 
@@ -24,7 +24,7 @@ export const AuthForm = (props) => {
         `https://api-for-missions-and-railways.herokuapp.com/${props.path}`,
         {
           method: 'post',
-          header: {
+          headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify(values),
@@ -50,8 +50,7 @@ export const AuthForm = (props) => {
         id: 'redilectToTop',
         disallowClose: true,
         autoClose: 5000,
-        title: 'ログイン成功',
-        message: 'トップページへ遷移しました',
+        title: 'ログインに成功しました',
         icon: <Check />,
         color: 'teal',
       })
