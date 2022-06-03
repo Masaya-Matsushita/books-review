@@ -48,7 +48,7 @@ export default function Profile() {
       showNotification({
         id: 'redilectToTop',
         disallowClose: true,
-        autoClose: 5000,
+        autoClose: 3000,
         title: `ようこそ！${value.name}さん`,
         message: 'ユーザーネームを変更しました',
         icon: <Check />,

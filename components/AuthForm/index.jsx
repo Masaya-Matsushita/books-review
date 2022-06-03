@@ -49,7 +49,7 @@ export const AuthForm = (props) => {
       showNotification({
         id: 'redilectToTop',
         disallowClose: true,
-        autoClose: 5000,
+        autoClose: 3000,
         title: 'ログインに成功しました',
         icon: <Check />,
         color: 'teal',
