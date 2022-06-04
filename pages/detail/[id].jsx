@@ -1,4 +1,4 @@
-import { Button, Card, Loader } from '@mantine/core'
+import { Badge, Button, Card, Loader } from '@mantine/core'
 import { useDetailState } from 'hooks/useDetailState'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect } from 'react'
@@ -37,10 +37,6 @@ export default function DetailId() {
     router.query.id ? getDetail() : null
   }, [router.query.id, getDetail])
 
-  if (state.data) {
-    console.log(state.data.isMine)
-  }
-
   return (
     <div className='bg-slate-100'>
       {state.loading ? (
@@ -54,12 +50,13 @@ export default function DetailId() {
       {state.data ? (
         <div>
           <Card>
-            <h1>{state.data.title}</h1>
+            <h1 className='inline-block pr-1'>{state.data.title}</h1>
+            {state.data.isMine ? <Badge>My Review</Badge> : null}
             <h3>{state.data.detail}</h3>
             <p>{state.data.review}</p>
-            <a href={state.data.url} className='block mr-4 text-right'>
-              作品のリンク
-            </a>
+            <div className='pr-4 text-right'>
+              <a href={state.data.url}>作品のリンク</a>
+            </div>
             <p className='mr-4 mb-0 text-right'>
               Reviewed by {state.data.reviewer}
             </p>
