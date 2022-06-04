@@ -22,10 +22,14 @@ export default function DetailId() {
         }
       )
       const json = await res.json()
-      // console.log(json)
+      if (!res.ok) {
+        dispatch({ type: 'error', error: json.ErrorMessageJP })
+        return
+      }
+
       dispatch({ type: 'end', data: json })
     } catch (error) {
-      dispatch({ type: 'error', error })
+      dispatch({ type: 'error', error: error.message })
     }
   }, [cookies.token, router.query.id, dispatch])
 
@@ -33,8 +37,20 @@ export default function DetailId() {
     router.query.id ? getDetail() : null
   }, [router.query.id, getDetail])
 
+  if (state.data) {
+    console.log(state.data.isMine)
+  }
+
   return (
     <div className='bg-slate-100'>
+      {state.loading ? (
+        <Loader size='xl' className='fixed inset-0 m-auto' />
+      ) : null}
+      {state.error ? (
+        <div className='text-lg font-bold text-red-500'>
+          Error：{state.error}
+        </div>
+      ) : null}
       {state.data ? (
         <div>
           <Card>
