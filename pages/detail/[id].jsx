@@ -53,8 +53,7 @@ export default function DetailId() {
       {state.detail ? (
         <div>
           <Card>
-            <h1 className='inline-block pr-1'>{state.detail.title}</h1>
-            {state.detail.isMine ? <Badge>My Review</Badge> : null}
+            <h1>{state.detail.title}</h1>
             <h3>{state.detail.detail}</h3>
             <p>{state.detail.review}</p>
             <div className='pr-4 text-right'>

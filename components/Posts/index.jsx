@@ -5,6 +5,14 @@ import { Plus } from 'tabler-icons-react'
 export const Posts = ({ state }) => {
   const router = useRouter()
 
+  const toDetail = (post) => {
+    if (post.isMine) {
+      router.push(`/edit/${post.id}`)
+    } else {
+      router.push(`/detail/${post.id}`)
+    }
+  }
+
   // ローディング状態
   if (state.loading) {
     return <Loader size='xl' className='block mx-auto mt-12' />
@@ -24,11 +32,7 @@ export const Posts = ({ state }) => {
     <div>
       {state.posts.map((post) => {
         return (
-          <Card
-            key={post.id}
-            className='mb-8'
-            onClick={() => router.push(`/detail/${post.id}`)}
-          >
+          <Card key={post.id} className='mb-8' onClick={() => toDetail(post)}>
             <h1 className='inline-block pr-1'>{post.title}</h1>
             {post.isMine ? <Badge>My Review</Badge> : null}
             <h3>{post.detail}</h3>
