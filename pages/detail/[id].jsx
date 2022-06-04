@@ -1,43 +1,11 @@
-import { Badge, Button, Card, Loader } from '@mantine/core'
+import { Button, Card, Loader } from '@mantine/core'
 import { HeadComponent as Head } from 'components/Head'
-import { usePreLoadState } from 'hooks/usePreLoadState'
+import { useGetDetail } from 'hooks/useGetDetail'
 import { useRouter } from 'next/router'
-import { useCallback, useEffect } from 'react'
-import { useCookies } from 'react-cookie'
 
 export default function DetailId() {
   const router = useRouter()
-  const [cookies, setCookie, removeCookie] = useCookies()
-  const { state, dispatch } = usePreLoadState()
-
-  const getDetail = useCallback(async () => {
-    try {
-      const res = await fetch(
-        `https://api-for-missions-and-railways.herokuapp.com/books/${router.query.id}`,
-        {
-          method: 'GET',
-          headers: {
-            accept: 'application/json',
-            Authorization: `Bearer ${cookies.token}`,
-          },
-        }
-      )
-      const json = await res.json()
-
-      if (!res.ok) {
-        dispatch({ type: 'error', error: json.ErrorMessageJP })
-        return
-      }
-
-      dispatch({ type: 'detail', detail: json })
-    } catch (error) {
-      dispatch({ type: 'error', error: error.message })
-    }
-  }, [cookies.token, router.query.id, dispatch])
-
-  useEffect(() => {
-    router.query.id ? getDetail() : null
-  }, [router.query.id, getDetail])
+  const state = useGetDetail()
 
   return (
     <div className='bg-slate-100'>
