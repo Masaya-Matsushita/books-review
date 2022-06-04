@@ -1,22 +1,22 @@
 import { usePreLoadState } from 'hooks/usePreLoadState'
+import { useRouter } from 'next/router'
 import { useCallback, useEffect } from 'react'
 import { useCookies } from 'react-cookie'
 
-export const useGetName = () => {
-  const [cookies, setCookie, reduceCookie] = useCookies('token')
+export const useGetDetail = () => {
+  const router = useRouter()
+  const [cookies, setCookie, removeCookie] = useCookies(['token'])
   const { state, dispatch } = usePreLoadState()
 
-  // ユーザー名を取得
-  const getName = useCallback(async () => {
+  const getDetail = useCallback(async () => {
     try {
-      const token = cookies.token
       const res = await fetch(
-        'https://api-for-missions-and-railways.herokuapp.com/users',
+        `https://api-for-missions-and-railways.herokuapp.com/books/${router.query.id}`,
         {
           method: 'GET',
-          mode: 'cors',
           headers: {
-            Authorization: `Bearer ${token}`,
+            accept: 'application/json',
+            Authorization: `Bearer ${cookies.token}`,
           },
         }
       )
@@ -26,19 +26,16 @@ export const useGetName = () => {
         dispatch({ type: 'error', error: json.ErrorMessageJP })
         return
       }
-      
-      dispatch({ type: 'name', name: json.name })
 
-      // エラー処理
+      dispatch({ type: 'detail', detail: json })
     } catch (error) {
       dispatch({ type: 'error', error: error.message })
     }
-  }, [cookies.token, dispatch])
+  }, [cookies.token, router.query.id, dispatch])
 
-  // マウント時
   useEffect(() => {
-    cookies.token ? getName() : null
-  }, [cookies.token, getName])
+    router.query.id ? getDetail() : null
+  }, [router.query.id, getDetail])
 
   return state
 }

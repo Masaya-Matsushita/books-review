@@ -1,44 +1,15 @@
-import { Badge, Button, Card, Loader } from '@mantine/core'
-import { useDetailState } from 'hooks/useDetailState'
+import { Button, Card, Loader } from '@mantine/core'
+import { HeadComponent as Head } from 'components/Head'
+import { useGetDetail } from 'hooks/useGetDetail'
 import { useRouter } from 'next/router'
-import { useCallback, useEffect } from 'react'
-import { useCookies } from 'react-cookie'
 
 export default function DetailId() {
   const router = useRouter()
-  const [cookies, setCookie, removeCookie] = useCookies()
-  const { state, dispatch } = useDetailState()
-
-  const getDetail = useCallback(async () => {
-    try {
-      const res = await fetch(
-        `https://api-for-missions-and-railways.herokuapp.com/books/${router.query.id}`,
-        {
-          method: 'GET',
-          headers: {
-            accept: 'application/json',
-            Authorization: `Bearer ${cookies.token}`,
-          },
-        }
-      )
-      const json = await res.json()
-      if (!res.ok) {
-        dispatch({ type: 'error', error: json.ErrorMessageJP })
-        return
-      }
-
-      dispatch({ type: 'end', data: json })
-    } catch (error) {
-      dispatch({ type: 'error', error: error.message })
-    }
-  }, [cookies.token, router.query.id, dispatch])
-
-  useEffect(() => {
-    router.query.id ? getDetail() : null
-  }, [router.query.id, getDetail])
+  const state = useGetDetail()
 
   return (
     <div className='bg-slate-100'>
+      <Head title='Detail' />
       {state.loading ? (
         <Loader size='xl' className='fixed inset-0 m-auto' />
       ) : null}
@@ -47,18 +18,17 @@ export default function DetailId() {
           Error：{state.error}
         </div>
       ) : null}
-      {state.data ? (
+      {state.detail ? (
         <div>
           <Card>
-            <h1 className='inline-block pr-1'>{state.data.title}</h1>
-            {state.data.isMine ? <Badge>My Review</Badge> : null}
-            <h3>{state.data.detail}</h3>
-            <p>{state.data.review}</p>
+            <h1>{state.detail.title}</h1>
+            <h3>{state.detail.detail}</h3>
+            <p>{state.detail.review}</p>
             <div className='pr-4 text-right'>
-              <a href={state.data.url}>作品のリンク</a>
+              <a href={state.detail.url}>作品のリンク</a>
             </div>
             <p className='mr-4 mb-0 text-right'>
-              Reviewed by {state.data.reviewer}
+              Reviewed by {state.detail.reviewer}
             </p>
           </Card>
           <Button

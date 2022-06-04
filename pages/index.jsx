@@ -3,22 +3,19 @@ import { HeadComponent as Head } from 'components/Head'
 import { Header } from 'components/Header'
 import { Posts } from 'components/Posts'
 import { useGetName } from 'hooks/useGetName'
-import { usePostsState } from 'hooks/usePostsState'
+import { usePreLoadState } from 'hooks/usePreLoadState'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect } from 'react'
 import { useCookies } from 'react-cookie'
 
 export default function Home() {
   const router = useRouter()
-  const { state, dispatch } = usePostsState()
+  const { state, dispatch } = usePreLoadState()
   const [cookies, setCookie, removeCookie] = useCookies(['token'])
   const headerState = useGetName()
 
   const getPosts = useCallback(
     async (e) => {
-      // postsリセット、ローディング表示
-      dispatch({ type: 'start' })
-
       // offsetの値を定義
       const offset = 10 * (e - 1)
       if (!e) {
@@ -49,7 +46,7 @@ export default function Home() {
         }
 
         // データをpostsへ、ローディング解除
-        dispatch({ type: 'end', posts: [...json] })
+        dispatch({ type: 'posts', posts: [...json] })
 
         // fetchが失敗した場合
       } catch (error) {

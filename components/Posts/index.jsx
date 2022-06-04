@@ -5,6 +5,14 @@ import { Plus } from 'tabler-icons-react'
 export const Posts = ({ state }) => {
   const router = useRouter()
 
+  const toDetail = (post) => {
+    if (post.isMine) {
+      router.push(`/edit/${post.id}`)
+    } else {
+      router.push(`/detail/${post.id}`)
+    }
+  }
+
   // ローディング状態
   if (state.loading) {
     return <Loader size='xl' className='block mx-auto mt-12' />
@@ -17,20 +25,15 @@ export const Posts = ({ state }) => {
 
   // 取得した投稿が空だった場合
   if (state.posts.length === 0) {
-    return <div className='mt-12 text-xl text-center'>投稿はありません</div>
+    return <h2 className='my-12 text-center'>投稿はありません</h2>
   }
 
   return (
     <div>
       {state.posts.map((post) => {
         return (
-          <Card
-            key={post.id}
-            className='mb-8'
-            onClick={() => router.push(`/detail/${post.id}`)}
-          >
-            <h1 className='inline-block pr-1'>{post.title}</h1>
-            {post.isMine ? <Badge>My Review</Badge> : null}
+          <Card key={post.id} className='mb-8' onClick={() => toDetail(post)}>
+            <h1>{post.title}</h1>
             <h3>{post.detail}</h3>
             <p>{post.review}</p>
             <div className='pr-4 text-right'>

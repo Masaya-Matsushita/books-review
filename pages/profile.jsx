@@ -5,6 +5,7 @@ import { HeadComponent as Head } from 'components/Head'
 import { useGetName } from 'hooks/useGetName'
 import { useLoadState } from 'hooks/useLoadState'
 import { useRouter } from 'next/router'
+import { useEffect } from 'react'
 import { useCookies } from 'react-cookie'
 import { Ballpen, Book2, Check } from 'tabler-icons-react'
 import { z } from 'zod'
@@ -30,6 +31,15 @@ export default function Profile() {
     },
   })
 
+  useEffect(
+    nameState.name
+      ? () => {
+          form.setFieldValue('name', nameState.name)
+        }
+      : () => {},
+    [nameState]
+  )
+
   const handleSubmit = async (value) => {
     dispatch({ type: 'start' })
     try {
@@ -45,6 +55,16 @@ export default function Profile() {
           body: JSON.stringify(value),
         }
       )
+
+      const json = await res.json()
+
+      if (!res.ok) {
+        dispatch({ type: 'error', error: json.ErrorMessageJP })
+        return
+      }
+
+      dispatch({ type: 'end' })
+
       router.push('/')
       showNotification({
         id: 'redilectToTop',
@@ -55,7 +75,6 @@ export default function Profile() {
         icon: <Check />,
         color: 'teal',
       })
-      dispatch({ type: 'end' })
     } catch (error) {
       dispatch({ type: 'error', error: error.message })
     }
