@@ -11,6 +11,7 @@ export const Header = ({ state }) => {
 
   const logout = () => {
     removeCookie('token')
+    router.push('/signin')
     showNotification({
       disallowClose: true,
       autoClose: 3000,
@@ -18,7 +19,6 @@ export const Header = ({ state }) => {
       icon: <Check />,
       color: 'teal',
     })
-    router.push('/signin')
   }
 
   if (state.error) {

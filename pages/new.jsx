@@ -6,7 +6,7 @@ import { HeadComponent as Head } from 'components/Head'
 import { useLoadState } from 'hooks/useLoadState'
 import { useRouter } from 'next/router'
 import { useCookies } from 'react-cookie'
-import { Ballpen, Check, Link, Mail } from 'tabler-icons-react'
+import { Ballpen, Book2, Bulb, Check, Link, Mail } from 'tabler-icons-react'
 import { z } from 'zod'
 
 const schema = z.object({
@@ -82,25 +82,25 @@ export default function New() {
         ) : null}
         <form onSubmit={form.onSubmit(handleSubmit)}>
           <TextInput
-            label='Title'
-            aria-label='Title'
-            placeholder='title'
+            label='書籍名'
+            aria-label='書籍名'
+            placeholder='（例）銀河鉄道の夜'
             required
-            icon={<Ballpen size={16} />}
+            icon={<Book2 size={16} />}
             {...form.getInputProps('title')}
           />
           <Textarea
-            label='detail'
-            area-label='detail'
-            placeholder='detail'
+            label='要約'
+            area-label='要約'
+            placeholder='宮沢賢治の代表作。孤独な少年ジョバンニが宇宙を旅する物語。'
             required
-            icon={<Ballpen size={16} />}
+            icon={<Bulb size={16} />}
             {...form.getInputProps('detail')}
           />
           <Textarea
-            label='review'
-            area-label='review'
-            placeholder='review'
+            label='レビュー'
+            area-label='レビュー'
+            placeholder='本当の幸せとは何なのか、大切なことを教えてくれました。'
             required
             icon={<Ballpen size={16} />}
             {...form.getInputProps('review')}
@@ -108,7 +108,7 @@ export default function New() {
           <TextInput
             label='URL'
             aria-label='URL'
-            placeholder='url'
+            placeholder='http://www.example.com'
             required
             icon={<Link size={16} />}
             {...form.getInputProps('url')}
