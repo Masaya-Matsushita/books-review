@@ -45,6 +45,16 @@ export default function Profile() {
           body: JSON.stringify(value),
         }
       )
+
+      const json = await res.json()
+
+      if (!res.ok) {
+        dispatch({ type: 'error', error: json.ErrorMessageJP })
+        return
+      }
+
+      dispatch({ type: 'end' })
+
       router.push('/')
       showNotification({
         id: 'redilectToTop',
@@ -55,7 +65,7 @@ export default function Profile() {
         icon: <Check />,
         color: 'teal',
       })
-      dispatch({ type: 'end' })
+      
     } catch (error) {
       dispatch({ type: 'error', error: error.message })
     }

@@ -31,18 +31,31 @@ export default function New() {
     },
   })
 
-  const handleSubmit = (values) => {
+  const handleSubmit = async (values) => {
     dispatch({ type: 'start' })
     try {
-      fetch('https://api-for-missions-and-railways.herokuapp.com/books', {
-        method: 'POST',
-        headers: {
-          accept: 'application/json',
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${cookies.token}`,
-        },
-        body: JSON.stringify(values),
-      })
+      const res = await fetch(
+        'https://api-for-missions-and-railways.herokuapp.com/books',
+        {
+          method: 'POST',
+          headers: {
+            accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${cookies.token}`,
+          },
+          body: JSON.stringify(values),
+        }
+      )
+
+      const json = await res.json()
+
+      if (!res.ok) {
+        dispatch({ type: 'error', error: json.ErrorMessageJP })
+        return
+      }
+
+      dispatch({ type: 'end' })
+
       router.push('/')
       showNotification({
         id: 'redilectToTop',
@@ -52,7 +65,6 @@ export default function New() {
         icon: <Check />,
         color: 'teal',
       })
-      dispatch({ type: 'end' })
     } catch (error) {
       dispatch({ type: 'error', error: error.message })
     }
@@ -60,7 +72,7 @@ export default function New() {
 
   return (
     <div className='bg-slate-100'>
-      <Head title='new' />
+      <Head title='New' />
       <Box sx={{ maxWidth: 400 }} mx='auto'>
         <h1 className='mb-4'>投稿を作成</h1>
         {state.error ? (
