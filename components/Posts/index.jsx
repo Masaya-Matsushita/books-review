@@ -1,6 +1,10 @@
-import { Card, Loader } from '@mantine/core'
+import { Button, Card, Loader } from '@mantine/core'
+import { useRouter } from 'next/router'
+import { Plus } from 'tabler-icons-react'
 
 export const Posts = ({ state }) => {
+  const router = useRouter()
+
   // ローディング状態
   if (state.loading) {
     return <Loader size='xl' className='block mx-auto mt-12' />
@@ -31,6 +35,13 @@ export const Posts = ({ state }) => {
           </Card>
         )
       })}
+      <Button
+        className='sticky bottom-16 -mt-12 w-16 h-16 rounded-full'
+        compact
+        onClick={() => router.push('/new')}
+      >
+        <Plus size={48} />
+      </Button>
     </div>
   )
 }

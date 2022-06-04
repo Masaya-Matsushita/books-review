@@ -74,7 +74,7 @@ export default function Home() {
         onChange={(e) => getPosts(e)}
         total={10}
         spacing='4px'
-        className='flex justify-center pb-12 mt-12 w-full'
+        className='flex justify-center mt-4'
       />
     </div>
   )
