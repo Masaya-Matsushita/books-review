@@ -33,8 +33,7 @@ export const Posts = ({ state }) => {
       {state.posts.map((post) => {
         return (
           <Card key={post.id} className='mb-8' onClick={() => toDetail(post)}>
-            <h1 className='inline-block pr-1'>{post.title}</h1>
-            {post.isMine ? <Badge>My Review</Badge> : null}
+            <h1>{post.title}</h1>
             <h3>{post.detail}</h3>
             <p>{post.review}</p>
             <div className='pr-4 text-right'>
