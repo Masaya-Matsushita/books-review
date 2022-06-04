@@ -1,4 +1,4 @@
-import { Button, Card, Loader } from '@mantine/core'
+import { Badge, Button, Card, Loader } from '@mantine/core'
 import { useRouter } from 'next/router'
 import { Plus } from 'tabler-icons-react'
 
@@ -24,13 +24,18 @@ export const Posts = ({ state }) => {
     <div>
       {state.posts.map((post) => {
         return (
-          <Card key={post.id} className='mb-8'>
-            <h1>{post.title}</h1>
+          <Card
+            key={post.id}
+            className='mb-8'
+            onClick={() => router.push(`/detail/${post.id}`)}
+          >
+            <h1 className='inline-block pr-1'>{post.title}</h1>
+            {post.isMine ? <Badge>My Review</Badge> : null}
             <h3>{post.detail}</h3>
             <p>{post.review}</p>
-            <a href={post.url} className='block mr-4 text-right'>
-              作品のリンク
-            </a>
+            <div className='pr-4 text-right'>
+              <a href={post.url}>作品のリンク</a>
+            </div>
             <p className='mr-4 mb-0 text-right'>Reviewed by {post.reviewer}</p>
           </Card>
         )
