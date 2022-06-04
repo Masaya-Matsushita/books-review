@@ -35,7 +35,7 @@ export default function EditId() {
     dispatch({ type: 'start' })
     try {
       const res = await fetch(
-        `https://api-for-missions-and-railways.herokuapp.com/books${router.query.id}`,
+        `https://api-for-missions-and-railways.herokuapp.com/books/${router.query.id}`,
         {
           method: 'PUT',
           headers: {
@@ -62,6 +62,43 @@ export default function EditId() {
         disallowClose: true,
         autoClose: 5000,
         title: '更新しました',
+        icon: <Check />,
+        color: 'teal',
+      })
+    } catch (error) {
+      dispatch({ type: 'error', error: error.message })
+    }
+  }
+
+  const deletePost = async () => {
+    dispatch({ type: 'start' })
+    try {
+      fetch(
+        `https://api-for-missions-and-railways.herokuapp.com/books/${router.query.id}`,
+        {
+          method: 'DELETE',
+          headers: {
+            accept: 'application/json',
+            Authorization: `Bearer ${cookies.token}`,
+          },
+        }
+      )
+
+      //　もしエラー情報のレスポンスが帰ってきた場合、受け取りたい
+      // if (!res.ok) {
+      //   const json = await res.json()
+      //   dispatch({ type: 'error', error: json.ErrorMessageJP })
+      //   return
+      // }
+
+      dispatch({ type: 'end' })
+
+      router.push('/')
+      showNotification({
+        id: 'redilectToTop',
+        disallowClose: true,
+        autoClose: 5000,
+        title: 'レビューを削除しました',
         icon: <Check />,
         color: 'teal',
       })
@@ -122,6 +159,16 @@ export default function EditId() {
               className='mt-8'
             >
               更新
+            </Button>
+            <Button
+              size='lg'
+              color='red'
+              leftIcon={<Trash size={16} />}
+              // loading={state.loading}
+              onClick={deletePost}
+              className='mt-8'
+            >
+              削除
             </Button>
           </Group>
         </form>
