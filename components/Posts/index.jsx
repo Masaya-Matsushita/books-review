@@ -17,7 +17,7 @@ export const Posts = ({ state }) => {
 
   // 取得した投稿が空だった場合
   if (state.posts.length === 0) {
-    return <div className='mt-12 text-xl text-center'>投稿はありません</div>
+    return <h2 className='my-12 text-center'>投稿はありません</h2>
   }
 
   return (

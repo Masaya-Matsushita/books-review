@@ -5,6 +5,7 @@ import { HeadComponent as Head } from 'components/Head'
 import { useGetName } from 'hooks/useGetName'
 import { useLoadState } from 'hooks/useLoadState'
 import { useRouter } from 'next/router'
+import { useEffect } from 'react'
 import { useCookies } from 'react-cookie'
 import { Ballpen, Book2, Check } from 'tabler-icons-react'
 import { z } from 'zod'
@@ -29,6 +30,15 @@ export default function Profile() {
       name: '',
     },
   })
+
+  useEffect(
+    nameState.name
+      ? () => {
+          form.setFieldValue('name', nameState.name)
+        }
+      : () => {},
+    [nameState]
+  )
 
   const handleSubmit = async (value) => {
     dispatch({ type: 'start' })
@@ -65,7 +75,6 @@ export default function Profile() {
         icon: <Check />,
         color: 'teal',
       })
-      
     } catch (error) {
       dispatch({ type: 'error', error: error.message })
     }
