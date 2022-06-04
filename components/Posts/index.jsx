@@ -24,7 +24,11 @@ export const Posts = ({ state }) => {
     <div>
       {state.posts.map((post) => {
         return (
-          <Card key={post.id} className='mb-8'>
+          <Card
+            key={post.id}
+            className='mb-8'
+            onClick={() => router.push(`/detail/${post.id}`)}
+          >
             <h1>{post.title}</h1>
             <h3>{post.detail}</h3>
             <p>{post.review}</p>
