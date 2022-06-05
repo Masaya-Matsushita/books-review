@@ -1,35 +1,17 @@
 import { Box, Button, Group, Textarea, TextInput } from '@mantine/core'
-import { zodResolver } from '@mantine/form'
-import { useForm } from '@mantine/hooks'
 import { showNotification } from '@mantine/notifications'
 import { HeadComponent as Head } from 'components/Head'
+import { useEditFormInitialize } from 'hooks/useEditFormInitialize'
 import { useLoadState } from 'hooks/useLoadState'
 import { useRouter } from 'next/router'
 import { useCookies } from 'react-cookie'
 import { Ballpen, Book2, Bulb, Check, Link, Mail } from 'tabler-icons-react'
-import { z } from 'zod'
-
-const schema = z.object({
-  title: z.string().trim().min(2, { message: '2文字以上で入力してください。' }),
-  detail: z.string().trim(),
-  review: z.string().trim(),
-  url: z.string().trim().url(),
-})
 
 export default function New() {
   const [cookies, setCookie, removeCookie] = useCookies(['token'])
   const { state, dispatch } = useLoadState()
   const router = useRouter()
-
-  const form = useForm({
-    schema: zodResolver(schema),
-    initialValues: {
-      title: '',
-      detail: '',
-      review: '',
-      url: '',
-    },
-  })
+  const form = useEditFormInitialize()
 
   const handleSubmit = async (values) => {
     dispatch({ type: 'start' })
@@ -109,8 +91,8 @@ export default function New() {
             label='URL'
             aria-label='URL'
             placeholder='http://www.example.com'
-            required
             icon={<Link size={16} />}
+            required
             {...form.getInputProps('url')}
           />
           <Group position='right'>

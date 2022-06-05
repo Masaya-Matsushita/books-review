@@ -23,8 +23,6 @@ export default function Home() {
       }
       dispatch({ type: 'offset', offset: offset })
 
-      const token = cookies.token
-
       // postsを取得(10件分)
       try {
         const res = await fetch(
@@ -33,7 +31,7 @@ export default function Home() {
             method: 'GET',
             mode: 'cors',
             headers: {
-              Authorization: `Bearer ${token}`,
+              Authorization: `Bearer ${cookies.token}`,
             },
           }
         )
