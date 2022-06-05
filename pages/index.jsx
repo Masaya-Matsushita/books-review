@@ -17,6 +17,9 @@ export default function Home() {
 
   const getPostList = useCallback(
     async (e) => {
+      // ローディング開始
+      dispatch({ type: 'start' })
+
       // offsetの値を定義
       const offset = 10 * (e - 1)
       if (!e) {
@@ -46,9 +49,6 @@ export default function Home() {
 
         // データをpostListへ、ローディング解除
         dispatch({ type: 'postList', postList: [...json] })
-
-        // 画面最上部へ自動スクロール
-        scroll.scrollToTop()
 
         // fetchが失敗した場合
       } catch (error) {
