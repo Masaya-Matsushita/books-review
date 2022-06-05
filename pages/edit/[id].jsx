@@ -8,15 +8,7 @@ import { useLoadState } from 'hooks/useLoadState'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { useCookies } from 'react-cookie'
-import {
-  Ballpen,
-  Book2,
-  Bulb,
-  Check,
-  Link,
-  Mail,
-  Trash,
-} from 'tabler-icons-react'
+import { Ballpen, Book2, Bulb, Check, Link, Mail } from 'tabler-icons-react'
 
 export default function EditId() {
   const [cookies, setCookie, removeCookie] = useCookies(['token'])
@@ -90,52 +82,6 @@ export default function EditId() {
     }
   }
 
-  const deletePost = async () => {
-    // ローディング開始
-    dispatch({ type: 'start' })
-
-    // 投稿を削除
-    try {
-      fetch(
-        `https://api-for-missions-and-railways.herokuapp.com/books/${router.query.id}`,
-        {
-          method: 'DELETE',
-          headers: {
-            accept: 'application/json',
-            Authorization: `Bearer ${cookies.token}`,
-          },
-        }
-      )
-
-      //　もしエラー情報のレスポンスが帰ってきた場合、受け取りたい
-      // if (!res.ok) {
-      //   const json = await res.json()
-      //   dispatch({ type: 'error', error: json.ErrorMessageJP })
-      //   return
-      // }
-
-      // ローディング解除
-      dispatch({ type: 'end' })
-
-      // 画面下に完了通知
-      showNotification({
-        id: 'redilectToTop',
-        disallowClose: true,
-        autoClose: 3000,
-        title: 'レビューを削除しました',
-        icon: <Check />,
-        color: 'teal',
-      })
-
-      // 一覧ページへ遷移
-      router.push('/')
-
-      // fetchが失敗した場合
-    } catch (error) {
-      dispatch({ type: 'error', error: error.message })
-    }
-  }
-
   return (
     <div className='bg-slate-100'>
       <Head title='New' />
@@ -183,16 +129,6 @@ export default function EditId() {
             {...form.getInputProps('url')}
           />
           <Group position='right'>
-            <Button
-              size='lg'
-              color='red'
-              leftIcon={<Trash size={16} />}
-              // loading={state.loading}
-              onClick={deletePost}
-              className='mt-10 mr-4'
-            >
-              削除
-            </Button>
             <Button
               type='submit'
               size='lg'

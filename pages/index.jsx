@@ -7,7 +7,6 @@ import { usePreLoadState } from 'hooks/usePreLoadState'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect } from 'react'
 import { useCookies } from 'react-cookie'
-import { animateScroll as scroll } from 'react-scroll/modules'
 
 export default function Home() {
   const router = useRouter()
@@ -68,7 +67,7 @@ export default function Home() {
       <Head title='index page' />
       <Header state={headerState} router={router} />
       <h1>投稿一覧</h1>
-      <PostList state={state} router={router} />
+      <PostList state={state} dispatch={dispatch} router={router} />
       <Pagination
         onChange={(e) => getPostList(e)}
         total={10}
