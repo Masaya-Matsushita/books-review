@@ -28,7 +28,7 @@ export const Detail = ({ state, router }) => {
       </Card>
       <Button
         size='lg'
-        className='block mt-4 mr-4 ml-auto'
+        className='block mt-10 mr-4 ml-auto'
         onClick={() => router.push('/')}
       >
         一覧へ戻る

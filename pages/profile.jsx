@@ -16,8 +16,8 @@ const schema = z.object({
   name: z
     .string()
     .trim()
-    .min(2, { message: '2文字以上10文字以内で入力してください。' })
-    .max(10, { message: '2文字以上10文字以内で入力してください。' }),
+    .min(2, { message: '2文字以上15文字以内で入力してください。' })
+    .max(15, { message: '2文字以上15文字以内で入力してください。' }),
 })
 
 export default function Profile() {
@@ -97,7 +97,7 @@ export default function Profile() {
   return (
     <div className='bg-slate-100'>
       <Head title='profile' />
-      <Box sx={{ maxWidth: 400 }} mx='auto'>
+      <Box sx={{ maxWidth: 500 }} mx='auto'>
         <h1 className='mb-4'>名前を変更する</h1>
         <ErrorMessage state={state} />
         <form onSubmit={form.onSubmit(handleSubmit)}>

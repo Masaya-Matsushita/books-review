@@ -62,7 +62,7 @@ export const AuthForm = (props) => {
 
   return (
     <div>
-      <Box sx={{ maxWidth: 400 }} mx='auto'>
+      <Box sx={{ maxWidth: 800 }} mx='auto'>
         <h1>{props.title}</h1>
         <ErrorMessage state={state} />
         <form onSubmit={form.onSubmit(handleSubmit)}>
@@ -70,7 +70,7 @@ export const AuthForm = (props) => {
           {props.path === 'users' ? (
             <TextInput
               id='username'
-              placeholder='サービス太郎'
+              placeholder='レビュー太郎'
               label='User Name'
               aria-label='User name'
               size='lg'

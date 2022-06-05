@@ -66,7 +66,7 @@ export default function New() {
   return (
     <div className='bg-slate-100'>
       <Head title='New' />
-      <Box sx={{ maxWidth: 400 }} mx='auto'>
+      <Box sx={{ maxWidth: 800 }} mx='auto'>
         <h1 className='mb-4'>投稿を作成</h1>
         <ErrorMessage state={state} />
         <form onSubmit={form.onSubmit(handleSubmit)}>
@@ -75,6 +75,8 @@ export default function New() {
             aria-label='書籍名'
             placeholder='（例）銀河鉄道の夜'
             required
+            size='lg'
+            className='mt-4'
             icon={<Book2 size={16} />}
             {...form.getInputProps('title')}
           />
@@ -83,6 +85,8 @@ export default function New() {
             area-label='要約'
             placeholder='宮沢賢治の代表作。孤独な少年ジョバンニが宇宙を旅する物語。'
             required
+            size='lg'
+            className='mt-4'
             icon={<Bulb size={16} />}
             {...form.getInputProps('detail')}
           />
@@ -91,6 +95,8 @@ export default function New() {
             area-label='レビュー'
             placeholder='本当の幸せとは何なのか、大切なことを教えてくれました。'
             required
+            size='lg'
+            className='mt-4'
             icon={<Ballpen size={16} />}
             {...form.getInputProps('review')}
           />
@@ -100,6 +106,7 @@ export default function New() {
             placeholder='http://www.example.com'
             icon={<Link size={16} />}
             required
+            className='mt-4'
             {...form.getInputProps('url')}
           />
           <Group position='right'>
@@ -108,7 +115,7 @@ export default function New() {
               size='lg'
               leftIcon={<Mail size={16} />}
               loading={state.loading}
-              className='mt-8'
+              className='mt-10'
             >
               投稿
             </Button>

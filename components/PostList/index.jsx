@@ -33,11 +33,16 @@ export const PostList = ({ state, router }) => {
           <Card key={post.id} className='mb-8' onClick={() => toDetail(post)}>
             <h1>{post.title}</h1>
             <h3>{post.detail}</h3>
-            <p>{post.review}</p>
-            <div className='pr-4 text-right'>
-              <a href={post.url}>作品のリンク</a>
-            </div>
-            <p className='mr-4 mb-0 text-right'>Reviewed by {post.reviewer}</p>
+            <p className='mr-4 mb-0 text-right'>
+              Reviewed by{' '}
+              <span
+                className={
+                  post.isMine ? 'text-blue-500 text-xl font-bold' : 'text-black'
+                }
+              >
+                {post.reviewer}
+              </span>
+            </p>
           </Card>
         )
       })}

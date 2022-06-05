@@ -139,7 +139,7 @@ export default function EditId() {
   return (
     <div className='bg-slate-100'>
       <Head title='New' />
-      <Box sx={{ maxWidth: 400 }} mx='auto'>
+      <Box sx={{ maxWidth: 800 }} mx='auto'>
         <h1 className='mb-4'>投稿を更新</h1>
         <ErrorMessage state={state} />
         <form onSubmit={form.onSubmit(handleSubmit)}>
@@ -148,7 +148,9 @@ export default function EditId() {
             aria-label='書籍名'
             placeholder={detailState.detail ? detailState.detail.title : ''}
             required
+            size='lg'
             icon={<Book2 size={16} />}
+            className='mt-4'
             {...form.getInputProps('title')}
           />
           <Textarea
@@ -156,6 +158,8 @@ export default function EditId() {
             area-label='要約'
             placeholder={detailState.detail ? detailState.detail.detail : ''}
             required
+            size='lg'
+            className='mt-4'
             icon={<Bulb size={16} />}
             {...form.getInputProps('detail')}
           />
@@ -164,6 +168,8 @@ export default function EditId() {
             area-label='レビュー'
             placeholder={detailState.detail ? detailState.detail.review : ''}
             required
+            size='lg'
+            className='mt-4'
             icon={<Ballpen size={16} />}
             {...form.getInputProps('review')}
           />
@@ -173,27 +179,28 @@ export default function EditId() {
             placeholder={detailState.detail ? detailState.detail.url : ''}
             icon={<Link size={16} />}
             required
+            className='mt-4'
             {...form.getInputProps('url')}
           />
           <Group position='right'>
-            <Button
-              type='submit'
-              size='lg'
-              leftIcon={<Mail size={16} />}
-              loading={state.loading}
-              className='mt-8'
-            >
-              更新
-            </Button>
             <Button
               size='lg'
               color='red'
               leftIcon={<Trash size={16} />}
               // loading={state.loading}
               onClick={deletePost}
-              className='mt-8'
+              className='mt-10 mr-4'
             >
               削除
+            </Button>
+            <Button
+              type='submit'
+              size='lg'
+              leftIcon={<Mail size={16} />}
+              loading={state.loading}
+              className='mt-10'
+            >
+              更新
             </Button>
           </Group>
         </form>
