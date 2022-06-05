@@ -11,6 +11,7 @@ import { useCookies } from 'react-cookie'
 import { Ballpen, Book2, Check } from 'tabler-icons-react'
 import { z } from 'zod'
 
+//フォームのバリデーションを定義
 const schema = z.object({
   name: z
     .string()
@@ -25,6 +26,7 @@ export default function Profile() {
   const router = useRouter()
   const { state, dispatch } = useLoadState()
 
+  // フォームの初期設定
   const form = useForm({
     schema: zodResolver(schema),
     initialValues: {
@@ -32,6 +34,7 @@ export default function Profile() {
     },
   })
 
+  // nameStateをformの初期値に設定
   useEffect(
     nameState.name
       ? () => {
@@ -42,7 +45,10 @@ export default function Profile() {
   )
 
   const handleSubmit = async (value) => {
+    // ローディング開始
     dispatch({ type: 'start' })
+
+    // 名前を更新
     try {
       const res = await fetch(
         'https://api-for-missions-and-railways.herokuapp.com/users',
@@ -59,14 +65,16 @@ export default function Profile() {
 
       const json = await res.json()
 
+      // エラーの入ったデータを取得した場合
       if (!res.ok) {
         dispatch({ type: 'error', error: json.ErrorMessageJP })
         return
       }
 
+      // ローディング解除
       dispatch({ type: 'end' })
 
-      router.push('/')
+      // 画面下に完了通知
       showNotification({
         id: 'redilectToTop',
         disallowClose: true,
@@ -76,6 +84,11 @@ export default function Profile() {
         icon: <Check />,
         color: 'teal',
       })
+
+      //　一覧ページへ遷移
+      router.push('/')
+
+      // fetchが失敗した場合
     } catch (error) {
       dispatch({ type: 'error', error: error.message })
     }

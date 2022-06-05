@@ -25,6 +25,7 @@ export default function EditId() {
   const detailState = useGetDetail()
   const form = useEditFormInitialize()
 
+  // detailStateをformの初期値に設定
   useEffect(
     detailState.detail
       ? () => {
@@ -41,7 +42,10 @@ export default function EditId() {
   )
 
   const handleSubmit = async (values) => {
+    // ローディング開始
     dispatch({ type: 'start' })
+
+    // 投稿を更新
     try {
       const res = await fetch(
         `https://api-for-missions-and-railways.herokuapp.com/books/${router.query.id}`,
@@ -58,29 +62,39 @@ export default function EditId() {
 
       const json = await res.json()
 
+      // エラーの入ったデータを取得した場合
       if (!res.ok) {
         dispatch({ type: 'error', error: json.ErrorMessageJP })
         return
       }
 
+      // ローディング解除
       dispatch({ type: 'end' })
 
-      router.push('/')
+      // 画面下に完了通知
       showNotification({
         id: 'redilectToTop',
         disallowClose: true,
-        autoClose: 5000,
+        autoClose: 3000,
         title: '更新しました',
         icon: <Check />,
         color: 'teal',
       })
+
+      //　一覧ページへ遷移
+      router.push('/')
+
+      // fetchが失敗した場合
     } catch (error) {
       dispatch({ type: 'error', error: error.message })
     }
   }
 
   const deletePost = async () => {
+    // ローディング開始
     dispatch({ type: 'start' })
+
+    // 投稿を削除
     try {
       fetch(
         `https://api-for-missions-and-railways.herokuapp.com/books/${router.query.id}`,
@@ -100,17 +114,23 @@ export default function EditId() {
       //   return
       // }
 
+      // ローディング解除
       dispatch({ type: 'end' })
 
-      router.push('/')
+      // 画面下に完了通知
       showNotification({
         id: 'redilectToTop',
         disallowClose: true,
-        autoClose: 5000,
+        autoClose: 3000,
         title: 'レビューを削除しました',
         icon: <Check />,
         color: 'teal',
       })
+
+      // 一覧ページへ遷移
+      router.push('/')
+
+      // fetchが失敗した場合
     } catch (error) {
       dispatch({ type: 'error', error: error.message })
     }

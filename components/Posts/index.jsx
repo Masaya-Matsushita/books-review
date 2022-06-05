@@ -6,6 +6,7 @@ export const Posts = ({ state }) => {
   const router = useRouter()
 
   const toDetail = (post) => {
+    // isMineの有無で動的に遷移先を決定
     if (post.isMine) {
       router.push(`/edit/${post.id}`)
     } else {

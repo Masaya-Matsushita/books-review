@@ -1,10 +1,12 @@
 import { Button, Card, Loader } from '@mantine/core'
 
 export const Detail = ({ state, router }) => {
+  // ローディング状態
   if (state.loading) {
     return <Loader size='xl' className='fixed inset-0 m-auto' />
   }
 
+  // エラー発生時
   if (state.error) {
     return (
       <div className='text-lg font-bold text-red-500'>Error：{state.error}</div>

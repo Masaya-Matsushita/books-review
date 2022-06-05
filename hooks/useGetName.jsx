@@ -6,8 +6,8 @@ export const useGetName = () => {
   const [cookies, setCookie, reduceCookie] = useCookies('token')
   const { state, dispatch } = usePreLoadState()
 
-  // ユーザー名を取得
   const getName = useCallback(async () => {
+    // ユーザー名を取得
     try {
       const token = cookies.token
       const res = await fetch(
@@ -22,20 +22,22 @@ export const useGetName = () => {
       )
       const json = await res.json()
 
+      // エラーの入ったデータを取得した場合
       if (!res.ok) {
         dispatch({ type: 'error', error: json.ErrorMessageJP })
         return
       }
-      
+
+      // nameを取得、ローディング解除
       dispatch({ type: 'name', name: json.name })
 
-      // エラー処理
+      // fetchが失敗した場合
     } catch (error) {
       dispatch({ type: 'error', error: error.message })
     }
   }, [cookies.token, dispatch])
 
-  // マウント時
+  // cookies.token定義時
   useEffect(() => {
     cookies.token ? getName() : null
   }, [cookies.token, getName])

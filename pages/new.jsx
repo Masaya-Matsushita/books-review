@@ -15,7 +15,10 @@ export default function New() {
   const form = useEditFormInitialize()
 
   const handleSubmit = async (values) => {
+    // ローディング開始
     dispatch({ type: 'start' })
+
+    // 投稿を作成
     try {
       const res = await fetch(
         'https://api-for-missions-and-railways.herokuapp.com/books',
@@ -32,22 +35,29 @@ export default function New() {
 
       const json = await res.json()
 
+      // エラーの入ったデータを取得した場合
       if (!res.ok) {
         dispatch({ type: 'error', error: json.ErrorMessageJP })
         return
       }
 
+      // ローディング解除
       dispatch({ type: 'end' })
 
-      router.push('/')
+      // 画面下に完了通知
       showNotification({
         id: 'redilectToTop',
         disallowClose: true,
-        autoClose: 5000,
+        autoClose: 3000,
         title: '投稿しました',
         icon: <Check />,
         color: 'teal',
       })
+
+      //　一覧ページへ遷移
+      router.push('/')
+
+      // fetchが失敗した場合
     } catch (error) {
       dispatch({ type: 'error', error: error.message })
     }

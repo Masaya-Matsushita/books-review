@@ -8,7 +8,7 @@ export const useRedirectToTop = (token) => {
 
   useEffect(() => {
     if (token) {
-      router.push('/')
+      // ログイン完了通知
       showNotification({
         id: 'redilectToTop',
         disallowClose: true,
@@ -18,6 +18,9 @@ export const useRedirectToTop = (token) => {
         icon: <Check />,
         color: 'teal',
       })
+
+      // 一覧ページへ遷移
+      router.push('/')
     }
   }, [router, token])
 }
