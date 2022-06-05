@@ -5,7 +5,6 @@ import { useLoadState } from 'hooks/useLoadState'
 import { useAuthFormInitialize } from 'hooks/useAuthFormInitialize'
 import { useCookies } from 'react-cookie'
 import { showNotification } from '@mantine/notifications'
-import { useRouter } from 'next/router'
 import { ErrorMessage } from 'components/ErrorMessage'
 // import PropTypes from 'prop-types'
 
@@ -13,7 +12,6 @@ export const AuthForm = (props) => {
   const form = useAuthFormInitialize(props.path)
   const { state, dispatch } = useLoadState()
   const [cookies, setCookie, removeCookie] = useCookies(['token'])
-  const router = useRouter()
 
   const handleSubmit = async (values) => {
     //ローディング表示
@@ -46,7 +44,7 @@ export const AuthForm = (props) => {
       setCookie('token', json.token, { maxAge: 7200 })
 
       // topベージへ遷移
-      router.push('/')
+      props.router.push('/')
       showNotification({
         id: 'redilectToTop',
         disallowClose: true,

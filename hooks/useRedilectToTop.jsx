@@ -1,11 +1,8 @@
 import { showNotification } from '@mantine/notifications'
-import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { Check } from 'tabler-icons-react'
 
-export const useRedirectToTop = (token) => {
-  const router = useRouter()
-
+export const useRedirectToTop = (token, router) => {
   useEffect(() => {
     if (token) {
       // ログイン完了通知

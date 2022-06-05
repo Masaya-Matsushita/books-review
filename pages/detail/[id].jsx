@@ -5,7 +5,7 @@ import { useRouter } from 'next/router'
 
 export default function DetailId() {
   const router = useRouter()
-  const state = useGetDetail()
+  const state = useGetDetail(router.query.id)
 
   return (
     <div className='bg-slate-100'>

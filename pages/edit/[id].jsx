@@ -22,7 +22,7 @@ export default function EditId() {
   const [cookies, setCookie, removeCookie] = useCookies(['token'])
   const { state, dispatch } = useLoadState()
   const router = useRouter()
-  const detailState = useGetDetail()
+  const detailState = useGetDetail(router.query.id)
   const form = useEditFormInitialize()
 
   // detailStateをformの初期値に設定

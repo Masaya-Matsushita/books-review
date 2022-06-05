@@ -1,13 +1,11 @@
 import { Menu } from '@mantine/core'
 import { showNotification } from '@mantine/notifications'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
 import { useCookies } from 'react-cookie'
 import { Check, Logout, Settings } from 'tabler-icons-react'
 
-export const Header = ({ state }) => {
+export const Header = ({ state, router }) => {
   const [cookies, setCookie, removeCookie] = useCookies(['token'])
-  const router = useRouter()
 
   const logout = () => {
     // cookieのtokenを削除

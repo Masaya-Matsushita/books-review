@@ -1,10 +1,8 @@
 import { usePreLoadState } from 'hooks/usePreLoadState'
-import { useRouter } from 'next/router'
 import { useCallback, useEffect } from 'react'
 import { useCookies } from 'react-cookie'
 
-export const useGetDetail = () => {
-  const router = useRouter()
+export const useGetDetail = (bookId) => {
   const [cookies, setCookie, removeCookie] = useCookies(['token'])
   const { state, dispatch } = usePreLoadState()
 
@@ -12,7 +10,7 @@ export const useGetDetail = () => {
     // Detailを取得
     try {
       const res = await fetch(
-        `https://api-for-missions-and-railways.herokuapp.com/books/${router.query.id}`,
+        `https://api-for-missions-and-railways.herokuapp.com/books/${bookId}`,
         {
           method: 'GET',
           headers: {
@@ -36,12 +34,12 @@ export const useGetDetail = () => {
     } catch (error) {
       dispatch({ type: 'error', error: error.message })
     }
-  }, [cookies.token, router.query.id, dispatch])
+  }, [cookies.token, bookId, dispatch])
 
-  // router.query.id定義時
+  // bookId定義時
   useEffect(() => {
-    router.query.id ? getDetail() : null
-  }, [router.query.id, getDetail])
+    bookId ? getDetail() : null
+  }, [bookId, getDetail])
 
   return state
 }

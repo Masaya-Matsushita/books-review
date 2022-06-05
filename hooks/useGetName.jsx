@@ -3,7 +3,7 @@ import { useCallback, useEffect } from 'react'
 import { useCookies } from 'react-cookie'
 
 export const useGetName = () => {
-  const [cookies, setCookie, reduceCookie] = useCookies('token')
+  const [cookies, setCookie, removeCookie] = useCookies('token')
   const { state, dispatch } = usePreLoadState()
 
   const getName = useCallback(async () => {
