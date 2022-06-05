@@ -1,16 +1,8 @@
-import { Button, Card, Loader } from '@mantine/core'
-import { Plus } from 'tabler-icons-react'
+import { Button, Card, Loader, Menu } from '@mantine/core'
+import Link from 'next/link'
+import { Plus, Settings, Trash } from 'tabler-icons-react'
 
 export const PostList = ({ state, router }) => {
-  const toDetail = (post) => {
-    // isMineの有無で動的に遷移先を決定
-    if (post.isMine) {
-      router.push(`/edit/${post.id}`)
-    } else {
-      router.push(`/detail/${post.id}`)
-    }
-  }
-
   // ローディング状態
   if (state.loading) {
     return <Loader size='xl' className='block mx-auto mt-12' />
@@ -30,19 +22,34 @@ export const PostList = ({ state, router }) => {
     <div>
       {state.postList.map((post) => {
         return (
-          <Card key={post.id} className='mb-8' onClick={() => toDetail(post)}>
-            <h1>{post.title}</h1>
-            <h3>{post.detail}</h3>
-            <p className='mr-4 mb-0 text-right'>
-              Reviewed by{' '}
-              <span
-                className={
-                  post.isMine ? 'text-blue-500 text-xl font-bold' : 'text-black'
-                }
+          <Card key={post.id} className='mb-8'>
+            {/* 自分の投稿はMenu表示 */}
+            {post.isMine ? (
+              <Menu
+                control={<div className='text-3xl'>...</div>}
+                className='flex justify-end mr-6'
               >
-                {post.reviewer}
-              </span>
-            </p>
+                <Menu.Label>Menu</Menu.Label>
+                <Menu.Item icon={<Settings size={14} />}>
+                  <Link href={`/edit/${post.id}`}>
+                    <a className='text-black no-underline'>Edit</a>
+                  </Link>
+                </Menu.Item>
+                <Menu.Item icon={<Trash size={14} />} color='red'>
+                  Delete
+                </Menu.Item>
+              </Menu>
+            ) : null}
+            <div onClick={() => router.push(`/detail/${post.id}`)}>
+              <h1>{post.title}</h1>
+              <h3>{post.detail}</h3>
+              <p className='mr-4 mb-0 text-right'>
+                Reviewed by{' '}
+                <span className='text-lg font-bold text-blue-500'>
+                  {post.reviewer}
+                </span>
+              </p>
+            </div>
           </Card>
         )
       })}
