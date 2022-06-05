@@ -6,6 +6,7 @@ import { useAuthFormInitialize } from 'hooks/useAuthFormInitialize'
 import { useCookies } from 'react-cookie'
 import { showNotification } from '@mantine/notifications'
 import { useRouter } from 'next/router'
+import { ErrorMessage } from 'components/ErrorMessage'
 // import PropTypes from 'prop-types'
 
 export const AuthForm = (props) => {
@@ -65,11 +66,7 @@ export const AuthForm = (props) => {
     <div>
       <Box sx={{ maxWidth: 400 }} mx='auto'>
         <h1>{props.title}</h1>
-        {state.error ? (
-          <div className='text-lg font-bold text-red-500'>
-            Error：{state.error}
-          </div>
-        ) : null}
+        <ErrorMessage state={state} />
         <form onSubmit={form.onSubmit(handleSubmit)}>
           {/* サインイン画面ではName入力無し */}
           {props.path === 'users' ? (

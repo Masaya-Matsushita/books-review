@@ -1,5 +1,6 @@
 import { Box, Button, Group, Textarea, TextInput } from '@mantine/core'
 import { showNotification } from '@mantine/notifications'
+import { ErrorMessage } from 'components/ErrorMessage'
 import { HeadComponent as Head } from 'components/Head'
 import { useEditFormInitialize } from 'hooks/useEditFormInitialize'
 import { useLoadState } from 'hooks/useLoadState'
@@ -57,11 +58,7 @@ export default function New() {
       <Head title='New' />
       <Box sx={{ maxWidth: 400 }} mx='auto'>
         <h1 className='mb-4'>投稿を作成</h1>
-        {state.error ? (
-          <div className='text-lg font-bold text-red-500'>
-            Error：{state.error}
-          </div>
-        ) : null}
+        <ErrorMessage state={state} />
         <form onSubmit={form.onSubmit(handleSubmit)}>
           <TextInput
             label='書籍名'

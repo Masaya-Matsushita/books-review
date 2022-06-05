@@ -1,6 +1,7 @@
 import { Box, Button, Group, TextInput } from '@mantine/core'
 import { useForm, zodResolver } from '@mantine/form'
 import { showNotification } from '@mantine/notifications'
+import { ErrorMessage } from 'components/ErrorMessage'
 import { HeadComponent as Head } from 'components/Head'
 import { useGetName } from 'hooks/useGetName'
 import { useLoadState } from 'hooks/useLoadState'
@@ -85,11 +86,7 @@ export default function Profile() {
       <Head title='profile' />
       <Box sx={{ maxWidth: 400 }} mx='auto'>
         <h1 className='mb-4'>名前を変更する</h1>
-        {state.error ? (
-          <div className='text-lg font-bold text-red-500'>
-            Error：{state.error}
-          </div>
-        ) : null}
+        <ErrorMessage state={state} />
         <form onSubmit={form.onSubmit(handleSubmit)}>
           <TextInput
             id='rename'
