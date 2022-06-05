@@ -11,8 +11,8 @@ export const useAuthFormInitialize = (mode) => {
           name: z
             .string()
             .trim()
-            .min(2, { message: '2文字以上10文字以内で入力してください。' })
-            .max(10, { message: '2文字以上10文字以内で入力してください。' }),
+            .min(2, { message: '2文字以上15文字以内で入力してください。' })
+            .max(15, { message: '2文字以上15文字以内で入力してください。' }),
           email: z
             .string()
             .trim()

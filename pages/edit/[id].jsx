@@ -1,8 +1,8 @@
 import { Box, Button, Group, Textarea, TextInput } from '@mantine/core'
-import { zodResolver } from '@mantine/form'
-import { useForm } from '@mantine/hooks'
 import { showNotification } from '@mantine/notifications'
+import { ErrorMessage } from 'components/ErrorMessage'
 import { HeadComponent as Head } from 'components/Head'
+import { useEditFormInitialize } from 'hooks/useEditFormInitialize'
 import { useGetDetail } from 'hooks/useGetDetail'
 import { useLoadState } from 'hooks/useLoadState'
 import { useRouter } from 'next/router'
@@ -17,31 +17,15 @@ import {
   Mail,
   Trash,
 } from 'tabler-icons-react'
-import { z } from 'zod'
-
-const schema = z.object({
-  title: z.string().trim().min(2, { message: '2文字以上で入力してください。' }),
-  detail: z.string().trim(),
-  review: z.string().trim(),
-  url: z.string().trim().url(),
-})
 
 export default function EditId() {
   const [cookies, setCookie, removeCookie] = useCookies(['token'])
   const { state, dispatch } = useLoadState()
   const router = useRouter()
-  const detailState = useGetDetail()
+  const detailState = useGetDetail(router.query.id)
+  const form = useEditFormInitialize()
 
-  const form = useForm({
-    schema: zodResolver(schema),
-    initialValues: {
-      title: '',
-      detail: '',
-      review: '',
-      url: '',
-    },
-  })
-
+  // detailStateをformの初期値に設定
   useEffect(
     detailState.detail
       ? () => {
@@ -58,7 +42,10 @@ export default function EditId() {
   )
 
   const handleSubmit = async (values) => {
+    // ローディング開始
     dispatch({ type: 'start' })
+
+    // 投稿を更新
     try {
       const res = await fetch(
         `https://api-for-missions-and-railways.herokuapp.com/books/${router.query.id}`,
@@ -75,29 +62,39 @@ export default function EditId() {
 
       const json = await res.json()
 
+      // エラーの入ったデータを取得した場合
       if (!res.ok) {
         dispatch({ type: 'error', error: json.ErrorMessageJP })
         return
       }
 
+      // ローディング解除
       dispatch({ type: 'end' })
 
-      router.push('/')
+      // 画面下に完了通知
       showNotification({
         id: 'redilectToTop',
         disallowClose: true,
-        autoClose: 5000,
+        autoClose: 3000,
         title: '更新しました',
         icon: <Check />,
         color: 'teal',
       })
+
+      //　一覧ページへ遷移
+      router.push('/')
+
+      // fetchが失敗した場合
     } catch (error) {
       dispatch({ type: 'error', error: error.message })
     }
   }
 
   const deletePost = async () => {
+    // ローディング開始
     dispatch({ type: 'start' })
+
+    // 投稿を削除
     try {
       fetch(
         `https://api-for-missions-and-railways.herokuapp.com/books/${router.query.id}`,
@@ -117,17 +114,23 @@ export default function EditId() {
       //   return
       // }
 
+      // ローディング解除
       dispatch({ type: 'end' })
 
-      router.push('/')
+      // 画面下に完了通知
       showNotification({
         id: 'redilectToTop',
         disallowClose: true,
-        autoClose: 5000,
+        autoClose: 3000,
         title: 'レビューを削除しました',
         icon: <Check />,
         color: 'teal',
       })
+
+      // 一覧ページへ遷移
+      router.push('/')
+
+      // fetchが失敗した場合
     } catch (error) {
       dispatch({ type: 'error', error: error.message })
     }
@@ -136,20 +139,18 @@ export default function EditId() {
   return (
     <div className='bg-slate-100'>
       <Head title='New' />
-      <Box sx={{ maxWidth: 400 }} mx='auto'>
+      <Box sx={{ maxWidth: 800 }} mx='auto'>
         <h1 className='mb-4'>投稿を更新</h1>
-        {state.error ? (
-          <div className='text-lg font-bold text-red-500'>
-            Error：{state.error}
-          </div>
-        ) : null}
+        <ErrorMessage state={state} />
         <form onSubmit={form.onSubmit(handleSubmit)}>
           <TextInput
             label='書籍名'
             aria-label='書籍名'
             placeholder={detailState.detail ? detailState.detail.title : ''}
             required
+            size='lg'
             icon={<Book2 size={16} />}
+            className='mt-4'
             {...form.getInputProps('title')}
           />
           <Textarea
@@ -157,6 +158,8 @@ export default function EditId() {
             area-label='要約'
             placeholder={detailState.detail ? detailState.detail.detail : ''}
             required
+            size='lg'
+            className='mt-4'
             icon={<Bulb size={16} />}
             {...form.getInputProps('detail')}
           />
@@ -165,6 +168,8 @@ export default function EditId() {
             area-label='レビュー'
             placeholder={detailState.detail ? detailState.detail.review : ''}
             required
+            size='lg'
+            className='mt-4'
             icon={<Ballpen size={16} />}
             {...form.getInputProps('review')}
           />
@@ -172,29 +177,30 @@ export default function EditId() {
             label='URL'
             aria-label='URL'
             placeholder={detailState.detail ? detailState.detail.url : ''}
-            required
             icon={<Link size={16} />}
+            required
+            className='mt-4'
             {...form.getInputProps('url')}
           />
           <Group position='right'>
-            <Button
-              type='submit'
-              size='lg'
-              leftIcon={<Mail size={16} />}
-              loading={state.loading}
-              className='mt-8'
-            >
-              更新
-            </Button>
             <Button
               size='lg'
               color='red'
               leftIcon={<Trash size={16} />}
               // loading={state.loading}
               onClick={deletePost}
-              className='mt-8'
+              className='mt-10 mr-4'
             >
               削除
+            </Button>
+            <Button
+              type='submit'
+              size='lg'
+              leftIcon={<Mail size={16} />}
+              loading={state.loading}
+              className='mt-10'
+            >
+              更新
             </Button>
           </Group>
         </form>

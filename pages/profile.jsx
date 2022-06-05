@@ -1,6 +1,7 @@
 import { Box, Button, Group, TextInput } from '@mantine/core'
 import { useForm, zodResolver } from '@mantine/form'
 import { showNotification } from '@mantine/notifications'
+import { ErrorMessage } from 'components/ErrorMessage'
 import { HeadComponent as Head } from 'components/Head'
 import { useGetName } from 'hooks/useGetName'
 import { useLoadState } from 'hooks/useLoadState'
@@ -10,12 +11,13 @@ import { useCookies } from 'react-cookie'
 import { Ballpen, Book2, Check } from 'tabler-icons-react'
 import { z } from 'zod'
 
+//フォームのバリデーションを定義
 const schema = z.object({
   name: z
     .string()
     .trim()
-    .min(2, { message: '2文字以上10文字以内で入力してください。' })
-    .max(10, { message: '2文字以上10文字以内で入力してください。' }),
+    .min(2, { message: '2文字以上15文字以内で入力してください。' })
+    .max(15, { message: '2文字以上15文字以内で入力してください。' }),
 })
 
 export default function Profile() {
@@ -24,6 +26,7 @@ export default function Profile() {
   const router = useRouter()
   const { state, dispatch } = useLoadState()
 
+  // フォームの初期設定
   const form = useForm({
     schema: zodResolver(schema),
     initialValues: {
@@ -31,6 +34,7 @@ export default function Profile() {
     },
   })
 
+  // nameStateをformの初期値に設定
   useEffect(
     nameState.name
       ? () => {
@@ -41,7 +45,10 @@ export default function Profile() {
   )
 
   const handleSubmit = async (value) => {
+    // ローディング開始
     dispatch({ type: 'start' })
+
+    // 名前を更新
     try {
       const res = await fetch(
         'https://api-for-missions-and-railways.herokuapp.com/users',
@@ -58,14 +65,16 @@ export default function Profile() {
 
       const json = await res.json()
 
+      // エラーの入ったデータを取得した場合
       if (!res.ok) {
         dispatch({ type: 'error', error: json.ErrorMessageJP })
         return
       }
 
+      // ローディング解除
       dispatch({ type: 'end' })
 
-      router.push('/')
+      // 画面下に完了通知
       showNotification({
         id: 'redilectToTop',
         disallowClose: true,
@@ -75,6 +84,11 @@ export default function Profile() {
         icon: <Check />,
         color: 'teal',
       })
+
+      //　一覧ページへ遷移
+      router.push('/')
+
+      // fetchが失敗した場合
     } catch (error) {
       dispatch({ type: 'error', error: error.message })
     }
@@ -83,13 +97,9 @@ export default function Profile() {
   return (
     <div className='bg-slate-100'>
       <Head title='profile' />
-      <Box sx={{ maxWidth: 400 }} mx='auto'>
+      <Box sx={{ maxWidth: 500 }} mx='auto'>
         <h1 className='mb-4'>名前を変更する</h1>
-        {state.error ? (
-          <div className='text-lg font-bold text-red-500'>
-            Error：{state.error}
-          </div>
-        ) : null}
+        <ErrorMessage state={state} />
         <form onSubmit={form.onSubmit(handleSubmit)}>
           <TextInput
             id='rename'

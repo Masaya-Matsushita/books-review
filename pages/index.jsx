@@ -1,12 +1,13 @@
 import { Pagination } from '@mantine/core'
 import { HeadComponent as Head } from 'components/Head'
 import { Header } from 'components/Header'
-import { Posts } from 'components/Posts'
+import { PostList } from 'components/PostList'
 import { useGetName } from 'hooks/useGetName'
 import { usePreLoadState } from 'hooks/usePreLoadState'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect } from 'react'
 import { useCookies } from 'react-cookie'
+import { animateScroll as scroll } from 'react-scroll/modules'
 
 export default function Home() {
   const router = useRouter()
@@ -14,7 +15,7 @@ export default function Home() {
   const [cookies, setCookie, removeCookie] = useCookies(['token'])
   const headerState = useGetName()
 
-  const getPosts = useCallback(
+  const getPostList = useCallback(
     async (e) => {
       // offsetの値を定義
       const offset = 10 * (e - 1)
@@ -23,9 +24,7 @@ export default function Home() {
       }
       dispatch({ type: 'offset', offset: offset })
 
-      const token = cookies.token
-
-      // postsを取得(10件分)
+      // postListを取得(10件分)
       try {
         const res = await fetch(
           `https://api-for-missions-and-railways.herokuapp.com/books?offset=${offset}`,
@@ -33,7 +32,7 @@ export default function Home() {
             method: 'GET',
             mode: 'cors',
             headers: {
-              Authorization: `Bearer ${token}`,
+              Authorization: `Bearer ${cookies.token}`,
             },
           }
         )
@@ -45,8 +44,11 @@ export default function Home() {
           return
         }
 
-        // データをpostsへ、ローディング解除
-        dispatch({ type: 'posts', posts: [...json] })
+        // データをpostListへ、ローディング解除
+        dispatch({ type: 'postList', postList: [...json] })
+
+        // 画面最上部へ自動スクロール
+        scroll.scrollToTop()
 
         // fetchが失敗した場合
       } catch (error) {
@@ -58,17 +60,17 @@ export default function Home() {
 
   // ログイン済でfetch、未ログインでリダイレクト
   useEffect(() => {
-    cookies.token ? getPosts() : router.push('/signin')
-  }, [cookies.token, getPosts, router])
+    cookies.token ? getPostList() : router.push('/signin')
+  }, [cookies.token, getPostList, router])
 
   return (
     <div className='bg-slate-100'>
       <Head title='index page' />
-      <Header state={headerState} />
+      <Header state={headerState} router={router} />
       <h1>投稿一覧</h1>
-      <Posts state={state} />
+      <PostList state={state} router={router} />
       <Pagination
-        onChange={(e) => getPosts(e)}
+        onChange={(e) => getPostList(e)}
         total={10}
         spacing='4px'
         className='flex justify-center mt-4'

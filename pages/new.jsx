@@ -1,38 +1,24 @@
 import { Box, Button, Group, Textarea, TextInput } from '@mantine/core'
-import { zodResolver } from '@mantine/form'
-import { useForm } from '@mantine/hooks'
 import { showNotification } from '@mantine/notifications'
+import { ErrorMessage } from 'components/ErrorMessage'
 import { HeadComponent as Head } from 'components/Head'
+import { useEditFormInitialize } from 'hooks/useEditFormInitialize'
 import { useLoadState } from 'hooks/useLoadState'
 import { useRouter } from 'next/router'
 import { useCookies } from 'react-cookie'
 import { Ballpen, Book2, Bulb, Check, Link, Mail } from 'tabler-icons-react'
-import { z } from 'zod'
-
-const schema = z.object({
-  title: z.string().trim().min(2, { message: '2文字以上で入力してください。' }),
-  detail: z.string().trim(),
-  review: z.string().trim(),
-  url: z.string().trim().url(),
-})
 
 export default function New() {
   const [cookies, setCookie, removeCookie] = useCookies(['token'])
   const { state, dispatch } = useLoadState()
   const router = useRouter()
-
-  const form = useForm({
-    schema: zodResolver(schema),
-    initialValues: {
-      title: '',
-      detail: '',
-      review: '',
-      url: '',
-    },
-  })
+  const form = useEditFormInitialize()
 
   const handleSubmit = async (values) => {
+    // ローディング開始
     dispatch({ type: 'start' })
+
+    // 投稿を作成
     try {
       const res = await fetch(
         'https://api-for-missions-and-railways.herokuapp.com/books',
@@ -49,22 +35,29 @@ export default function New() {
 
       const json = await res.json()
 
+      // エラーの入ったデータを取得した場合
       if (!res.ok) {
         dispatch({ type: 'error', error: json.ErrorMessageJP })
         return
       }
 
+      // ローディング解除
       dispatch({ type: 'end' })
 
-      router.push('/')
+      // 画面下に完了通知
       showNotification({
         id: 'redilectToTop',
         disallowClose: true,
-        autoClose: 5000,
+        autoClose: 3000,
         title: '投稿しました',
         icon: <Check />,
         color: 'teal',
       })
+
+      //　一覧ページへ遷移
+      router.push('/')
+
+      // fetchが失敗した場合
     } catch (error) {
       dispatch({ type: 'error', error: error.message })
     }
@@ -73,19 +66,17 @@ export default function New() {
   return (
     <div className='bg-slate-100'>
       <Head title='New' />
-      <Box sx={{ maxWidth: 400 }} mx='auto'>
+      <Box sx={{ maxWidth: 800 }} mx='auto'>
         <h1 className='mb-4'>投稿を作成</h1>
-        {state.error ? (
-          <div className='text-lg font-bold text-red-500'>
-            Error：{state.error}
-          </div>
-        ) : null}
+        <ErrorMessage state={state} />
         <form onSubmit={form.onSubmit(handleSubmit)}>
           <TextInput
             label='書籍名'
             aria-label='書籍名'
             placeholder='（例）銀河鉄道の夜'
             required
+            size='lg'
+            className='mt-4'
             icon={<Book2 size={16} />}
             {...form.getInputProps('title')}
           />
@@ -94,6 +85,8 @@ export default function New() {
             area-label='要約'
             placeholder='宮沢賢治の代表作。孤独な少年ジョバンニが宇宙を旅する物語。'
             required
+            size='lg'
+            className='mt-4'
             icon={<Bulb size={16} />}
             {...form.getInputProps('detail')}
           />
@@ -102,6 +95,8 @@ export default function New() {
             area-label='レビュー'
             placeholder='本当の幸せとは何なのか、大切なことを教えてくれました。'
             required
+            size='lg'
+            className='mt-4'
             icon={<Ballpen size={16} />}
             {...form.getInputProps('review')}
           />
@@ -109,8 +104,9 @@ export default function New() {
             label='URL'
             aria-label='URL'
             placeholder='http://www.example.com'
-            required
             icon={<Link size={16} />}
+            required
+            className='mt-4'
             {...form.getInputProps('url')}
           />
           <Group position='right'>
@@ -119,7 +115,7 @@ export default function New() {
               size='lg'
               leftIcon={<Mail size={16} />}
               loading={state.loading}
-              className='mt-8'
+              className='mt-10'
             >
               投稿
             </Button>

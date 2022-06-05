@@ -4,7 +4,7 @@ import { useReducer } from 'react'
 const initialState = {
   loading: true,
   error: null,
-  posts: [],
+  postList: [],
   offset: 0,
   name: null,
   detail: null,
@@ -12,7 +12,7 @@ const initialState = {
 
 const reducer = (state, action) => {
   switch (action.type) {
-    // 取得するpostsの範囲をセット
+    // 取得するpostList:の範囲をセット
     case 'offset':
       return {
         ...state,
@@ -24,12 +24,12 @@ const reducer = (state, action) => {
         ...state,
         name: action.name,
       }
-    // postsをfetch
-    case 'posts':
+    // postListをfetch
+    case 'postList':
       return {
         ...state,
         loading: false,
-        posts: action.posts,
+        postList: action.postList,
       }
     //detailをfetch
     case 'detail':

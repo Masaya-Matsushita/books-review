@@ -1,17 +1,17 @@
 import { Menu } from '@mantine/core'
 import { showNotification } from '@mantine/notifications'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
 import { useCookies } from 'react-cookie'
 import { Check, Logout, Settings } from 'tabler-icons-react'
 
-export const Header = ({ state }) => {
+export const Header = ({ state, router }) => {
   const [cookies, setCookie, removeCookie] = useCookies(['token'])
-  const router = useRouter()
 
   const logout = () => {
+    // cookieのtokenを削除
     removeCookie('token')
-    router.push('/signin')
+
+    // ログアウト処理の完了通知
     showNotification({
       disallowClose: true,
       autoClose: 3000,
@@ -19,12 +19,17 @@ export const Header = ({ state }) => {
       icon: <Check />,
       color: 'teal',
     })
+
+    // Signinページへ遷移
+    router.push('/signin')
   }
 
+  // エラー発生時
   if (state.error) {
     return <div className='flex justify-end'>{state.error}</div>
   }
 
+  // 名前を表示
   if (state.name) {
     return (
       <div className='flex justify-end'>

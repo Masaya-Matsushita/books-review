@@ -1,11 +1,9 @@
-import { Badge, Button, Card, Loader } from '@mantine/core'
-import { useRouter } from 'next/router'
+import { Button, Card, Loader } from '@mantine/core'
 import { Plus } from 'tabler-icons-react'
 
-export const Posts = ({ state }) => {
-  const router = useRouter()
-
+export const PostList = ({ state, router }) => {
   const toDetail = (post) => {
+    // isMineの有無で動的に遷移先を決定
     if (post.isMine) {
       router.push(`/edit/${post.id}`)
     } else {
@@ -24,22 +22,27 @@ export const Posts = ({ state }) => {
   }
 
   // 取得した投稿が空だった場合
-  if (state.posts.length === 0) {
+  if (state.postList.length === 0) {
     return <h2 className='my-12 text-center'>投稿はありません</h2>
   }
 
   return (
     <div>
-      {state.posts.map((post) => {
+      {state.postList.map((post) => {
         return (
           <Card key={post.id} className='mb-8' onClick={() => toDetail(post)}>
             <h1>{post.title}</h1>
             <h3>{post.detail}</h3>
-            <p>{post.review}</p>
-            <div className='pr-4 text-right'>
-              <a href={post.url}>作品のリンク</a>
-            </div>
-            <p className='mr-4 mb-0 text-right'>Reviewed by {post.reviewer}</p>
+            <p className='mr-4 mb-0 text-right'>
+              Reviewed by{' '}
+              <span
+                className={
+                  post.isMine ? 'text-blue-500 text-xl font-bold' : 'text-black'
+                }
+              >
+                {post.reviewer}
+              </span>
+            </p>
           </Card>
         )
       })}

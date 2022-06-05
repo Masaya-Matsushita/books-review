@@ -5,14 +5,13 @@ import { useLoadState } from 'hooks/useLoadState'
 import { useAuthFormInitialize } from 'hooks/useAuthFormInitialize'
 import { useCookies } from 'react-cookie'
 import { showNotification } from '@mantine/notifications'
-import { useRouter } from 'next/router'
+import { ErrorMessage } from 'components/ErrorMessage'
 // import PropTypes from 'prop-types'
 
 export const AuthForm = (props) => {
   const form = useAuthFormInitialize(props.path)
   const { state, dispatch } = useLoadState()
   const [cookies, setCookie, removeCookie] = useCookies(['token'])
-  const router = useRouter()
 
   const handleSubmit = async (values) => {
     //ローディング表示
@@ -45,7 +44,7 @@ export const AuthForm = (props) => {
       setCookie('token', json.token, { maxAge: 7200 })
 
       // topベージへ遷移
-      router.push('/')
+      props.router.push('/')
       showNotification({
         id: 'redilectToTop',
         disallowClose: true,
@@ -63,19 +62,15 @@ export const AuthForm = (props) => {
 
   return (
     <div>
-      <Box sx={{ maxWidth: 400 }} mx='auto'>
+      <Box sx={{ maxWidth: 800 }} mx='auto'>
         <h1>{props.title}</h1>
-        {state.error ? (
-          <div className='text-lg font-bold text-red-500'>
-            Error：{state.error}
-          </div>
-        ) : null}
+        <ErrorMessage state={state} />
         <form onSubmit={form.onSubmit(handleSubmit)}>
           {/* サインイン画面ではName入力無し */}
           {props.path === 'users' ? (
             <TextInput
               id='username'
-              placeholder='サービス太郎'
+              placeholder='レビュー太郎'
               label='User Name'
               aria-label='User name'
               size='lg'

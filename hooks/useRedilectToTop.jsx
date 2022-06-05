@@ -1,14 +1,11 @@
 import { showNotification } from '@mantine/notifications'
-import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { Check } from 'tabler-icons-react'
 
-export const useRedirectToTop = (token) => {
-  const router = useRouter()
-
+export const useRedirectToTop = (token, router) => {
   useEffect(() => {
     if (token) {
-      router.push('/')
+      // ログイン完了通知
       showNotification({
         id: 'redilectToTop',
         disallowClose: true,
@@ -18,6 +15,9 @@ export const useRedirectToTop = (token) => {
         icon: <Check />,
         color: 'teal',
       })
+
+      // 一覧ページへ遷移
+      router.push('/')
     }
   }, [router, token])
 }
