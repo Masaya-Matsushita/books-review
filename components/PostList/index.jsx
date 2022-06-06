@@ -70,7 +70,7 @@ export const PostList = ({ state, dispatch, router }) => {
       {state.postList.map((post) => {
         return (
           <Card key={post.id} className='mb-8'>
-            {/* 自分の投稿はMenu表示 */}
+            {/* 自分の投稿はMenuを表示 */}
             {post.isMine ? (
               <Menu
                 control={<div className='text-3xl'>...</div>}
@@ -96,7 +96,8 @@ export const PostList = ({ state, dispatch, router }) => {
               className='cursor-pointer'
             >
               <h1>{post.title}</h1>
-              <h3>{post.detail}</h3>
+              <span>{post.detail.slice(0, 50)}</span>
+              <span>{post.detail.length > 50 ? '...' : null}</span>
               <p className='mr-4 mb-0 text-right'>
                 Reviewed by{' '}
                 <span className='text-lg font-bold text-blue-500'>
