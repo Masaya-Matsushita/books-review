@@ -7,7 +7,7 @@ import { Ballpen, Check, Plus, Trash } from 'tabler-icons-react'
 
 export const PostList = ({ state, dispatch, router }) => {
   const [cookies, setCookie, removeCookie] = useCookies()
-  const [opened, setOpened] = useState(false)
+  const [opened, setOpened] = useState(null)
 
   // 投稿を削除
   const deletePost = async (id) => {
@@ -40,7 +40,8 @@ export const PostList = ({ state, dispatch, router }) => {
         color: 'teal',
       })
 
-      // 削除後のPostListをリダイレクト
+      // 削除後にページをリダイレクト
+      setOpened(null)
       router.push('/')
 
       // fetchが失敗した場合
@@ -84,7 +85,7 @@ export const PostList = ({ state, dispatch, router }) => {
                 <Menu.Item
                   icon={<Trash size={14} />}
                   color='red'
-                  onClick={() => setOpened(true)}
+                  onClick={() => setOpened(post.id)}
                 >
                   Delete
                 </Menu.Item>
@@ -108,14 +109,14 @@ export const PostList = ({ state, dispatch, router }) => {
       })}
       <Modal
         opened={opened}
-        onClose={() => setOpened(false)}
+        onClose={() => setOpened(null)}
         withCloseButton={false}
         className='mt-16 text-center'
       >
         <div className='mt-4'>投稿を削除してもよろしいですか？</div>
         <Button
           variant='outline'
-          onClick={() => setOpened(false)}
+          onClick={() => setOpened(null)}
           className='mx-4 mt-6'
         >
           キャンセル
@@ -123,7 +124,7 @@ export const PostList = ({ state, dispatch, router }) => {
         <Button
           color='red'
           variant='outline'
-          onClick={deletePost}
+          onClick={() => deletePost(opened)}
           className='mx-4 mt-6'
         >
           削除
