@@ -1,11 +1,13 @@
-import { Button, Card, Loader, Menu } from '@mantine/core'
+import { Button, Card, Loader, Menu, Modal } from '@mantine/core'
 import { showNotification } from '@mantine/notifications'
 import Link from 'next/link'
+import { useState } from 'react'
 import { useCookies } from 'react-cookie'
 import { Ballpen, Check, Plus, Trash } from 'tabler-icons-react'
 
 export const PostList = ({ state, dispatch, router }) => {
   const [cookies, setCookie, removeCookie] = useCookies()
+  const [opened, setOpened] = useState(false)
 
   // 投稿を削除
   const deletePost = async (id) => {
@@ -82,7 +84,7 @@ export const PostList = ({ state, dispatch, router }) => {
                 <Menu.Item
                   icon={<Trash size={14} />}
                   color='red'
-                  onClick={() => deletePost(post.id)}
+                  onClick={() => setOpened(true)}
                 >
                   Delete
                 </Menu.Item>
@@ -104,6 +106,29 @@ export const PostList = ({ state, dispatch, router }) => {
           </Card>
         )
       })}
+      <Modal
+        opened={opened}
+        onClose={() => setOpened(false)}
+        withCloseButton={false}
+        className='mt-16 text-center'
+      >
+        <div className='mt-4'>投稿を削除してもよろしいですか？</div>
+        <Button
+          variant='outline'
+          onClick={() => setOpened(false)}
+          className='mx-4 mt-6'
+        >
+          キャンセル
+        </Button>
+        <Button
+          color='red'
+          variant='outline'
+          onClick={deletePost}
+          className='mx-4 mt-6'
+        >
+          削除
+        </Button>
+      </Modal>
       <Button
         className='sticky bottom-16 -mt-12 w-16 h-16 rounded-full'
         compact
