@@ -71,7 +71,7 @@ export const PostList = ({ state, dispatch, router }) => {
             {post.isMine ? (
               <Menu
                 control={<div className='text-3xl'>...</div>}
-                className='flex justify-end mr-6'
+                className='flex justify-end mr-6 cursor-pointer'
               >
                 <Menu.Label>Menu</Menu.Label>
                 <Menu.Item icon={<Ballpen size={14} />}>
@@ -88,7 +88,10 @@ export const PostList = ({ state, dispatch, router }) => {
                 </Menu.Item>
               </Menu>
             ) : null}
-            <div onClick={() => router.push(`/detail/${post.id}`)}>
+            <div
+              onClick={() => router.push(`/detail/${post.id}`)}
+              className='cursor-pointer'
+            >
               <h1>{post.title}</h1>
               <h3>{post.detail}</h3>
               <p className='mr-4 mb-0 text-right'>

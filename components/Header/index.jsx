@@ -34,7 +34,11 @@ export const Header = ({ state, router }) => {
     return (
       <div className='flex justify-end'>
         ログイン済：
-        <Menu control={<span className='underline'>{state.name}</span>}>
+        <Menu
+          control={
+            <span className='underline cursor-pointer'>{state.name}</span>
+          }
+        >
           <Menu.Label>Menu</Menu.Label>
           <Menu.Item icon={<Settings size={14} />}>
             <Link href='/profile'>
