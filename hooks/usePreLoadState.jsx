@@ -12,6 +12,12 @@ const initialState = {
 
 const reducer = (state, action) => {
   switch (action.type) {
+    // ローディング開始
+    case 'start':
+      return {
+        ...state,
+        loading: true,
+      }
     // 取得するpostList:の範囲をセット
     case 'offset':
       return {

@@ -62,7 +62,7 @@ export const AuthForm = (props) => {
 
   return (
     <div>
-      <Box sx={{ maxWidth: 800 }} mx='auto'>
+      <Box sx={{ maxWidth: 500 }} mx='auto'>
         <h1>{props.title}</h1>
         <ErrorMessage state={state} />
         <form onSubmit={form.onSubmit(handleSubmit)}>

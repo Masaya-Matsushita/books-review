@@ -1,13 +1,52 @@
-import { Button, Card, Loader } from '@mantine/core'
-import { Plus } from 'tabler-icons-react'
+import { Button, Card, Loader, Menu, Modal } from '@mantine/core'
+import { showNotification } from '@mantine/notifications'
+import Link from 'next/link'
+import { useState } from 'react'
+import { useCookies } from 'react-cookie'
+import { Ballpen, Check, Plus, Trash } from 'tabler-icons-react'
 
-export const PostList = ({ state, router }) => {
-  const toDetail = (post) => {
-    // isMineの有無で動的に遷移先を決定
-    if (post.isMine) {
-      router.push(`/edit/${post.id}`)
-    } else {
-      router.push(`/detail/${post.id}`)
+export const PostList = ({ state, dispatch, router }) => {
+  const [cookies, setCookie, removeCookie] = useCookies()
+  const [opened, setOpened] = useState(null)
+
+  // 投稿を削除
+  const deletePost = async (id) => {
+    try {
+      await fetch(
+        `https://api-for-missions-and-railways.herokuapp.com/books/${id}`,
+        {
+          method: 'DELETE',
+          headers: {
+            accept: 'application/json',
+            Authorization: `Bearer ${cookies.token}`,
+          },
+        }
+      )
+
+      //　もしエラー情報のレスポンスが帰ってきた場合、受け取りたい
+      // if (!res.ok) {
+      //   const json = await res.json()
+      //   dispatch({ type: 'error', error: json.ErrorMessageJP })
+      //   return
+      // }
+
+      // 画面下に完了通知
+      showNotification({
+        id: 'redilectToTop',
+        disallowClose: true,
+        autoClose: 3000,
+        title: 'レビューを削除しました',
+        icon: <Check />,
+        color: 'teal',
+      })
+
+      // 削除後にページをリダイレクト
+      setOpened(null)
+      router.push('/')
+
+      // fetchが失敗した場合
+    } catch (error) {
+      dispatch({ type: 'error', error: error.message })
     }
   }
 
@@ -30,22 +69,68 @@ export const PostList = ({ state, router }) => {
     <div>
       {state.postList.map((post) => {
         return (
-          <Card key={post.id} className='mb-8' onClick={() => toDetail(post)}>
-            <h1>{post.title}</h1>
-            <h3>{post.detail}</h3>
-            <p className='mr-4 mb-0 text-right'>
-              Reviewed by{' '}
-              <span
-                className={
-                  post.isMine ? 'text-blue-500 text-xl font-bold' : 'text-black'
-                }
+          <Card key={post.id} className='mb-8'>
+            {/* 自分の投稿はMenuを表示 */}
+            {post.isMine ? (
+              <Menu
+                control={<div className='text-3xl'>...</div>}
+                className='flex justify-end mr-6 cursor-pointer'
               >
-                {post.reviewer}
-              </span>
-            </p>
+                <Menu.Label>Menu</Menu.Label>
+                <Menu.Item icon={<Ballpen size={14} />}>
+                  <Link href={`/edit/${post.id}`}>
+                    <a className='text-black no-underline'>Edit</a>
+                  </Link>
+                </Menu.Item>
+                <Menu.Item
+                  icon={<Trash size={14} />}
+                  color='red'
+                  onClick={() => setOpened(post.id)}
+                >
+                  Delete
+                </Menu.Item>
+              </Menu>
+            ) : null}
+            <div
+              onClick={() => router.push(`/detail/${post.id}`)}
+              className='cursor-pointer'
+            >
+              <h1>{post.title}</h1>
+              <span>{post.detail.slice(0, 50)}</span>
+              <span>{post.detail.length > 50 ? '...' : null}</span>
+              <p className='mr-4 mb-0 text-right'>
+                Reviewed by{' '}
+                <span className='text-lg font-bold text-blue-500'>
+                  {post.reviewer}
+                </span>
+              </p>
+            </div>
           </Card>
         )
       })}
+      <Modal
+        opened={opened}
+        onClose={() => setOpened(null)}
+        withCloseButton={false}
+        className='mt-16 text-center'
+      >
+        <div className='mt-4'>投稿を削除してもよろしいですか？</div>
+        <Button
+          variant='outline'
+          onClick={() => setOpened(null)}
+          className='mx-4 mt-6'
+        >
+          キャンセル
+        </Button>
+        <Button
+          color='red'
+          variant='outline'
+          onClick={() => deletePost(opened)}
+          className='mx-4 mt-6'
+        >
+          削除
+        </Button>
+      </Modal>
       <Button
         className='sticky bottom-16 -mt-12 w-16 h-16 rounded-full'
         compact

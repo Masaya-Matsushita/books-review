@@ -7,7 +7,6 @@ import { usePreLoadState } from 'hooks/usePreLoadState'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect } from 'react'
 import { useCookies } from 'react-cookie'
-import { animateScroll as scroll } from 'react-scroll/modules'
 
 export default function Home() {
   const router = useRouter()
@@ -17,6 +16,9 @@ export default function Home() {
 
   const getPostList = useCallback(
     async (e) => {
+      // ローディング開始
+      dispatch({ type: 'start' })
+
       // offsetの値を定義
       const offset = 10 * (e - 1)
       if (!e) {
@@ -47,9 +49,6 @@ export default function Home() {
         // データをpostListへ、ローディング解除
         dispatch({ type: 'postList', postList: [...json] })
 
-        // 画面最上部へ自動スクロール
-        scroll.scrollToTop()
-
         // fetchが失敗した場合
       } catch (error) {
         dispatch({ type: 'error', error: error.message })
@@ -68,7 +67,7 @@ export default function Home() {
       <Head title='index page' />
       <Header state={headerState} router={router} />
       <h1>投稿一覧</h1>
-      <PostList state={state} router={router} />
+      <PostList state={state} dispatch={dispatch} router={router} />
       <Pagination
         onChange={(e) => getPostList(e)}
         total={10}
