@@ -8,9 +8,9 @@ export default function DetailId() {
   const state = useGetDetail(router.query.id)
 
   return (
-    <div className='bg-slate-100'>
+    <>
       <Head title='Detail' />
       <Detail state={state} router={router} />
-    </div>
+    </>
   )
 }

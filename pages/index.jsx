@@ -22,7 +22,7 @@ export default function Home() {
       // offsetの値を定義
       const offset = 10 * (e - 1)
       if (!e) {
-        offset = 0
+        offset = state.offset
       }
       dispatch({ type: 'offset', offset: offset })
 
@@ -54,8 +54,10 @@ export default function Home() {
         dispatch({ type: 'error', error: error.message })
       }
     },
-    [cookies.token, dispatch]
+    [cookies.token, dispatch, state.offset]
   )
+
+  console.log(state.offset)
 
   // ログイン済でfetch、未ログインでリダイレクト
   useEffect(() => {
@@ -63,10 +65,10 @@ export default function Home() {
   }, [cookies.token, getPostList, router])
 
   return (
-    <div className='bg-slate-100'>
+    <>
       <Head title='index page' />
       <Header state={headerState} router={router} />
-      <h1>投稿一覧</h1>
+      <h1>最新の投稿</h1>
       <PostList state={state} dispatch={dispatch} router={router} />
       <Pagination
         onChange={(e) => getPostList(e)}
@@ -74,6 +76,6 @@ export default function Home() {
         spacing='4px'
         className='flex justify-center mt-4'
       />
-    </div>
+    </>
   )
 }

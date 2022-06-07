@@ -41,7 +41,7 @@ export const AuthForm = (props) => {
       dispatch({ type: 'end' })
 
       // クッキーに値をセット
-      setCookie('token', json.token, { maxAge: 7200 })
+      setCookie('token', json.token, { maxAge: 21600 })
 
       // topベージへ遷移
       props.router.push('/')

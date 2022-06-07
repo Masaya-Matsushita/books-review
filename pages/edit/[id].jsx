@@ -83,7 +83,7 @@ export default function EditId() {
   }
 
   return (
-    <div className='bg-slate-100'>
+    <>
       <Head title='New' />
       <Box sx={{ maxWidth: 800 }} mx='auto'>
         <h1 className='mb-4'>投稿を更新</h1>
@@ -141,6 +141,6 @@ export default function EditId() {
           </Group>
         </form>
       </Box>
-    </div>
+    </>
   )
 }

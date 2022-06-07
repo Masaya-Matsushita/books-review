@@ -66,7 +66,7 @@ export const PostList = ({ state, dispatch, router }) => {
   }
 
   return (
-    <div>
+    <div className='mt-12'>
       {state.postList.map((post) => {
         return (
           <Card key={post.id} className='mb-8'>

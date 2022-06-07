@@ -11,7 +11,7 @@ export default function Signup() {
   useRedirectToTop(cookies.token, router)
 
   return (
-    <div className='bg-slate-100'>
+    <>
       <Head title='signup page' />
       <AuthForm
         router={router}
@@ -21,6 +21,6 @@ export default function Signup() {
         linkHref='/signin'
         linkText='登録済みの方はこちら'
       />
-    </div>
+    </>
   )
 }

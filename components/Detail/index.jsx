@@ -1,4 +1,5 @@
 import { Button, Card, Loader } from '@mantine/core'
+import Link from 'next/link'
 
 export const Detail = ({ state, router }) => {
   // ローディング状態
