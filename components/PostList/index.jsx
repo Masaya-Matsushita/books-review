@@ -112,7 +112,7 @@ export const PostList = ({ state, dispatch, router }) => {
         opened={opened}
         onClose={() => setOpened(null)}
         withCloseButton={false}
-        className='mt-16 text-center'
+        className='mt-40 text-center'
       >
         <div className='mt-4'>投稿を削除してもよろしいですか？</div>
         <Button

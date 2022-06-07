@@ -62,7 +62,7 @@ export const Header = ({ state, router }) => {
           opened={opened}
           onClose={() => setOpened(false)}
           withCloseButton={false}
-          className='mt-16 text-center'
+          className='mt-40 text-center'
         >
           <h3>{state.name}さん</h3>
           <div>ログアウトしますか？</div>
