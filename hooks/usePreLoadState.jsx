@@ -18,17 +18,17 @@ const reducer = (state, action) => {
         ...state,
         loading: true,
       }
-    // 取得するpostList:の範囲をセット
-    case 'offset':
-      return {
-        ...state,
-        offset: action.offset,
-      }
     // nameをfetch
     case 'name':
       return {
         ...state,
         name: action.name,
+      }
+    // 取得するpostList:の範囲をセット
+    case 'offset':
+      return {
+        ...state,
+        offset: action.offset,
       }
     // postListをfetch
     case 'postList':

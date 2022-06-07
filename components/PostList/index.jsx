@@ -23,13 +23,6 @@ export const PostList = ({ state, dispatch, router }) => {
         }
       )
 
-      //　もしエラー情報のレスポンスが帰ってきた場合、受け取りたい
-      // if (!res.ok) {
-      //   const json = await res.json()
-      //   dispatch({ type: 'error', error: json.ErrorMessageJP })
-      //   return
-      // }
-
       // 画面下に完了通知
       showNotification({
         id: 'redilectToTop',
@@ -66,7 +59,7 @@ export const PostList = ({ state, dispatch, router }) => {
   }
 
   return (
-    <div className='mt-12'>
+    <div>
       {state.postList.map((post) => {
         return (
           <Card key={post.id} className='mb-8'>
@@ -95,9 +88,16 @@ export const PostList = ({ state, dispatch, router }) => {
               onClick={() => router.push(`/detail/${post.id}`)}
               className='cursor-pointer'
             >
-              <h1>{post.title}</h1>
-              <span>{post.detail.slice(0, 50)}</span>
-              <span>{post.detail.length > 50 ? '...' : null}</span>
+              <h1>
+                {post.title.length > 40
+                  ? post.title.slice(0, 40) + '...'
+                  : post.title}
+              </h1>
+              <div>
+                {post.detail.length > 50
+                  ? post.detail.slice(0, 50) + '...'
+                  : post.detail}
+              </div>
               <p className='mr-4 mb-0 text-right'>
                 Reviewed by{' '}
                 <span className='text-lg font-bold text-blue-500'>
@@ -132,7 +132,7 @@ export const PostList = ({ state, dispatch, router }) => {
         </Button>
       </Modal>
       <Button
-        className='sticky bottom-16 -mt-12 w-16 h-16 rounded-full'
+        className='sticky bottom-16 left-full -mt-16 w-16 h-16 rounded-full'
         compact
         onClick={() => router.push('/new')}
       >
