@@ -2,7 +2,7 @@ import { MantineProvider } from '@mantine/core'
 import { NotificationsProvider } from '@mantine/notifications'
 import { CookiesProvider } from 'react-cookie'
 
-export const StateProvider = ({ children }) => {
+export const Provider = ({ children }) => {
   return (
     <div>
       <MantineProvider withGlobalStyles withNormalizeCSS>
