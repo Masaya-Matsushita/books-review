@@ -1,4 +1,5 @@
 import Head from 'next/head'
+import { PropTypes } from 'prop-types'
 
 export const HeadComponent = (props) => {
   return (
@@ -8,4 +9,8 @@ export const HeadComponent = (props) => {
       <title>{props.title}</title>
     </Head>
   )
+}
+
+HeadComponent.propTypes = {
+  title: PropTypes.string,
 }
