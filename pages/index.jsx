@@ -1,4 +1,3 @@
-import { Pagination } from '@mantine/core'
 import { HeadComponent as Head } from 'components/Head'
 import { Header } from 'components/Header'
 import { PostList } from 'components/PostList'
@@ -65,19 +64,7 @@ export default function Home() {
     <>
       <Head title='index page' />
       <Header state={headerState} router={router} />
-      <h1>最新の投稿</h1>
       <PostList state={state} dispatch={dispatch} router={router} />
-      <Pagination
-        onChange={(e) =>
-          router.push({
-            pathname: '/',
-            query: { page: encodeURIComponent(JSON.stringify(e)) },
-          })
-        }
-        total={10}
-        spacing='4px'
-        className='flex justify-center mt-4'
-      />
     </>
   )
 }

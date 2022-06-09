@@ -1,4 +1,4 @@
-import { Button, Card, Loader, Menu, Modal } from '@mantine/core'
+import { Button, Card, Loader, Menu, Modal, Pagination } from '@mantine/core'
 import { showNotification } from '@mantine/notifications'
 import Link from 'next/link'
 import { useState } from 'react'
@@ -45,7 +45,7 @@ export const PostList = ({ state, dispatch, router }) => {
 
   // ローディング状態
   if (state.loading) {
-    return <Loader size='xl' className='block mx-auto mt-12' />
+    return <Loader size='xl' className='fixed inset-0 m-auto' />
   }
 
   // エラー発生時
@@ -55,11 +55,29 @@ export const PostList = ({ state, dispatch, router }) => {
 
   // 取得した投稿が空だった場合
   if (state.postList.length === 0) {
-    return <h2 className='my-12 text-center'>投稿はありません</h2>
+    return (
+      <div>
+        <h1>最新の投稿</h1>
+        <h2 className='my-12 text-center'>投稿はありません</h2>
+        <Pagination
+          page={parseInt(router.query.page)}
+          onChange={(e) =>
+            router.push({
+              pathname: '/',
+              query: { page: e },
+            })
+          }
+          total={10}
+          spacing='4px'
+          className='flex justify-center mt-4'
+        />
+      </div>
+    )
   }
 
   return (
     <div>
+      <h1>最新の投稿</h1>
       {state.postList.map((post) => {
         return (
           <Card key={post.id} className='mb-8'>
@@ -108,6 +126,18 @@ export const PostList = ({ state, dispatch, router }) => {
           </Card>
         )
       })}
+      <Pagination
+        page={parseInt(router.query.page)}
+        onChange={(e) =>
+          router.push({
+            pathname: '/',
+            query: { page: e },
+          })
+        }
+        total={10}
+        spacing='4px'
+        className='flex justify-center mt-4'
+      />
       <Modal
         opened={opened}
         onClose={() => setOpened(null)}
