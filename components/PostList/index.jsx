@@ -1,4 +1,4 @@
-import { Button, Card, Loader, Menu, Modal } from '@mantine/core'
+import { Button, Card, Loader, Menu, Modal, Pagination } from '@mantine/core'
 import { showNotification } from '@mantine/notifications'
 import Link from 'next/link'
 import { useState } from 'react'
@@ -23,13 +23,6 @@ export const PostList = ({ state, dispatch, router }) => {
         }
       )
 
-      //　もしエラー情報のレスポンスが帰ってきた場合、受け取りたい
-      // if (!res.ok) {
-      //   const json = await res.json()
-      //   dispatch({ type: 'error', error: json.ErrorMessageJP })
-      //   return
-      // }
-
       // 画面下に完了通知
       showNotification({
         id: 'redilectToTop',
@@ -42,7 +35,7 @@ export const PostList = ({ state, dispatch, router }) => {
 
       // 削除後にページをリダイレクト
       setOpened(null)
-      router.push('/')
+      router.push({ pathname: '/', query: { page: 1 } })
 
       // fetchが失敗した場合
     } catch (error) {
@@ -52,7 +45,7 @@ export const PostList = ({ state, dispatch, router }) => {
 
   // ローディング状態
   if (state.loading) {
-    return <Loader size='xl' className='block mx-auto mt-12' />
+    return <Loader size='xl' className='fixed inset-0 m-auto' />
   }
 
   // エラー発生時
@@ -62,11 +55,29 @@ export const PostList = ({ state, dispatch, router }) => {
 
   // 取得した投稿が空だった場合
   if (state.postList.length === 0) {
-    return <h2 className='my-12 text-center'>投稿はありません</h2>
+    return (
+      <div>
+        <h1>最新の投稿</h1>
+        <h2 className='my-12 text-center'>投稿はありません</h2>
+        <Pagination
+          page={parseInt(router.query.page)}
+          onChange={(e) =>
+            router.push({
+              pathname: '/',
+              query: { page: e },
+            })
+          }
+          total={10}
+          spacing='4px'
+          className='flex justify-center mt-4'
+        />
+      </div>
+    )
   }
 
   return (
     <div>
+      <h1>最新の投稿</h1>
       {state.postList.map((post) => {
         return (
           <Card key={post.id} className='mb-8'>
@@ -92,12 +103,24 @@ export const PostList = ({ state, dispatch, router }) => {
               </Menu>
             ) : null}
             <div
-              onClick={() => router.push(`/detail/${post.id}`)}
+              onClick={() =>
+                router.push({
+                  pathname: `/detail/${post.id}`,
+                  query: { page: router.query.page },
+                })
+              }
               className='cursor-pointer'
             >
-              <h1>{post.title}</h1>
-              <span>{post.detail.slice(0, 50)}</span>
-              <span>{post.detail.length > 50 ? '...' : null}</span>
+              <h1>
+                {post.title.length > 40
+                  ? post.title.slice(0, 40) + '...'
+                  : post.title}
+              </h1>
+              <div>
+                {post.detail.length > 50
+                  ? post.detail.slice(0, 50) + '...'
+                  : post.detail}
+              </div>
               <p className='mr-4 mb-0 text-right'>
                 Reviewed by{' '}
                 <span className='text-lg font-bold text-blue-500'>
@@ -108,11 +131,23 @@ export const PostList = ({ state, dispatch, router }) => {
           </Card>
         )
       })}
+      <Pagination
+        page={parseInt(router.query.page)}
+        onChange={(e) =>
+          router.push({
+            pathname: '/',
+            query: { page: e },
+          })
+        }
+        total={10}
+        spacing='4px'
+        className='flex justify-center mt-4'
+      />
       <Modal
         opened={opened}
         onClose={() => setOpened(null)}
         withCloseButton={false}
-        className='mt-16 text-center'
+        className='mt-40 text-center'
       >
         <div className='mt-4'>投稿を削除してもよろしいですか？</div>
         <Button
@@ -132,7 +167,7 @@ export const PostList = ({ state, dispatch, router }) => {
         </Button>
       </Modal>
       <Button
-        className='sticky bottom-16 -mt-12 w-16 h-16 rounded-full'
+        className='sticky bottom-16 left-full -mt-16 w-16 h-16 rounded-full'
         compact
         onClick={() => router.push('/new')}
       >

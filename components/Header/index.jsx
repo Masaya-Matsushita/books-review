@@ -9,7 +9,7 @@ export const Header = ({ state, router }) => {
   const [cookies, setCookie, removeCookie] = useCookies(['token'])
   const [opened, setOpened] = useState(false)
 
-  const logout = () => {
+  const logout = async () => {
     // cookieのtokenを削除
     removeCookie('token')
 
@@ -23,7 +23,7 @@ export const Header = ({ state, router }) => {
     })
 
     // Signinページへ遷移
-    router.push('/signin')
+    await router.push('/signin')
   }
 
   // エラー発生時
@@ -62,7 +62,7 @@ export const Header = ({ state, router }) => {
           opened={opened}
           onClose={() => setOpened(false)}
           withCloseButton={false}
-          className='mt-16 text-center'
+          className='mt-40 text-center'
         >
           <h3>{state.name}さん</h3>
           <div>ログアウトしますか？</div>

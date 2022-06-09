@@ -1,6 +1,7 @@
 import { showNotification } from '@mantine/notifications'
 import { useEffect } from 'react'
 import { Check } from 'tabler-icons-react'
+import { PropTypes } from 'prop-types'
 
 export const useRedirectToTop = (token, router) => {
   useEffect(() => {
@@ -17,7 +18,11 @@ export const useRedirectToTop = (token, router) => {
       })
 
       // 一覧ページへ遷移
-      router.push('/')
+      router.push({ pathname: '/', query: { page: 1 } })
     }
   }, [router, token])
+}
+
+useRedirectToTop.propTypes = {
+  token: PropTypes.string,
 }

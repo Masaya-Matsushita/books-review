@@ -5,7 +5,6 @@ const initialState = {
   loading: true,
   error: null,
   postList: [],
-  offset: 0,
   name: null,
   detail: null,
 }
@@ -17,12 +16,6 @@ const reducer = (state, action) => {
       return {
         ...state,
         loading: true,
-      }
-    // 取得するpostList:の範囲をセット
-    case 'offset':
-      return {
-        ...state,
-        offset: action.offset,
       }
     // nameをfetch
     case 'name':

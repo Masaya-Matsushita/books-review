@@ -86,7 +86,7 @@ export default function Profile() {
       })
 
       //　一覧ページへ遷移
-      router.push('/')
+      router.push({ pathname: '/', query: { page: 1 } })
 
       // fetchが失敗した場合
     } catch (error) {
@@ -95,7 +95,7 @@ export default function Profile() {
   }
 
   return (
-    <div className='bg-slate-100'>
+    <>
       <Head title='profile' />
       <Box sx={{ maxWidth: 500 }} mx='auto'>
         <h1 className='mb-4'>名前を変更する</h1>
@@ -124,6 +124,6 @@ export default function Profile() {
           </Group>
         </form>
       </Box>
-    </div>
+    </>
   )
 }

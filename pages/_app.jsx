@@ -1,12 +1,15 @@
-import { StateProvider } from 'components/StateProvider'
+import { Layout } from 'components/Layout'
+import { Provider } from 'components/Provider'
 import 'styles/globals.css'
 
 function MyApp({ Component, pageProps }) {
   return (
     <>
-      <StateProvider>
-        <Component {...pageProps} />
-      </StateProvider>
+      <Provider>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </Provider>
     </>
   )
 }

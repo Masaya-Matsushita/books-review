@@ -55,7 +55,7 @@ export default function New() {
       })
 
       //　一覧ページへ遷移
-      router.push('/')
+      router.push({ pathname: '/', query: { page: 1 } })
 
       // fetchが失敗した場合
     } catch (error) {
@@ -64,7 +64,7 @@ export default function New() {
   }
 
   return (
-    <div className='bg-slate-100'>
+    <>
       <Head title='New' />
       <Box sx={{ maxWidth: 800 }} mx='auto'>
         <h1 className='mb-4'>投稿を作成</h1>
@@ -122,6 +122,6 @@ export default function New() {
           </Group>
         </form>
       </Box>
-    </div>
+    </>
   )
 }

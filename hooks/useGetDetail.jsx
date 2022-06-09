@@ -1,6 +1,7 @@
 import { usePreLoadState } from 'hooks/usePreLoadState'
 import { useCallback, useEffect } from 'react'
 import { useCookies } from 'react-cookie'
+import { PropTypes } from 'prop-types'
 
 export const useGetDetail = (bookId) => {
   const [cookies, setCookie, removeCookie] = useCookies(['token'])
@@ -42,4 +43,8 @@ export const useGetDetail = (bookId) => {
   }, [bookId, getDetail])
 
   return state
+}
+
+useGetDetail.propTypes = {
+  bookId: PropTypes.string,
 }
