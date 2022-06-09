@@ -1,19 +1,19 @@
 # 書籍レビューアプリ
 
-> **Warning**
+> **Warning**<br>
 > API は[TechTrain](https://techbowl.co.jp/techtrain)で用意されたものを用い、フロント部分のみ実装をしました。<br>
 
-> **Note**
+> **Note**<br>
 > 読んだ書籍のレビューを投稿できます。<br>
 > ログイン、投稿の更新・削除、ユーザー情報の更新が行えます。<br>
-> cookie でトークン管理を行い、認証状態によってリダイレクトします。<br> > [プロダクトのリンクはこちら](https://books-review.vercel.app/signin)
+> cookie でトークン管理を行い、認証状態によってリダイレクトします。<br>
+> [プロダクトのリンクはこちら](https://books-review.vercel.app/signin)
 
 ![Desktop](https://user-images.githubusercontent.com/97160510/172779226-f06d3308-6459-4767-a9c6-afdcd7b67764.jpg)
 
 ### ↑デモ画面
 
-<img src="https://user-images.githubusercontent.com/97160510/172779293-8da25d50-3d23-46fb-8cce-1fb16da39902.jpg" width="300px">
-<img src="https://user-images.githubusercontent.com/97160510/172779392-01d4d160-77dd-4256-8f70-c782def00ee5.png" width="280px">
+<img src="https://user-images.githubusercontent.com/97160510/172785396-79ed611f-f5f0-4d17-976b-ba139e3b0427.jpg" width="300px">         <img src="https://user-images.githubusercontent.com/97160510/172779392-01d4d160-77dd-4256-8f70-c782def00ee5.png" width="280px">
 
 ### ↑ スマホ画面(iPhone11 & iPhoneSE2)
 
