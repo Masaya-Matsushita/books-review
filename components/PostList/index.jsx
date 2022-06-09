@@ -103,7 +103,12 @@ export const PostList = ({ state, dispatch, router }) => {
               </Menu>
             ) : null}
             <div
-              onClick={() => router.push(`/detail/${post.id}`)}
+              onClick={() =>
+                router.push({
+                  pathname: `/detail/${post.id}`,
+                  query: { page: router.query.page },
+                })
+              }
               className='cursor-pointer'
             >
               <h1>

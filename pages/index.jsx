@@ -20,8 +20,6 @@ export default function Home() {
     // queryの値からoffsetを定義
     const offset = 10 * (router.query.page - 1)
 
-    // dispatch({ type: 'offset', offset: offset })
-
     // postListを取得(10件分)
     try {
       const res = await fetch(

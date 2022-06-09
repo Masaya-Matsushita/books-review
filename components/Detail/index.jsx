@@ -29,7 +29,9 @@ export const Detail = ({ state, router }) => {
       <Button
         size='lg'
         className='block mt-10 mr-4 ml-auto'
-        onClick={() => router.push({ pathname: '/', query: { page: 1 } })}
+        onClick={() =>
+          router.push({ pathname: '/', query: { page: router.query.page } })
+        }
       >
         一覧へ戻る
       </Button>
