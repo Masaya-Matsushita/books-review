@@ -74,7 +74,7 @@ export default function EditId() {
       })
 
       //　一覧ページへ遷移
-      router.push('/')
+      router.push({ pathname: '/', query: { page: 1 } })
 
       // fetchが失敗した場合
     } catch (error) {

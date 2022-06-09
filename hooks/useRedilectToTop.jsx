@@ -18,7 +18,7 @@ export const useRedirectToTop = (token, router) => {
       })
 
       // 一覧ページへ遷移
-      router.push('/')
+      router.push({ pathname: '/', query: { page: 1 } })
     }
   }, [router, token])
 }

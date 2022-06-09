@@ -35,7 +35,7 @@ export const PostList = ({ state, dispatch, router }) => {
 
       // 削除後にページをリダイレクト
       setOpened(null)
-      router.push('/')
+      router.push({ pathname: '/', query: { page: 1 } })
 
       // fetchが失敗した場合
     } catch (error) {

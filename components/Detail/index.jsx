@@ -29,7 +29,7 @@ export const Detail = ({ state, router }) => {
       <Button
         size='lg'
         className='block mt-10 mr-4 ml-auto'
-        onClick={() => router.push('/')}
+        onClick={() => router.push({ pathname: '/', query: { page: 1 } })}
       >
         一覧へ戻る
       </Button>

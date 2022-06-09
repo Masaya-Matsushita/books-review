@@ -44,7 +44,7 @@ export const AuthForm = (props) => {
       setCookie('token', json.token, { maxAge: 21600 })
 
       // topベージへ遷移
-      props.router.push('/')
+      props.router.push({ pathname: '/', query: { page: 1 } })
       showNotification({
         id: 'redilectToTop',
         disallowClose: true,
