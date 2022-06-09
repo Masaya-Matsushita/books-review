@@ -1,34 +1,51 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 書籍レビューアプリ
 
-## Getting Started
+> **Warning**
+> API は[TechTrain](https://techbowl.co.jp/techtrain)で用意されたものを用い、フロント部分のみ実装をしました。<br>
 
-First, run the development server:
+> **Note**
+> 読んだ書籍のレビューを投稿できます。<br>
+> ログイン、投稿の更新・削除、ユーザー情報の更新が行えます。<br>
+> cookie でトークン管理を行い、認証状態によってリダイレクトします。<br> > [プロダクトのリンクはこちら](https://books-review.vercel.app/signin)
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+![Desktop](https://user-images.githubusercontent.com/97160510/172779226-f06d3308-6459-4767-a9c6-afdcd7b67764.jpg)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### ↑デモ画面
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+<img src="https://user-images.githubusercontent.com/97160510/172779293-8da25d50-3d23-46fb-8cce-1fb16da39902.jpg" width="300px">
+<img src="https://user-images.githubusercontent.com/97160510/172779392-01d4d160-77dd-4256-8f70-c782def00ee5.png" width="280px">
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+### ↑ スマホ画面(iPhone11 & iPhoneSE2)
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+## 使用技術
 
-## Learn More
+- JavaScript
+- React 18.1.0
+- Next.js 12.1.6
+  - autoprefixer 10.4.7
+  - react-dom 18.1.0
+- Mantine 4.2.7
+  - mantine/core 4.2.6
+  - mantine/form 4.2.6
+  - mantine/hooks 4.2.6
+  - mantine/next 4.2.6
+  - mantine/notifications 4.2.7
+- tailwindcss 3.0.24
+  - postcss 8.4.14
+- eslint 8.16.0
+  - eslint-config-next 12.1.6
+- eslint-plugin-tailwindcss 3.5.0
+- zod 3.17.3
+- react-cookie 4.1.1
+- prop-types 15.8.1
+- tabler-icons-react 1.48.0
+- [TectTrain Railway MISSION(API)](https://app.swaggerhub.com/apis-docs/Takumaron/TechTrain-RailwayMission/1.0.0#/)
 
-To learn more about Next.js, take a look at the following resources:
+## 機能一覧
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- ユーザーの新規登録、ログイン/ログアウト
+  - バリデーション
+  - cookieでトークン管理
+    - 認証状態によってリダイレクト
+- レビュー投稿、編集、削除
+- ユーザー情報編集
