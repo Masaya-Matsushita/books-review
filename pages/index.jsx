@@ -14,54 +14,51 @@ export default function Home() {
   const [cookies, setCookie, removeCookie] = useCookies(['token'])
   const headerState = useGetName()
 
-  const getPostList = useCallback(
-    async (e) => {
-      // ローディング開始
-      dispatch({ type: 'start' })
+  const getPostList = useCallback(async () => {
+    // ローディング開始
+    dispatch({ type: 'start' })
 
-      // offsetの値を定義
-      const offset = 10 * (e - 1)
-      if (!e) {
-        offset = state.offset
-      }
-      dispatch({ type: 'offset', offset: offset })
+    // queryの値からoffsetを定義
+    const offset = 10 * (router.query.page - 1)
 
-      // postListを取得(10件分)
-      try {
-        const res = await fetch(
-          `https://api-for-missions-and-railways.herokuapp.com/books?offset=${offset}`,
-          {
-            method: 'GET',
-            mode: 'cors',
-            headers: {
-              Authorization: `Bearer ${cookies.token}`,
-            },
-          }
-        )
-        const json = await res.json()
+    // dispatch({ type: 'offset', offset: offset })
 
-        // エラーの入ったデータを取得した場合
-        if (!res.ok) {
-          dispatch({ type: 'error', error: json.ErrorMessageJP })
-          return
+    // postListを取得(10件分)
+    try {
+      const res = await fetch(
+        `https://api-for-missions-and-railways.herokuapp.com/books?offset=${offset}`,
+        {
+          method: 'GET',
+          mode: 'cors',
+          headers: {
+            Authorization: `Bearer ${cookies.token}`,
+          },
         }
+      )
+      const json = await res.json()
 
-        // データをpostListへ、ローディング解除
-        dispatch({ type: 'postList', postList: [...json] })
-
-        // fetchが失敗した場合
-      } catch (error) {
-        dispatch({ type: 'error', error: error.message })
+      // エラーの入ったデータを取得した場合
+      if (!res.ok) {
+        dispatch({ type: 'error', error: json.ErrorMessageJP })
+        return
       }
-    },
-    [cookies.token, dispatch, state.offset]
-  )
 
-  console.log(state.offset)
+      // データをpostListへ、ローディング解除
+      dispatch({ type: 'postList', postList: [...json] })
+
+      // fetchが失敗した場合
+    } catch (error) {
+      dispatch({ type: 'error', error: error.message })
+    }
+  }, [cookies.token, dispatch, router.query.page])
 
   // ログイン済でfetch、未ログインでリダイレクト
   useEffect(() => {
-    cookies.token ? getPostList() : router.push('/signin')
+    cookies.token
+      ? router.query.page
+        ? getPostList()
+        : null
+      : router.push('/signin')
   }, [cookies.token, getPostList, router])
 
   return (
@@ -71,7 +68,12 @@ export default function Home() {
       <h1>最新の投稿</h1>
       <PostList state={state} dispatch={dispatch} router={router} />
       <Pagination
-        onChange={(e) => getPostList(e)}
+        onChange={(e) =>
+          router.push({
+            pathname: '/',
+            query: { page: encodeURIComponent(JSON.stringify(e)) },
+          })
+        }
         total={10}
         spacing='4px'
         className='flex justify-center mt-4'
