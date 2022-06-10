@@ -1,9 +1,8 @@
 # 書籍レビューアプリ
 
-> **Warning**<br>
-> API は[TechTrain](https://techbowl.co.jp/techtrain)で用意されたものを用い、フロント部分のみ実装をしました。<br>
-
 > **Note**<br>
+> API は[TechTrain](https://techbowl.co.jp/techtrain)で用意されたものを用い、フロント部分のみ実装をしました。<br>
+<br>
 > 読んだ書籍のレビューを投稿できます。<br>
 > ログイン、投稿の更新・削除、ユーザー情報の更新が行えます。<br>
 > cookie でトークン管理を行い、認証状態によってリダイレクトします。<br>
