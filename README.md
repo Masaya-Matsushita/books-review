@@ -3,10 +3,10 @@
 > **Note**<br>
 > API は[TechTrain](https://techbowl.co.jp/techtrain)で用意されたものを用い、フロント部分のみ実装をしました。<br>
 <br>
-> 読んだ書籍のレビューを投稿できます。<br>
-> ログイン、投稿の更新・削除、ユーザー情報の更新が行えます。<br>
-> cookie でトークン管理を行い、認証状態によってリダイレクトします。<br>
-> [プロダクトのリンクはこちら](https://books-review.vercel.app/signin)
+読んだ書籍のレビューを投稿できます。<br>
+ログイン、投稿の更新・削除、ユーザー情報の更新が行えます。<br>
+cookie でトークン管理を行い、認証状態によってリダイレクトします。<br>
+[プロダクトのリンクはこちら](https://books-review.vercel.app/signin)
 
 ![Desktop](https://user-images.githubusercontent.com/97160510/172779226-f06d3308-6459-4767-a9c6-afdcd7b67764.jpg)
 
