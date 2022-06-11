@@ -22,7 +22,6 @@
 - JavaScript
 - React 18.1.0
 - Next.js 12.1.6
-  - autoprefixer 10.4.7
   - react-dom 18.1.0
 - Mantine 4.2.7
   - mantine/core 4.2.6
@@ -32,6 +31,7 @@
   - mantine/notifications 4.2.7
 - tailwindcss 3.0.24
   - postcss 8.4.14
+  - autoprefixer 10.4.7
 - eslint 8.16.0
   - eslint-config-next 12.1.6
 - eslint-plugin-tailwindcss 3.5.0
